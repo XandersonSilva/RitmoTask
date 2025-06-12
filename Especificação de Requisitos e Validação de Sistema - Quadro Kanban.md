@@ -71,7 +71,7 @@ Com base nesses requisitos, também foram definidos diversos **casos de uso** qu
 
 | **\[RF04\]** | **Deletar usuário** |
 |--|--|
-| **Descrição** | Permite que um usuário seja removido do sistema por um administrador ou pelo próprio dono da conta. |
+| **Descrição** | Permite que um usuário seja removido de removido de recursos do sistema por um administrador ou líder. |
 | **Prioridade** | Alta |
 | **Caso de uso relacionado** | \[UC04\] |
 
