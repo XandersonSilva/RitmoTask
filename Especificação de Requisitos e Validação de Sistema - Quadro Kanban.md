@@ -417,8 +417,8 @@ Com base nesses requisitos, também foram definidos diversos **casos de uso** qu
 | **Descrição** | Um administrador ou líder pode mudar o papel de cada usuário que tem acesso ao sistema (líder, Membro, Visitante) ou removê-lo totalmente. |
 | **Atores** | Administrador, líder |
 | **Prioridade** | Alta |
-| **Pré-condições** |  |
-| **Fluxo de eventos** |  |
+| **Pré-condições** | Pssuir pelo menos uma organização ou grupo de trabalho ou quadro com acesso compartilhado|
+| **Fluxo de eventos** | - Usuário acessa a área de gerenciamento do recurso e gerencia o compartilhamento de acesso <br> - Usuário informa o username ou email de quem irá receber o acesso ao recurso ou terá o acesso alterado <br> - Sistema valida as informações e informa se foi possível realizar a ação |
 
 
 | **\[UC15\]** | **Compartilhar recurso com link público** |
