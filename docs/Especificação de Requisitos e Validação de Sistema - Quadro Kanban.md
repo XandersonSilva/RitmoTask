@@ -71,7 +71,7 @@ Com base nesses requisitos, também foram definidos diversos **casos de uso** qu
 
 | **\[RF04\]** | **Deletar usuário** |
 |--|--|
-| **Descrição** | Permite que um usuário seja removido de removido de recursos do sistema por um administrador ou líder. |
+| **Descrição** | Permite que um usuário seja removido do sistema por um administrador ou pelo próprio dono da conta. |
 | **Prioridade** | Alta |
 | **Caso de uso relacionado** | \[UC04\] |
 
@@ -292,8 +292,11 @@ Com base nesses requisitos, também foram definidos diversos **casos de uso** qu
 | **Descrição** | A aplicação deve ser projetada para crescer horizontalmente e manter desempenho adequado mesmo com grandes volumes de dados e usuários simultâneos. |
 | **Prioridade** | Alta |
 | **Caso de uso relacionado** | \[UC06\], \[UC07\], \[UC10\], \[UC27\] |
-* **Descrição dos casos de**
 
+
+* **Descrição dos casos de uso**
+
+![Diagrama de casos de uso](casos_de_uso.drawio.svg)
 
 | **\[UC01\]**| **Cadastrar usuário** |
 | -- | -- |
@@ -417,8 +420,8 @@ Com base nesses requisitos, também foram definidos diversos **casos de uso** qu
 | **Descrição** | Um administrador ou líder pode mudar o papel de cada usuário que tem acesso ao sistema (líder, Membro, Visitante) ou removê-lo totalmente. |
 | **Atores** | Administrador, líder |
 | **Prioridade** | Alta |
-| **Pré-condições** | Pssuir pelo menos uma organização ou grupo de trabalho ou quadro com acesso compartilhado|
-| **Fluxo de eventos** | - Usuário acessa a área de gerenciamento do recurso e gerencia o compartilhamento de acesso <br> - Usuário informa o username ou email de quem irá receber o acesso ao recurso ou terá o acesso alterado <br> - Sistema valida as informações e informa se foi possível realizar a ação |
+| **Pré-condições** |  |
+| **Fluxo de eventos** |  |
 
 
 | **\[UC15\]** | **Compartilhar recurso com link público** |
@@ -572,3 +575,4 @@ Com base nesses requisitos, também foram definidos diversos **casos de uso** qu
 | **Prioridade** | Baixa |
 | **Pré-condições** | Ter acesso a um recurso (quadro de tarefas) com prazos|
 | **Fluxo de eventos** | - Usuário acessa o recurso e solicita a integração <br> - Sistema valida juntamente ao Google calendar se é possível realizar a ação e retorna para o usuário se foi possível|
+
