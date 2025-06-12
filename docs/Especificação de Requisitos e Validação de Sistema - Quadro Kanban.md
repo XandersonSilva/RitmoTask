@@ -57,7 +57,7 @@ Com base nesses requisitos, também foram definidos diversos **casos de uso** qu
 
 | **\[RF02\]** | **Logar usuário** |
 |--|--|
-| **Descrição** | O usuário poderá acessar o sistema inserindo e-mail e senha, sendo redirecionado à tela inicial após autenticação válida. |
+| **Descrição** | O usuário poderá acessar o sistema inserindo e-mail ou username e senha ou com sua conta google, sendo redirecionado à tela inicial após autenticação válida. |
 | **Prioridade** | Essencial |
 | **Caso de uso relacionado** | \[UC02\] |
 
@@ -309,7 +309,7 @@ Com base nesses requisitos, também foram definidos diversos **casos de uso** qu
 
 | **\[UC02\]** | **Logar usuário** |
 |--|--|
-| **Descrição** | Para se logar o usuário deverá informar nome, email, username, ou logar com uma conta google|
+| **Descrição** | Para se logar o usuário deverá informar o email ou username e senha, ou logar com uma conta google|
 | **Atores** | Todos |
 | **Prioridade** | Essencial |
 | **Pré-condições** | Ter uma conta na plataforma |
