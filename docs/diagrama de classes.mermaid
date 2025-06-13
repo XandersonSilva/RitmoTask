@@ -1,0 +1,222 @@
+classDiagram
+    class RoleType {
+        <<enum>>
+        ADMINISTRATOR
+        LEADER
+        MEMBER
+        GUEST
+        VISITOR
+    }
+
+    class TaskStatus {
+        <<enum>>
+        TODO
+        IN_PROGRESS
+        DONE
+        CANCELED
+    }
+
+    class NotificationType {
+        <<enum>>
+        TASK_ASSIGNED
+        TASK_COMMENTED
+        MENTION
+        DUE_DATE_REMINDER
+        RESOURCE_SHARED
+    }
+
+    class UserEntity {
+        -long id
+        -String name
+        -String username
+        -Email email
+        -String password
+
+        +getOrganizations() List~Organization~
+        +getWorkGroups() List~WorkGroup~
+        +getRolesForOrganization(Organization org)
+        +isOrganizationAdmin(Organization org) boolean
+        +getId() Long
+        +getName() String
+        +getUsername() String
+        +getEmail() String
+        +setName(String name) void
+        +setUsername(String username) void
+        +setEmail(Email email) void
+    }
+
+    class Organization {
+        -long id
+        -String name
+        -String identifier
+        -String phoneNumber
+        -Email email
+        -String sector
+        -String logoUrl
+        -String description
+        -String websiteUrl
+
+        +getName() String
+        +getIdentifier() String
+        +getPhoneNumber() String
+        +getEmail() Email
+        +getSector() String
+        +getLogo() String
+        +getDescription() String
+        +getWebsite() String
+        +setName(String name) void
+        +setIdentifier(String identifier) void
+        +setPhoneNumber(String phoneNumber) void
+        +setEmail(Email email) void
+        +setSector(String sector) void
+        +setLogo(String logoUrl) void
+        +setDescription(String description) void
+        +setWebsite(String websiteUrl) void
+    }
+
+    class OrganizationMembership {
+        -UserEntity user
+        -Organization organization
+        -RoleType role
+
+        +getRole() RoleType
+    }
+
+    class WorkGroupMembership {
+        -UserEntity user
+        -WorkGroup workGroup
+        -RoleType role
+
+        +getRole() RoleType
+    }
+
+    class BoardMembership {
+        -UserEntity user
+        -Board board
+        -RoleType role
+
+        +getRole() RoleType
+    }
+
+    class WorkGroup {
+        -List~Board~ boards
+        -Organization organization
+
+        +getOrganization() Organization
+        +getBoards() List~Board~
+    }
+
+    class Board {
+        -long id
+        -WorkGroup workGroup
+        -Organization organization
+        -List~Column~ columns
+
+        +getOrganization() Organization
+        +getWorkGroup() WorkGroup
+        +getColumns() List~Column~
+    }
+
+    class Column {
+        -long id
+        -String name
+        -int order
+        -List~Task~ tasks
+
+        +getName() String
+        +getOrder() int
+        +getTasks() List~Task~
+    }
+
+    class Task {
+        -long id
+        -String title
+        -String description
+        -TaskStatus status
+        -LocalDate startDate
+        -LocalDate dueDate
+        -boolean isBlocked
+        -List~Tag~ tags
+        -List~Comment~ comments
+
+        +getDescription() String
+        +getTags() List~Tag~
+        +getComments() List~Comment~
+    }
+
+    class SubTask {
+        -long id
+        -String description
+        -boolean status
+
+        +getDescription() String
+        +getStatus() boolean
+        +setDescription(String description) void
+        +setStatus(boolean status) void
+    }
+
+    class Checklist {
+        -long id
+        -List~SubTask~ subTasks
+
+        +getSubTasks() List~SubTask~
+    }
+
+    class Comment {
+        -long id
+        -String comment
+
+        +getComment() String
+    }
+
+    class Tag {
+        -long id
+        -String tag
+        -String color
+
+        +getTag() String
+        +getColor() String
+    }
+
+    class Mention {
+        -long id
+        -long commentId
+        -String mentionedUser
+        -boolean mentionedUserNotified
+
+        +getMentionedUserNotified() boolean
+    }
+
+    class Email {
+        -String email
+
+        +validateEmail(String email) boolean
+        +getEmail() String
+    }
+
+    class Notification {
+        -long id
+        -Email sender
+        -Email recipientEmail
+        -UserEntity recipientUser
+        -String content
+    }
+
+UserEntity *-- Email
+    Organization <-- WorkGroup
+    WorkGroup <-- Board
+    Email <-- Organization
+    Board *-- Column
+    Column *-- Task
+    Task *-- Checklist
+    Task *-- Comment
+    Task *-- Tag
+    Comment *-- Mention
+    Checklist *-- SubTask
+    UserEntity "1" -- "N" Notification : has
+    UserEntity "1" -- "N" OrganizationMembership : has
+    Organization "1" -- "N" OrganizationMembership : has
+    UserEntity "1" -- "N" WorkGroupMembership : has
+    WorkGroup "1" -- "N" WorkGroupMembership : has
+    UserEntity "1" -- "N" BoardMembership : has
+    Board "1" -- "N" BoardMembership : has
