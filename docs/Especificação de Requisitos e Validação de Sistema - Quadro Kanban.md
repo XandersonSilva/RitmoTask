@@ -802,3 +802,162 @@ UserEntity *-- Email
     UserEntity "1" -- "N" BoardMembership : has
     Board "1" -- "N" BoardMembership : has
 ```
+
+* **Diagrama relacional*
+```mermaid
+  erDiagram
+    User {
+        BIGINT user_id PK
+        VARCHAR name
+        VARCHAR username "UNIQUE"
+        VARCHAR email "UNIQUE"
+        VARCHAR password
+    }
+
+    Organization {
+        BIGIn org_id PK
+        VARCHAR name
+        VARCHAR identifier "UNIQUE"
+        VARCHAR phone_number
+        VARCHAR email
+        VARCHAR sector
+        VARCHAR logo_url
+        TEXT description
+        VARCHAR websiteUrl
+        
+    }
+
+    WorkGroup {
+        BIGINT workgroup_id PK
+        VARCHAR name
+        BIGINT org_id FK
+        
+    }
+
+    Board {
+        BIGINT board_id PK
+        VARCHAR name
+        BIGINT workgroup_id FK
+        
+    }
+
+    Columns {
+        BIGINT column_id PK
+        VARCHAR name
+        INTEGER display_order
+        BIGINT board_id FK
+        
+    }
+
+    Task {
+        BIGINT task_id PK
+        VARCHAR title
+        TEXT description
+        VARCHAR status
+        TIMESTAMP start_date
+        TIMESTAMP due_date
+        BOOLEAN is_blocked
+        BIGINT column_id FK
+        BIGINT assignee_user_id FK
+    }
+
+    Checklist {
+        BIGINT checklist_id PK
+        BIGINT task_id FK
+        
+    }
+
+    SubTask {
+        BIGINT subtask_id PK
+        TEXT description
+        BOOLEAN status
+        BIGINT checklist_id FK
+    }
+
+    Comment {
+        BIGINT comment_id PK
+        TEXT comment_text
+        BIGINT task_id FK
+        BIGINT user_id FK
+        TIMESTAMP created_at
+    }
+
+    Tag {
+        BIGINT tag_id PK
+        VARCHAR name
+        VARCHAR color
+    }
+
+    Mention {
+        BIGINT mention_id PK
+        BIGINT comment_id FK
+        BIGINT mentioned_user_id FK
+        BOOLEAN mentioned_user_notified
+    }
+
+    Notification {
+        BIGINT notification_id PK
+        BIGINT sender_user_id FK
+        BIGINT recipient_user_id FK
+        VARCHAR type
+        TEXT content
+        BOOLEAN is_read
+        TIMESTAMP created_at
+    }
+
+   
+
+    OrganizationMembership {
+        BIGINT user_id PK,FK
+        BIGINT org_id PK,FK
+        VARCHAR role
+    }
+
+    WorkGroupMembership {
+        BIGINT user_id PK,FK
+        BIGINT workgroup_id PK,FK
+        VARCHAR role
+    }
+
+    BoardMembership {
+        BIGINT user_id PK,FK
+        BIGINT board_id PK,FK
+        VARCHAR role
+    }
+
+    TaskTag {
+        BIGINT task_id PK,FK
+        BIGINT tag_id PK,FK
+    }
+
+  
+
+    Organization ||--o{ WorkGroup : contém
+    WorkGroup ||--o{ Board : contém
+    Board ||--o{ Columns : contém
+    Columns ||--o{ Task : contém
+
+    Task ||--o| Checklist : tem_uma
+    Task ||--o{ Comment : tem_muitos
+    Task }o--o{ TaskTag : tem_muitas_tags
+    Tag }o--o{ TaskTag : usada_em_muitas_tasks
+
+    Comment ||--o{ Mention : contém
+
+    Checklist ||--o{ SubTask : contém
+
+    User ||--o{ Notification : envia_ou_recebe
+    User ||--o{ OrganizationMembership : é_membro_de
+    Organization ||--o{ OrganizationMembership : tem_membros
+
+    User ||--o{ WorkGroupMembership : é_membro_de
+    WorkGroup ||--o{ WorkGroupMembership : tem_membros
+
+    User ||--o{ BoardMembership : é_membro_de
+    Board ||--o{ BoardMembership : tem_membros
+
+    User ||--o{ Comment : fez
+    User }o--o{ Task : é_atribuído_a
+    User ||--o{ Mention : mencionado_em
+´´´
+  
