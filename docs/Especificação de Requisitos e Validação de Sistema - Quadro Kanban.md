@@ -578,8 +578,7 @@ Com base nesses requisitos, também foram definidos diversos **casos de uso** qu
 
 * **Diagrama de classes**
 
-```
-mermaid
+```mermaid
 classDiagram
     class RoleType {
         <<enum>>
