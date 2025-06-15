@@ -1,5 +1,8 @@
 package edu.xanderson.ritimoTask.controller;
 
+import java.time.Instant;
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -8,6 +11,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,8 +22,10 @@ import edu.xanderson.ritimoTask.model.DTOs.AuthResponseDTO;
 import edu.xanderson.ritimoTask.model.DTOs.AuthenticationDTO;
 import edu.xanderson.ritimoTask.model.DTOs.RegisterDTO;
 import edu.xanderson.ritimoTask.model.entity.UserEntity;
+import edu.xanderson.ritimoTask.model.entity.UserVerifyEntity;
 import edu.xanderson.ritimoTask.model.repository.UserRepository;
-
+import edu.xanderson.ritimoTask.model.repository.UserVerifyRepository;
+import edu.xanderson.ritimoTask.service.AuthorizationService;
 @Controller
 @RequestMapping("auth")
 
@@ -29,6 +36,11 @@ public class AuthenticationController {
     private UserRepository userRepository;
     @Autowired
     private TokenService tokenService;
+    @Autowired
+    private AuthorizationService authorizationService;
+    @Autowired
+    private UserVerifyRepository userVerifyRepository;
+
 
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody @Validated AuthenticationDTO data){
@@ -55,6 +67,21 @@ public class AuthenticationController {
             newUser.setPassword(encryptedPassword);
             this.userRepository.save(newUser);
 
+            UserVerifyEntity userVerifyEntity = new UserVerifyEntity();
+
+            UUID uuid = UUID.randomUUID();
+            System.out.println(uuid);
+            userVerifyEntity.setUuid(uuid);
+            userVerifyEntity.setUser(newUser);
+            userVerifyEntity.setDateExpiration(Instant.now().plusSeconds(900));
+            userVerifyRepository.save(userVerifyEntity);
+
             return ResponseEntity.ok().build();
     }
+
+    @GetMapping("/register/verification/{uuid}")
+    public String registerVerification(@PathVariable("uuid") String uuid){
+        authorizationService.registerVerification(uuid);
+        return null;
+    }    
 }

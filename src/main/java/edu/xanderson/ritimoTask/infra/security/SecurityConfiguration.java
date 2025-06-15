@@ -28,9 +28,10 @@ public class SecurityConfiguration {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeRequests(authorize -> authorize
                                     .requestMatchers(HttpMethod.POST, "/").permitAll()
-                                    .requestMatchers(HttpMethod.POST, "/public").permitAll()
+                                    .requestMatchers(HttpMethod.POST, "/public/**").permitAll()
                                     .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
                                     .requestMatchers(HttpMethod.POST, "/auth/register").permitAll()
+                                    .requestMatchers(HttpMethod.GET, "/auth/register/verification/*").permitAll()
                                     .anyRequest().authenticated()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
