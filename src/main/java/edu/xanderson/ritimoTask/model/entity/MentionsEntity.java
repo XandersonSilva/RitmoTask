@@ -16,11 +16,11 @@ public class MentionsEntity {
 
     @ManyToOne
     @JoinColumn(name = "comment_id")
-    private CommentEntity commentId;
+    private CommentEntity comment;
     
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private String mentionedUser;
+    private UserEntity mentionedUser;
     
     @Column(nullable = false)
     private boolean mentionedUserNotified;

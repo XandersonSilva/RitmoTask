@@ -4,6 +4,7 @@ import java.util.List;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -11,6 +12,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 
+@Entity
 public class ColumnEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,8 +21,8 @@ public class ColumnEntity {
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false)
-    private int order;
+    @Column(name = "column_order", nullable = false)
+    private int columnOrder;
     
     @ManyToOne
     @JoinColumn(name = "board_id")
@@ -45,12 +47,12 @@ public class ColumnEntity {
         this.name = name;
     }
 
-    public int getOrder() {
-        return order;
+    public int getColumnOrder() {
+        return columnOrder;
     }
 
-    public void setOrder(int order) {
-        this.order = order;
+    public void setColumnOrder(int columnOrder) {
+        this.columnOrder = columnOrder;
     }
 
     public BoardEntity getBoard() {

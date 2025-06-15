@@ -33,7 +33,7 @@ public class BoardEntity {
     private String description;
 
     @ManyToOne
-    @JoinColumn(name = "workGroup_id")
+    @JoinColumn(name = "workGroup_id", nullable = false)
     private WorkGroupEntity workGroup;
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)

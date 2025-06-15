@@ -10,19 +10,19 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
 @Entity
-public class OrganizationMembership {
+public class BoardMembership {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private UserEntity user;
- 
+
     @ManyToOne
-    @JoinColumn(name = "organization_id")
-    private OrganizationEntity organization;
-    
+    @JoinColumn(name = "board_id", nullable = false)
+    private BoardEntity board;
+
     @Enumerated(EnumType.STRING)
     private RoleType role;
 
@@ -42,12 +42,12 @@ public class OrganizationMembership {
         this.user = user;
     }
 
-    public OrganizationEntity getOrganization() {
-        return organization;
+    public BoardEntity getBoard() {
+        return board;
     }
 
-    public void setOrganization(OrganizationEntity organization) {
-        this.organization = organization;
+    public void setBoard(BoardEntity board) {
+        this.board = board;
     }
 
     public RoleType getRole() {
@@ -57,5 +57,4 @@ public class OrganizationMembership {
     public void setRole(RoleType role) {
         this.role = role;
     }
-
 }

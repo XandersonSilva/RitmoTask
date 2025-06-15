@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>edu.xanderson</groupId>
-	<artifactId>ritimoTask</artifactId>
+	<artifactId>ritmoTask</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>ritimoTask</name>
+	<name>ritmoTask</name>
 	<description>Software to manage tasks</description>
 	<url/>
 	<licenses>

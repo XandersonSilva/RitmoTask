@@ -5,6 +5,7 @@ import edu.xanderson.ritimoTask.service.EmailService;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -15,25 +16,27 @@ import jakarta.persistence.OneToMany;
 public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    
     private long id;
     
+    @Column(nullable = false)
     private String name;
     
+    @Column(nullable = false, unique = true)
     private String username;
     
+    @Column(nullable = false, unique = true)
     private String email;
     
     private String password;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<OrganizationEntity> organizationsEntity;
+    private List<OrganizationMembership> organizationsEntity;
     
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<WorkGroupEntity> workGroupsEntity;
+    private List<WorkGroupMembership> workGroupsEntity;
     
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<BoardEntity> boarsEntity;
+    private List<BoardMembership> boarsEntity;
     
     @OneToMany(mappedBy = "mentionedUser")
     private List<MentionsEntity> mentions;
@@ -81,27 +84,27 @@ public class UserEntity {
         this.password = password;
     }
 
-    public List<OrganizationEntity> getOrganizationsEntity() {
+    public List<OrganizationMembership> getOrganizationsEntity() {
         return organizationsEntity;
     }
 
-    public void setOrganizationsEntity(List<OrganizationEntity> organizationsEntity) {
+    public void setOrganizationsEntity(List<OrganizationMembership> organizationsEntity) {
         this.organizationsEntity = organizationsEntity;
     }
 
-    public List<WorkGroupEntity> getWorkGroupsEntity() {
+    public List<WorkGroupMembership> getWorkGroupsEntity() {
         return workGroupsEntity;
     }
 
-    public void setWorkGroupsEntity(List<WorkGroupEntity> workGroupsEntity) {
+    public void setWorkGroupsEntity(List<WorkGroupMembership> workGroupsEntity) {
         this.workGroupsEntity = workGroupsEntity;
     }
 
-    public List<BoardEntity> getBoarsEntity() {
+    public List<BoardMembership> getBoarsEntity() {
         return boarsEntity;
     }
 
-    public void setBoarsEntity(List<BoardEntity> boarsEntity) {
+    public void setBoarsEntity(List<BoardMembership> boarsEntity) {
         this.boarsEntity = boarsEntity;
     }
 

@@ -37,7 +37,7 @@ public class WorkGroupEntity {
     @JoinColumn(name = "organization_id")
     private OrganizationEntity organization;
 
-    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "workGroup", cascade = CascadeType.ALL)
     private List<BoardEntity> boards;
 
     public String getName() {
