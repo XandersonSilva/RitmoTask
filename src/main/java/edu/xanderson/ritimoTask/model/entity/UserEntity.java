@@ -2,7 +2,12 @@ package edu.xanderson.ritimoTask.model.entity;
 
 import edu.xanderson.ritimoTask.service.EmailService;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -13,7 +18,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 
 @Entity
-public class UserEntity {
+public class UserEntity implements UserDetails{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -73,7 +78,7 @@ public class UserEntity {
     }
 
     public void setEmail(String email) {
-        this.email = EmailService.validateEmail(email);
+        this.email = email;
     }
 
     public String getPassword() {
@@ -122,6 +127,11 @@ public class UserEntity {
 
     public void setNotifications(List<NotificationEntity> notifications) {
         this.notifications = notifications;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return Collections.emptyList();
     }
 
 }

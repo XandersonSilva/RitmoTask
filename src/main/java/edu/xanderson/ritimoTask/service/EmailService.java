@@ -4,7 +4,7 @@ public class EmailService {
     private static String email;
 
     public static String validateEmail(String email){
-        return null;
+        return email;
     }
     public static String getEmail(){
         return email;
