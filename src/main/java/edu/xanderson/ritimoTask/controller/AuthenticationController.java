@@ -2,12 +2,14 @@ package edu.xanderson.ritimoTask.controller;
 
 import java.time.Instant;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
@@ -22,10 +24,12 @@ import edu.xanderson.ritimoTask.model.DTOs.AuthResponseDTO;
 import edu.xanderson.ritimoTask.model.DTOs.AuthenticationDTO;
 import edu.xanderson.ritimoTask.model.DTOs.RegisterDTO;
 import edu.xanderson.ritimoTask.model.entity.UserEntity;
+import edu.xanderson.ritimoTask.model.entity.UserSituation;
 import edu.xanderson.ritimoTask.model.entity.UserVerifyEntity;
 import edu.xanderson.ritimoTask.model.repository.UserRepository;
 import edu.xanderson.ritimoTask.model.repository.UserVerifyRepository;
 import edu.xanderson.ritimoTask.service.AuthorizationService;
+import edu.xanderson.ritimoTask.service.EmailService;
 @Controller
 @RequestMapping("auth")
 
@@ -40,6 +44,8 @@ public class AuthenticationController {
     private AuthorizationService authorizationService;
     @Autowired
     private UserVerifyRepository userVerifyRepository;
+    @Autowired
+    private EmailService emailService;
 
 
     @PostMapping("/login")
@@ -54,10 +60,12 @@ public class AuthenticationController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity register(@RequestBody @Validated RegisterDTO data){
-        if (this.userRepository.findByEmail(data.email()) != null || this.userRepository.findByUsername(data.username()) != null) {
+    public ResponseEntity register(@RequestBody @Validated RegisterDTO data) throws Exception{
+        if (this.userRepository.findByEmailAndSituation(data.email(), UserSituation.ACTIVE) != null 
+            || this.userRepository.findByUsernameAndSituation(data.username(), UserSituation.ACTIVE) != null) {
             return ResponseEntity.badRequest().build();
         }
+
             String encryptedPassword = new BCryptPasswordEncoder().encode(data.password());
 
             UserEntity newUser = new UserEntity();
@@ -65,11 +73,20 @@ public class AuthenticationController {
             newUser.setEmail(data.email());
             newUser.setUsername(data.username());
             newUser.setPassword(encryptedPassword);
-            this.userRepository.save(newUser);
-
+            newUser.setSituation(UserSituation.UNCONFIRMED);
+            
             UserVerifyEntity userVerifyEntity = new UserVerifyEntity();
-
+            
             UUID uuid = UUID.randomUUID();
+            
+            boolean result = emailService.sendTextMail(data.email(), 
+            "Email de verificação de cadastro",
+                    String.valueOf(uuid));
+            
+            if (result) {
+                this.userRepository.save(newUser);
+            }
+
             System.out.println(uuid);
             userVerifyEntity.setUuid(uuid);
             userVerifyEntity.setUser(newUser);
@@ -80,7 +97,7 @@ public class AuthenticationController {
     }
 
     @GetMapping("/register/verification/{uuid}")
-    public String registerVerification(@PathVariable("uuid") String uuid){
+    public String registerVerification(@PathVariable("uuid") String uuid) throws ExecutionException{
         authorizationService.registerVerification(uuid);
         return null;
     }    

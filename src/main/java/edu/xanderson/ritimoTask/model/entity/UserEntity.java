@@ -1,7 +1,5 @@
 package edu.xanderson.ritimoTask.model.entity;
 
-import edu.xanderson.ritimoTask.service.EmailService;
-
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -12,6 +10,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -26,13 +26,16 @@ public class UserEntity implements UserDetails{
     @Column(nullable = false)
     private String name;
     
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = true, length = 8)
     private String username;
     
     @Column(nullable = false, unique = true)
     private String email;
     
     private String password;
+
+    @Enumerated(EnumType.STRING)
+    private UserSituation situation;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<OrganizationMembership> organizationsEntity;
@@ -134,4 +137,11 @@ public class UserEntity implements UserDetails{
         return Collections.emptyList();
     }
 
+    public UserSituation getSituation() {
+        return situation;
+    }
+
+    public void setSituation(UserSituation situation) {
+        this.situation = situation;
+    }
 }
