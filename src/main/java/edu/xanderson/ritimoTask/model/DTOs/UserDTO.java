@@ -13,7 +13,6 @@ import edu.xanderson.ritimoTask.model.entity.UserSituation;
 import edu.xanderson.ritimoTask.model.entity.WorkGroupMembership;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 
 public class UserDTO {
     public UserDTO(){

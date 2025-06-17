@@ -16,6 +16,13 @@ import jakarta.persistence.OneToMany;
 
 @Entity
 public class OrganizationEntity {
+    public OrganizationEntity(){
+    
+    }
+    
+    public OrganizationEntity(OrganizationDTO organization){
+        BeanUtils.copyProperties(organization, this);
+    }
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -31,7 +38,7 @@ public class OrganizationEntity {
     
     private String sector;
     
-    private String logoUrl;
+    private String logo;
     
     @Column(nullable = false)
     private String description;
@@ -44,12 +51,6 @@ public class OrganizationEntity {
     @OneToMany(mappedBy = "organization", cascade = CascadeType.ALL)
     private List<OrganizationMembership> memberships = new ArrayList<>();
 
-    public OrganizationEntity(){
-    }
-
-    public OrganizationEntity(OrganizationDTO organization){
-        BeanUtils.copyProperties(organization, this);
-    }
 
     public long getId() {
         return id;
@@ -87,11 +88,11 @@ public class OrganizationEntity {
     public void setSector(String sector) {
         this.sector = sector;
     }
-    public String getLogoUrl() {
-        return logoUrl;
+    public String getLogo() {
+        return logo;
     }
-    public void setLogoUrl(String logoUrl) {
-        this.logoUrl = logoUrl;
+    public void setLogo(String logo) {
+        this.logo = logo;
     }
     public String getDescription() {
         return description;

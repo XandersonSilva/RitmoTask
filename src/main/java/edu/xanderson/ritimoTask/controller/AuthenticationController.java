@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.RestController;
 import edu.xanderson.ritimoTask.infra.security.TokenService;
 import edu.xanderson.ritimoTask.model.DTOs.AuthResponseDTO;
 import edu.xanderson.ritimoTask.model.DTOs.AuthenticationDTO;
-import edu.xanderson.ritimoTask.model.DTOs.UserDTO;
 import edu.xanderson.ritimoTask.model.DTOs.UserRegisterDTO;
 import edu.xanderson.ritimoTask.model.entity.UserEntity;
 import edu.xanderson.ritimoTask.model.entity.UserSituation;

@@ -2,6 +2,9 @@ package edu.xanderson.ritimoTask.model.entity;
 
 import java.util.List;
 
+import org.springframework.beans.BeanUtils;
+
+import edu.xanderson.ritimoTask.model.DTOs.WorkGroupDTO;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -14,6 +17,13 @@ import jakarta.persistence.OneToMany;
 
 @Entity
 public class WorkGroupEntity {
+    public WorkGroupEntity(){
+
+    }
+
+    public WorkGroupEntity(WorkGroupDTO workGroup){
+        BeanUtils.copyProperties(workGroup, this);
+    }
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -27,7 +37,6 @@ public class WorkGroupEntity {
     
     private String area;
     
-    @Column(nullable = false)
     private String logo;
 
     @Column(nullable = false)

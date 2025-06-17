@@ -1,52 +1,43 @@
-package edu.xanderson.ritimoTask.model.entity;
+package edu.xanderson.ritimoTask.model.DTOs;
 
 import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 
-import edu.xanderson.ritimoTask.model.DTOs.BoardDTO;
-import jakarta.persistence.Entity;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
+import edu.xanderson.ritimoTask.model.entity.BoardEntity;
+import edu.xanderson.ritimoTask.model.entity.ColumnEntity;
+import edu.xanderson.ritimoTask.model.entity.WorkGroupEntity;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 
-@Entity
-public class BoardEntity {
-    public BoardEntity(){
+public class BoardDTO {
+    public BoardDTO(){
 
     }
     
-    public BoardEntity(BoardDTO board){
+    public BoardDTO(BoardEntity board){
         BeanUtils.copyProperties(board, this);
     }
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     private long id;
 
-    @Column(nullable = false)
+    @NotBlank()
     private String name;
     
     private String identifier;
     
+    @Email
     private String email;
     
     private String area_performance;
     
     private String logo;
 
-    @Column(nullable = false)
+    @NotBlank()
     private String description;
 
-    @ManyToOne
-    @JoinColumn(name = "workGroup_id")
     private WorkGroupEntity workGroup;
 
-    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
     private List<ColumnEntity> columns;
 
     public long getId() {
