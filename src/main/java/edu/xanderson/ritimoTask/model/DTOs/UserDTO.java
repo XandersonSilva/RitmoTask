@@ -1,65 +1,51 @@
-package edu.xanderson.ritimoTask.model.entity;
+package edu.xanderson.ritimoTask.model.DTOs;
 
-import java.util.Collection;
 import java.util.List;
 
 import org.springframework.beans.BeanUtils;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
-import edu.xanderson.ritimoTask.model.DTOs.UserDTO;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import edu.xanderson.ritimoTask.model.entity.BoardMembership;
+import edu.xanderson.ritimoTask.model.entity.MentionsEntity;
+import edu.xanderson.ritimoTask.model.entity.NotificationEntity;
+import edu.xanderson.ritimoTask.model.entity.OrganizationMembership;
+import edu.xanderson.ritimoTask.model.entity.UserEntity;
+import edu.xanderson.ritimoTask.model.entity.UserSituation;
+import edu.xanderson.ritimoTask.model.entity.WorkGroupMembership;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
-@Entity
-public class UserEntity implements UserDetails{
-    public UserEntity(){
+public class UserDTO {
+    public UserDTO(){
     
     }
 
-    public UserEntity(UserDTO dto){
-        BeanUtils.copyProperties(dto, this);
+    public UserDTO(UserEntity user){
+        BeanUtils.copyProperties(user, this);
     }
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     
-    @Column(nullable = false)
+    @NotBlank(message = "O nome é obrigatorio")
     private String name;
     
-    @Column(nullable = false, unique = true, length = 100)
+    @NotBlank(message = "O username é obrigatorio")
     private String username;
     
-    @Column(nullable = false, unique = true)
+    @NotBlank(message = "O email é obrigatorio")
+    @Email(message = "e-mail inválido")
     private String email;
     
-    private String password;
-
-    @Enumerated(EnumType.STRING)
     private UserSituation situation;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<OrganizationMembership> organizationsEntity;
     
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<WorkGroupMembership> workGroupsEntity;
     
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<BoardMembership> boarsEntity;
     
-    @OneToMany(mappedBy = "mentionedUser")
     private List<MentionsEntity> mentions;
 
-    @OneToMany(mappedBy = "recipientUser")
     private List<NotificationEntity> notifications;
 
     public long getId() {
@@ -94,12 +80,12 @@ public class UserEntity implements UserDetails{
         this.email = email;
     }
 
-    public String getPassword() {
-        return password;
+    public UserSituation getSituation() {
+        return situation;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setSituation(UserSituation situation) {
+        this.situation = situation;
     }
 
     public List<OrganizationMembership> getOrganizationsEntity() {
@@ -142,16 +128,4 @@ public class UserEntity implements UserDetails{
         this.notifications = notifications;
     }
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
-    }
-
-    public UserSituation getSituation() {
-        return situation;
-    }
-
-    public void setSituation(UserSituation situation) {
-        this.situation = situation;
-    }
 }

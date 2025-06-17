@@ -21,7 +21,8 @@ import org.springframework.web.bind.annotation.RestController;
 import edu.xanderson.ritimoTask.infra.security.TokenService;
 import edu.xanderson.ritimoTask.model.DTOs.AuthResponseDTO;
 import edu.xanderson.ritimoTask.model.DTOs.AuthenticationDTO;
-import edu.xanderson.ritimoTask.model.DTOs.RegisterDTO;
+import edu.xanderson.ritimoTask.model.DTOs.UserDTO;
+import edu.xanderson.ritimoTask.model.DTOs.UserRegisterDTO;
 import edu.xanderson.ritimoTask.model.entity.UserEntity;
 import edu.xanderson.ritimoTask.model.entity.UserSituation;
 import edu.xanderson.ritimoTask.model.entity.UserVerifyEntity;
@@ -50,6 +51,10 @@ public class AuthenticationController {
 
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody @Validated AuthenticationDTO data){
+        if (this.userRepository.findByEmailAndSituation(data.login(), UserSituation.UNCONFIRMED) != null 
+            || this.userRepository.findByUsernameAndSituation(data.login(), UserSituation.UNCONFIRMED) != null) {
+            return ResponseEntity.badRequest().body("Para fazer login valide seu e-mail");
+        }
         UsernamePasswordAuthenticationToken usernamePassword;
         usernamePassword = new UsernamePasswordAuthenticationToken(data.login(), data.password());
         Authentication auth = authenticationManager.authenticate(usernamePassword);
@@ -60,18 +65,24 @@ public class AuthenticationController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity register(@RequestBody @Validated RegisterDTO data) throws Exception{
-        if (this.userRepository.findByEmailAndSituation(data.email(), UserSituation.ACTIVE) != null 
-            || this.userRepository.findByUsernameAndSituation(data.username(), UserSituation.ACTIVE) != null) {
+    public ResponseEntity register(@RequestBody @Validated UserRegisterDTO newUserData) throws Exception{
+        if (this.userRepository.findByEmailAndSituation(newUserData.getEmail(), UserSituation.UNCONFIRMED) != null 
+            || this.userRepository.findByUsernameAndSituation(newUserData.getUsername(), UserSituation.UNCONFIRMED) != null) {
+            
+            //Deletar o usuário não confirmado da base de dados caso ele esteja tentando realizar cadastro novamente para salvar as novas informações
+            userRepository.delete((UserEntity)userRepository.findByEmail(newUserData.getEmail()));
+        }
+        if (this.userRepository.findByEmailAndSituation(newUserData.getEmail(), UserSituation.ACTIVE) != null 
+            || this.userRepository.findByUsernameAndSituation(newUserData.getUsername(), UserSituation.ACTIVE) != null) {
             return ResponseEntity.badRequest().build();
         }
 
-            String encryptedPassword = new BCryptPasswordEncoder().encode(data.password());
+            String encryptedPassword = new BCryptPasswordEncoder().encode(newUserData.getPassword());
 
             UserEntity newUser = new UserEntity();
-            newUser.setName(data.name());
-            newUser.setEmail(data.email());
-            newUser.setUsername(data.username());
+            newUser.setName(newUserData.getName());
+            newUser.setEmail(newUserData.getEmail());
+            newUser.setUsername(newUserData.getUsername());
             newUser.setPassword(encryptedPassword);
             newUser.setSituation(UserSituation.UNCONFIRMED);
             
@@ -79,7 +90,7 @@ public class AuthenticationController {
             
             UUID uuid = UUID.randomUUID();
             
-            boolean result = emailService.sendTextMail(data.email(), 
+            boolean result = emailService.sendTextMail(newUserData.getEmail(), 
             "Email de verificação de cadastro",
                     String.valueOf(uuid));
             
