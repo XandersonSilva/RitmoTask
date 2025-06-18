@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.beans.BeanUtils;
 
 import edu.xanderson.ritimoTask.model.entity.BoardMembership;
-import edu.xanderson.ritimoTask.model.entity.MentionsEntity;
+import edu.xanderson.ritimoTask.model.entity.MentionEntity;
 import edu.xanderson.ritimoTask.model.entity.NotificationEntity;
 import edu.xanderson.ritimoTask.model.entity.OrganizationMembership;
 import edu.xanderson.ritimoTask.model.entity.UserEntity;
@@ -43,7 +43,7 @@ public class UserDTO {
     
     private List<BoardMembership> boarsEntity;
     
-    private List<MentionsEntity> mentions;
+    private List<MentionEntity> mentions;
 
     private List<NotificationEntity> notifications;
 
@@ -111,11 +111,11 @@ public class UserDTO {
         this.boarsEntity = boarsEntity;
     }
 
-    public List<MentionsEntity> getMentions() {
+    public List<MentionEntity> getMentions() {
         return mentions;
     }
 
-    public void setMentions(List<MentionsEntity> mentions) {
+    public void setMentions(List<MentionEntity> mentions) {
         this.mentions = mentions;
     }
 

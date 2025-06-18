@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import edu.xanderson.ritimoTask.model.DTOs.BoardDTO;
 import edu.xanderson.ritimoTask.model.DTOs.ColumnDTO;
+import edu.xanderson.ritimoTask.model.DTOs.CommentDTO;
+import edu.xanderson.ritimoTask.model.DTOs.MentionDTO;
 import edu.xanderson.ritimoTask.model.DTOs.OrganizationDTO;
 import edu.xanderson.ritimoTask.model.DTOs.TaskDTO;
 import edu.xanderson.ritimoTask.model.DTOs.WorkGroupDTO;
@@ -92,6 +94,33 @@ public class ResourceCreationController {
             long userId = currentUser.getId(); // Obtém o ID do usuário
                         
             boardService.createBoardColumnTask(taskDTO, userId);
+
+            return ResponseEntity.ok().body("Tentativa de cração de recurso via user: " + userId);
+
+        }
+        return ResponseEntity.badRequest().body("Usuário não autenticado.");
+    }
+
+    @PostMapping("/create/boardcolumn/task/comment")
+    public ResponseEntity createBoardColumnTaskComment(@AuthenticationPrincipal UserEntity currentUser, 
+                                @Validated @RequestBody CommentDTO commentDTO) {
+        if (currentUser != null) {
+            long userId = currentUser.getId(); // Obtém o ID do usuário
+                        
+            boardService.createBoardColumnTaskComment(commentDTO, userId);
+
+            return ResponseEntity.ok().body("Tentativa de cração de recurso via user: " + userId);
+
+        }
+        return ResponseEntity.badRequest().body("Usuário não autenticado.");
+    }
+
+    @PostMapping("/create/boardcolumn/task/comment/mention")
+    public ResponseEntity createBoardColumnTaskCommentMention(@AuthenticationPrincipal UserEntity currentUser, 
+                                @Validated @RequestBody MentionDTO mentionDTO) {
+        if (currentUser != null) {
+            long userId = currentUser.getId(); // Obtém o ID do usuário
+            boardService.createBoardColumnTaskCommentMention(mentionDTO, userId);
 
             return ResponseEntity.ok().body("Tentativa de cração de recurso via user: " + userId);
 

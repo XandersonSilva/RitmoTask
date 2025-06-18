@@ -10,15 +10,8 @@ import edu.xanderson.ritimoTask.model.entity.CommentEntity;
 import edu.xanderson.ritimoTask.model.entity.TagEntity;
 import edu.xanderson.ritimoTask.model.entity.TaskEntity;
 import edu.xanderson.ritimoTask.model.entity.TaskStatus;
-import io.micrometer.common.lang.NonNull;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public class TaskDTO {
     public TaskDTO(){
@@ -43,8 +36,8 @@ public class TaskDTO {
     private LocalDateTime dueDate;
     
     private boolean isBlocked;
-
-    @NonNull
+    
+    @NotNull
     private long columnId;
 
     private ColumnEntity column;

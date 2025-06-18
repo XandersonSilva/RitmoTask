@@ -57,7 +57,7 @@ public class UserEntity implements UserDetails{
     private List<BoardMembership> boarsEntity;
     
     @OneToMany(mappedBy = "mentionedUser")
-    private List<MentionsEntity> mentions;
+    private List<MentionEntity> mentions;
 
     @OneToMany(mappedBy = "recipientUser")
     private List<NotificationEntity> notifications;
@@ -126,11 +126,11 @@ public class UserEntity implements UserDetails{
         this.boarsEntity = boarsEntity;
     }
 
-    public List<MentionsEntity> getMentions() {
+    public List<MentionEntity> getMentions() {
         return mentions;
     }
 
-    public void setMentions(List<MentionsEntity> mentions) {
+    public void setMentions(List<MentionEntity> mentions) {
         this.mentions = mentions;
     }
 

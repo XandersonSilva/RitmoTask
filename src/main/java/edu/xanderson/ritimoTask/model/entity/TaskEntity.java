@@ -25,6 +25,8 @@ public class TaskEntity {
     }
     public TaskEntity(TaskDTO taskDTO){
         BeanUtils.copyProperties(taskDTO, this);
+        this.column = new ColumnEntity();
+        this.column.setId(taskDTO.getColumnId());
         setStatusIfIsNull();
     }
     @Id
@@ -49,7 +51,7 @@ public class TaskEntity {
     private boolean isBlocked;
 
     @ManyToOne
-    @JoinColumn(name = "column_id")
+    @JoinColumn(name = "column_id", nullable = false)
     private ColumnEntity column;
     
     @OneToMany(mappedBy = "task", cascade =  CascadeType.ALL)
