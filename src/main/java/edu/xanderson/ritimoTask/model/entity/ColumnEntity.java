@@ -2,6 +2,9 @@ package edu.xanderson.ritimoTask.model.entity;
 
 import java.util.List;
 
+import org.springframework.beans.BeanUtils;
+
+import edu.xanderson.ritimoTask.model.DTOs.ColumnDTO;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -11,9 +14,25 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 
 @Entity
+@Table(
+    uniqueConstraints = @UniqueConstraint(
+        name = "uk_board_column_order", // Nome para a restrição no BD
+        columnNames = {"board_id", "column_order"}
+    )
+)
 public class ColumnEntity {
+    public ColumnEntity(){
+
+    }
+    public ColumnEntity(ColumnDTO columnDTO){
+        BeanUtils.copyProperties(columnDTO, this);
+    }
+
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -22,7 +41,7 @@ public class ColumnEntity {
     private String name;
 
     @Column(name = "column_order", nullable = false)
-    private int columnOrder;
+    private long columnOrder;
     
     @ManyToOne
     @JoinColumn(name = "board_id")
@@ -47,11 +66,11 @@ public class ColumnEntity {
         this.name = name;
     }
 
-    public int getColumnOrder() {
+    public long getColumnOrder() {
         return columnOrder;
     }
 
-    public void setColumnOrder(int columnOrder) {
+    public void setColumnOrder(long columnOrder) {
         this.columnOrder = columnOrder;
     }
 
