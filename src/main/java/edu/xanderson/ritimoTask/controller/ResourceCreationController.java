@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import edu.xanderson.ritimoTask.model.DTOs.BoardDTO;
 import edu.xanderson.ritimoTask.model.DTOs.ColumnDTO;
 import edu.xanderson.ritimoTask.model.DTOs.OrganizationDTO;
+import edu.xanderson.ritimoTask.model.DTOs.TaskDTO;
 import edu.xanderson.ritimoTask.model.DTOs.WorkGroupDTO;
 import edu.xanderson.ritimoTask.model.entity.UserEntity;
 import edu.xanderson.ritimoTask.service.BoardService;
@@ -84,4 +85,17 @@ public class ResourceCreationController {
         return ResponseEntity.badRequest().body("Usuário não autenticado.");
     }
 
+    @PostMapping("/create/boardcolumn/task")
+    public ResponseEntity createBoardColumnTask(@AuthenticationPrincipal UserEntity currentUser, 
+                                @Validated @RequestBody TaskDTO taskDTO) {
+        if (currentUser != null) {
+            long userId = currentUser.getId(); // Obtém o ID do usuário
+                        
+            boardService.createBoardColumnTask(taskDTO, userId);
+
+            return ResponseEntity.ok().body("Tentativa de cração de recurso via user: " + userId);
+
+        }
+        return ResponseEntity.badRequest().body("Usuário não autenticado.");
+    }
 }
