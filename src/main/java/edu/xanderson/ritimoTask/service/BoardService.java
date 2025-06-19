@@ -9,6 +9,7 @@ import edu.xanderson.ritimoTask.model.DTOs.BoardDTO;
 import edu.xanderson.ritimoTask.model.DTOs.ColumnDTO;
 import edu.xanderson.ritimoTask.model.DTOs.CommentDTO;
 import edu.xanderson.ritimoTask.model.DTOs.MentionDTO;
+import edu.xanderson.ritimoTask.model.DTOs.TagDTO;
 import edu.xanderson.ritimoTask.model.DTOs.TaskDTO;
 import edu.xanderson.ritimoTask.model.entity.BoardEntity;
 import edu.xanderson.ritimoTask.model.entity.BoardMembership;
@@ -54,6 +55,9 @@ public class BoardService {
 
     @Autowired
     MentionService mentionService;
+
+    @Autowired
+    TagService tagService;
 
 
     public void createBoard(BoardDTO dto, long userId){
@@ -115,6 +119,17 @@ public class BoardService {
         }
     }
     
+    public void createBoardColumnTaskTag(TagDTO tagDTO, long userId){
+        UserEntity   user   = userRepository.getReferenceById(userId);
+        long columnId       = taskRepository.getReferenceById(tagDTO.getTaskId()).getColumn().getId();
+        ColumnEntity column = columnRepository.getReferenceById(columnId);
+
+        
+        if (verifyUserAutority(user, column.getBoard().getId())) {
+            tagService.createTag(tagDTO);
+        }
+    }
+
     
     private boolean verifyUserAutority(UserEntity user, long boardId){
         BoardEntity board = boardRepository.getReferenceById(boardId);

@@ -13,6 +13,7 @@ import edu.xanderson.ritimoTask.model.DTOs.ColumnDTO;
 import edu.xanderson.ritimoTask.model.DTOs.CommentDTO;
 import edu.xanderson.ritimoTask.model.DTOs.MentionDTO;
 import edu.xanderson.ritimoTask.model.DTOs.OrganizationDTO;
+import edu.xanderson.ritimoTask.model.DTOs.TagDTO;
 import edu.xanderson.ritimoTask.model.DTOs.TaskDTO;
 import edu.xanderson.ritimoTask.model.DTOs.WorkGroupDTO;
 import edu.xanderson.ritimoTask.model.entity.UserEntity;
@@ -122,6 +123,18 @@ public class ResourceCreationController {
             long userId = currentUser.getId(); // Obtém o ID do usuário
             boardService.createBoardColumnTaskCommentMention(mentionDTO, userId);
 
+            return ResponseEntity.ok().body("Tentativa de cração de recurso via user: " + userId);
+
+        }
+        return ResponseEntity.badRequest().body("Usuário não autenticado.");
+    }
+
+    @PostMapping("/create/boardcolumn/task/tag")
+    public ResponseEntity createBoardColumnTaskTag(@AuthenticationPrincipal UserEntity currentUser, 
+                                @Validated @RequestBody TagDTO tagDTO) {
+        if (currentUser != null) {
+            long userId = currentUser.getId(); // Obtém o ID do usuário
+            boardService.createBoardColumnTaskTag(tagDTO, userId);
             return ResponseEntity.ok().body("Tentativa de cração de recurso via user: " + userId);
 
         }
