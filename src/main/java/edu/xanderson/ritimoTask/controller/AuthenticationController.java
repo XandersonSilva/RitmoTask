@@ -69,7 +69,13 @@ public class AuthenticationController {
             || this.userRepository.findByUsernameAndSituation(newUserData.getUsername(), UserSituation.UNCONFIRMED) != null) {
             
             //Deletar o usuário não confirmado da base de dados caso ele esteja tentando realizar cadastro novamente para salvar as novas informações
-            userRepository.delete((UserEntity)userRepository.findByEmail(newUserData.getEmail()));
+            try {
+                userRepository.delete((UserEntity)userRepository.findByEmail(newUserData.getEmail()));
+            } catch (Exception e) {
+                userRepository.delete((UserEntity)userRepository.findByUsername(newUserData.getUsername()));
+
+                System.out.println("Erro ao excluir usuário "+ e);
+            }
         }
         if (this.userRepository.findByEmailAndSituation(newUserData.getEmail(), UserSituation.ACTIVE) != null 
             || this.userRepository.findByUsernameAndSituation(newUserData.getUsername(), UserSituation.ACTIVE) != null) {

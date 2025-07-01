@@ -8,12 +8,14 @@ import org.springframework.stereotype.Service;
 import edu.xanderson.ritimoTask.model.DTOs.BoardDTO;
 import edu.xanderson.ritimoTask.model.DTOs.ColumnDTO;
 import edu.xanderson.ritimoTask.model.DTOs.CommentDTO;
+import edu.xanderson.ritimoTask.model.DTOs.EditUserResourcePermitionDTO;
 import edu.xanderson.ritimoTask.model.DTOs.MentionDTO;
 import edu.xanderson.ritimoTask.model.DTOs.TagDTO;
 import edu.xanderson.ritimoTask.model.DTOs.TaskDTO;
 import edu.xanderson.ritimoTask.model.entity.BoardEntity;
 import edu.xanderson.ritimoTask.model.entity.BoardMembership;
 import edu.xanderson.ritimoTask.model.entity.ColumnEntity;
+import edu.xanderson.ritimoTask.model.entity.NotificationEntity;
 import edu.xanderson.ritimoTask.model.entity.RoleType;
 import edu.xanderson.ritimoTask.model.entity.TaskEntity;
 import edu.xanderson.ritimoTask.model.entity.UserEntity;
@@ -58,6 +60,9 @@ public class BoardService {
 
     @Autowired
     TagService tagService;
+
+    @Autowired
+    NotificationService notificationService;
 
 
     public void createBoard(BoardDTO dto, long userId){
@@ -127,6 +132,34 @@ public class BoardService {
         
         if (verifyUserAutority(user, column.getBoard().getId())) {
             tagService.createTag(tagDTO);
+        }
+    }
+
+    public void addUserToBoard(EditUserResourcePermitionDTO data, long adminOrLeaderId){
+        UserEntity   adminOrLeader   = userRepository.getReferenceById(adminOrLeaderId);
+        if (verifyUserAutority(adminOrLeader, data.getResoarceId())) {
+            BoardMembership boardMembership = new BoardMembership();
+            BoardEntity board = new BoardEntity();
+            UserEntity user = userRepository.getReferenceById(data.getUserId());
+            board.setId(data.getResoarceId());
+
+
+            boardMembership.setBoard(board);
+            boardMembership.setRole(data.getRole());
+            boardMembership.setUser(user);
+
+            boardMembershipRepository.save(boardMembership);
+
+            NotificationEntity notification = new NotificationEntity();
+
+            notification.setRecipientEmail(user.getEmail());
+            notification.setRecipientUser(user);
+            notification.setRecipientUsername(user.getUsername());
+            notification.setSubject("Você foi adicionado a um board por " + adminOrLeader.getName());
+            notification.setContent("Você foi adicionado a um board por " + adminOrLeader.getName());
+
+            notificationService.sendNotification(notification);
+            
         }
     }
 

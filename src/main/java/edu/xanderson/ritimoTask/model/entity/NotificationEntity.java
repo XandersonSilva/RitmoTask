@@ -1,5 +1,7 @@
 package edu.xanderson.ritimoTask.model.entity;
 
+import org.springframework.beans.factory.annotation.Value;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -10,6 +12,9 @@ import jakarta.persistence.ManyToOne;
 
 @Entity
 public class NotificationEntity {
+    @Value("${spring.mail.username}")
+    private String defaultSender;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -17,16 +22,21 @@ public class NotificationEntity {
     @Column(nullable = false)
     private String sender;
     
+    private String recipientUsername;
+
     @Column(nullable = false)
     private String recipientEmail;
-    
     
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private UserEntity recipientUser;
     
-    @Column(nullable = false)
+    private String subject;
+
+    @Column(nullable = false, length = 5096)
     private String content;
+
+    private boolean sended = false;
 
     public long getId() {
         return id;
@@ -42,6 +52,14 @@ public class NotificationEntity {
 
     public void setSender(String sender) {
         this.sender = sender;
+    }
+
+    public String getRecipientUsername() {
+        return recipientUsername;
+    }
+
+    public void setRecipientUsername(String recipientUsername) {
+        this.recipientUsername = recipientUsername;
     }
 
     public String getRecipientEmail() {
@@ -60,12 +78,28 @@ public class NotificationEntity {
         this.recipientUser = recipientUser;
     }
 
+    public String getSubject() {
+        return subject;
+    }
+
+    public void setSubject(String subject) {
+        this.subject = subject;
+    }
+
     public String getContent() {
         return content;
     }
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public boolean isSended() {
+        return sended;
+    }
+
+    public void setSended(boolean sended) {
+        this.sended = sended;
     }
 
 }
