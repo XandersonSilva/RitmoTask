@@ -3,7 +3,9 @@ package edu.xanderson.ritimoTask.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import edu.xanderson.ritimoTask.model.DTOs.EditUserResourcePermitionDTO;
 import edu.xanderson.ritimoTask.model.DTOs.WorkGroupDTO;
+import edu.xanderson.ritimoTask.model.entity.NotificationEntity;
 import edu.xanderson.ritimoTask.model.entity.RoleType;
 import edu.xanderson.ritimoTask.model.entity.UserEntity;
 import edu.xanderson.ritimoTask.model.entity.WorkGroupEntity;
@@ -23,6 +25,12 @@ public class WorkGroupService {
     @Autowired
     UserRepository userRepository;
 
+    @Autowired
+    VerifyUserAutority verifyUserAutority;
+
+    @Autowired
+    NotificationService notificationService;
+
     public void createWorkGroupService(WorkGroupDTO dto, long userId){
         
         WorkGroupEntity workGroup = new WorkGroupEntity(dto);
@@ -36,6 +44,35 @@ public class WorkGroupService {
         workGroupMembership.setWorkGroup(workGroup);
 
         workGroupMembershipRepository.save(workGroupMembership);
+    }
+
+    public void addUserToWorkGroup(EditUserResourcePermitionDTO data, long adminOrLeaderId){
+        UserEntity   adminOrLeader   = userRepository.getReferenceById(adminOrLeaderId);
+        if (verifyUserAutority.verifyUserAutorityWorkGroup(adminOrLeader, data.getResoarceId())) {
+            WorkGroupMembership workGroupMembership = new WorkGroupMembership();
+            WorkGroupEntity workGroup = new WorkGroupEntity();
+            UserEntity user = userRepository.getReferenceById(data.getUserId());
+            workGroup.setId(data.getResoarceId());
+
+
+            workGroupMembership.setWorkGroup(workGroup);
+            workGroupMembership.setRole(data.getRole());
+            workGroupMembership.setUser(user);
+
+            workGroupMembershipRepository.save(workGroupMembership);
+
+            NotificationEntity notification = new NotificationEntity();
+
+            notification.setRecipientEmail(user.getEmail());
+            notification.setRecipientUser(user);
+            notification.setRecipientUsername(user.getUsername());
+            
+            notification.setSubject("Você foi adicionado a um work goup por " + adminOrLeader.getName());
+            notification.setContent("Você foi adicionado a um work goup por " + adminOrLeader.getName());
+
+            notificationService.sendNotification(notification);
+            
+        }
     }
     
 }

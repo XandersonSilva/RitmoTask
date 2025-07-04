@@ -153,4 +153,28 @@ public class ResourceCreationController {
         }
         return ResponseEntity.badRequest().body("Usuário não autenticado.");
     }
+
+    @PostMapping("/workgoup/adduser")
+    public ResponseEntity addUserToWorkGroup(@AuthenticationPrincipal UserEntity currentUser, 
+                                @Validated @RequestBody EditUserResourcePermitionDTO data ) {
+        if (currentUser != null) {
+            long userId = currentUser.getId(); // Obtém o ID do usuário
+            workGroupService.addUserToWorkGroup(data, userId);
+            return ResponseEntity.ok().body("Tentativa de cração de recurso via user: " + userId);
+
+        }
+        return ResponseEntity.badRequest().body("Usuário não autenticado.");
+    }
+
+    @PostMapping("/organization/adduser")
+    public ResponseEntity addUserToOrganization(@AuthenticationPrincipal UserEntity currentUser, 
+                                @Validated @RequestBody EditUserResourcePermitionDTO data ) {
+        if (currentUser != null) {
+            long userId = currentUser.getId(); // Obtém o ID do usuário
+            organizationService.addUserToOrganization(data, userId);
+            return ResponseEntity.ok().body("Tentativa de cração de recurso via user: " + userId);
+
+        }
+        return ResponseEntity.badRequest().body("Usuário não autenticado.");
+    }
 }

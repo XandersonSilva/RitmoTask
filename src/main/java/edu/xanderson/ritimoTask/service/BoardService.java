@@ -1,7 +1,5 @@
 package edu.xanderson.ritimoTask.service;
 
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -64,6 +62,9 @@ public class BoardService {
     @Autowired
     NotificationService notificationService;
 
+    @Autowired
+    VerifyUserAutority verifyUserAutority;
+
 
     public void createBoard(BoardDTO dto, long userId){
         BoardEntity board = new BoardEntity(dto);
@@ -84,7 +85,7 @@ public class BoardService {
         UserEntity  user  = userRepository.getReferenceById(userId);
         BoardEntity board = boardRepository.getReferenceById(columnDTO.getBoardId());
         
-        if (verifyUserAutority(user, board.getId())) {
+        if (verifyUserAutority.verifyUserAutorityBoard(user, board.getId())) {
             columnService.createColumn(columnDTO, user, board);
         }
     }
@@ -93,7 +94,7 @@ public class BoardService {
         UserEntity   user   = userRepository.getReferenceById(userId);
         ColumnEntity column = columnRepository.getReferenceById(taskDTO.getColumnId());
 
-        if (verifyUserAutority(user, column.getBoard().getId())) {
+        if (verifyUserAutority.verifyUserAutorityBoard(user, column.getBoard().getId())) {
             taskService.createTask(taskDTO);
         }
     }
@@ -107,7 +108,8 @@ public class BoardService {
         //pelo comentario será o que estava informado na requisição
         commentDTO.setUser(user);
         commentDTO.setUserId(userId);
-        if (verifyUserAutority(user, column.getBoard().getId())) {
+        
+        if (verifyUserAutority.verifyUserAutorityBoard(user, column.getBoard().getId())) {
             commentService.createComment(commentDTO);
         }
     }
@@ -119,7 +121,7 @@ public class BoardService {
         ColumnEntity column = columnRepository.getReferenceById(columnId);
 
         
-        if (verifyUserAutority(user, column.getBoard().getId())) {
+        if (verifyUserAutority.verifyUserAutorityBoard(user, column.getBoard().getId())) {
             mentionService.createMention(mentionDTO);
         }
     }
@@ -130,14 +132,14 @@ public class BoardService {
         ColumnEntity column = columnRepository.getReferenceById(columnId);
 
         
-        if (verifyUserAutority(user, column.getBoard().getId())) {
+        if (verifyUserAutority.verifyUserAutorityBoard(user, column.getBoard().getId())) {
             tagService.createTag(tagDTO);
         }
     }
 
     public void addUserToBoard(EditUserResourcePermitionDTO data, long adminOrLeaderId){
         UserEntity   adminOrLeader   = userRepository.getReferenceById(adminOrLeaderId);
-        if (verifyUserAutority(adminOrLeader, data.getResoarceId())) {
+        if (verifyUserAutority.verifyUserAutorityBoard(adminOrLeader, data.getResoarceId())) {
             BoardMembership boardMembership = new BoardMembership();
             BoardEntity board = new BoardEntity();
             UserEntity user = userRepository.getReferenceById(data.getUserId());
@@ -161,23 +163,5 @@ public class BoardService {
             notificationService.sendNotification(notification);
             
         }
-    }
-
-    
-    private boolean verifyUserAutority(UserEntity user, long boardId){
-        BoardEntity board = boardRepository.getReferenceById(boardId);
-        Optional<BoardMembership> boardMembership;
-        boardMembership = boardMembershipRepository.findByUserAndBoard(user, board);
-        if (boardMembership.isPresent()) {
-            RoleType userRole = boardMembership.get().getRole();
-            
-            if (userRole != RoleType.ADMINISTRATOR &&
-                userRole != RoleType.LEADER && 
-                userRole != RoleType.MEMBER) {
-                return false;
-            }
-            return true;
-        }
-        return false;
     }
 }

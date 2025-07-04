@@ -37,7 +37,7 @@ public class WorkGroupEntity {
     
     private String area;
     
-    private String logo;
+    private String logo = "default_logo";
 
     @Column(nullable = false)
     private String description;
@@ -48,6 +48,14 @@ public class WorkGroupEntity {
 
     @OneToMany(mappedBy = "workGroup", cascade = CascadeType.ALL)
     private List<BoardEntity> boards;
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
@@ -112,6 +120,8 @@ public class WorkGroupEntity {
     public void setBoards(List<BoardEntity> boards) {
         this.boards = boards;
     }
+
+    
 
     
 }

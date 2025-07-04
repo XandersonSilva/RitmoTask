@@ -38,7 +38,7 @@ public class OrganizationEntity {
     
     private String sector;
     
-    private String logo;
+    private String logo = "default_logo";
     
     @Column(nullable = false)
     private String description;

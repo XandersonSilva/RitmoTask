@@ -37,7 +37,7 @@ public class BoardEntity {
     
     private String area_performance;
     
-    private String logo;
+    private String logo = "default_logo";
 
     @Column(nullable = false)
     private String description;
