@@ -7,12 +7,34 @@ import edu.xanderson.ritimoTask.model.DTOs.ColumnDTO;
 import edu.xanderson.ritimoTask.model.entity.BoardEntity;
 import edu.xanderson.ritimoTask.model.entity.ColumnEntity;
 import edu.xanderson.ritimoTask.model.entity.UserEntity;
+import edu.xanderson.ritimoTask.model.repository.BoardRepository;
 import edu.xanderson.ritimoTask.model.repository.ColumnRepository;
+import edu.xanderson.ritimoTask.model.repository.UserRepository;
 
 @Service
 public class ColumnService {
     @Autowired
     ColumnRepository columnRepository;
+    
+    @Autowired
+    UserRepository userRepository;
+
+    @Autowired
+    BoardRepository boardRepository;
+
+    @Autowired
+    VerifyUserAutority verifyUserAutority;
+
+
+    public void createBoardColumn(ColumnDTO columnDTO, long userId){
+        
+        UserEntity  user  = userRepository.getReferenceById(userId);
+        BoardEntity board = boardRepository.getReferenceById(columnDTO.getBoardId());
+        
+        if (verifyUserAutority.verifyUserAutorityBoard(user, board.getId())) {
+            createColumn(columnDTO, user, board);
+        }
+    }
 
     public void createColumn(ColumnDTO columnDTO, UserEntity user, BoardEntity board){
 

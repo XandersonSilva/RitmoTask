@@ -2,6 +2,7 @@ package edu.xanderson.ritimoTask.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import edu.xanderson.ritimoTask.model.entity.NotificationEntity;
@@ -16,6 +17,7 @@ public class NotificationService {
     @Value("${spring.mail.username}")
     private String sender;
 
+    @Async
     public void sendNotification(NotificationEntity notification){
         try {
             emailService.sendTextMail(
