@@ -3,17 +3,10 @@ package edu.xanderson.ritimoTask.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import edu.xanderson.ritimoTask.model.DTOs.BoardDTO;
 import edu.xanderson.ritimoTask.model.DTOs.MentionDTO;
-import edu.xanderson.ritimoTask.model.DTOs.TagDTO;
-import edu.xanderson.ritimoTask.model.entity.BoardEntity;
-import edu.xanderson.ritimoTask.model.entity.BoardMembership;
 import edu.xanderson.ritimoTask.model.entity.ColumnEntity;
 import edu.xanderson.ritimoTask.model.entity.MentionEntity;
-import edu.xanderson.ritimoTask.model.entity.RoleType;
 import edu.xanderson.ritimoTask.model.entity.UserEntity;
-import edu.xanderson.ritimoTask.model.repository.BoardMembershipRepository;
-import edu.xanderson.ritimoTask.model.repository.BoardRepository;
 import edu.xanderson.ritimoTask.model.repository.ColumnRepository;
 import edu.xanderson.ritimoTask.model.repository.CommentRepository;
 import edu.xanderson.ritimoTask.model.repository.MentionRepository;

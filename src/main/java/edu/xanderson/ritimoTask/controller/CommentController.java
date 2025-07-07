@@ -6,14 +6,15 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import edu.xanderson.ritimoTask.model.DTOs.CommentDTO;
 import edu.xanderson.ritimoTask.model.entity.UserEntity;
-import edu.xanderson.ritimoTask.service.BoardService;
 import edu.xanderson.ritimoTask.service.CommentService;
 
+@RestController
 public class CommentController {
-@Autowired
+    @Autowired
     private CommentService commentService;
 
     @PostMapping("/create/boardcolumn/task/comment")

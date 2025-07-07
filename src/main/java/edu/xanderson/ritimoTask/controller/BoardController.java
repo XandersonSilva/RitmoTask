@@ -6,12 +6,15 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import edu.xanderson.ritimoTask.model.DTOs.BoardDTO;
 import edu.xanderson.ritimoTask.model.DTOs.EditUserResourcePermitionDTO;
 import edu.xanderson.ritimoTask.model.entity.UserEntity;
 import edu.xanderson.ritimoTask.service.BoardService;
 
+@RestController
 public class BoardController {
     @Autowired
     private BoardService boardService;
@@ -25,6 +28,20 @@ public class BoardController {
             boardService.createBoard(boardDTO, userId);
 
             return ResponseEntity.ok().body("Criando quadro para o usuário com ID: " + userId);
+
+        }
+        return ResponseEntity.badRequest().body("Usuário não autenticado.");
+    }
+
+    @PostMapping("/delete/board")
+    public ResponseEntity deleteBoard(@AuthenticationPrincipal UserEntity currentUser, 
+                                @RequestParam(value = "boardId", required=true) long boardId) {
+        if (currentUser != null) {
+            long userId = currentUser.getId(); // Obtém o ID do usuário
+                        
+            boardService.deleteBoard(boardId, userId);
+
+            return ResponseEntity.ok().body("Deletando quadro para o usuário com ID: " + userId);
 
         }
         return ResponseEntity.badRequest().body("Usuário não autenticado.");

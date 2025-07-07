@@ -46,6 +46,12 @@ public class BoardService {
         boardMembershipRepository.save(boardMembership);
     }
 
+    public void deleteBoard(long boardId, long userId){
+        BoardEntity board = boardRepository.getReferenceById(boardId);
+
+        boardRepository.delete(board);
+    }
+
     public void addUserToBoard(EditUserResourcePermitionDTO data, long adminOrLeaderId){
         UserEntity   adminOrLeader   = userRepository.getReferenceById(adminOrLeaderId);
         if (verifyUserAutority.verifyUserAutorityBoard(adminOrLeader, data.getResoarceId())) {

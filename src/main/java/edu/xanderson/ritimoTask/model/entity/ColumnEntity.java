@@ -47,7 +47,7 @@ public class ColumnEntity {
     @JoinColumn(name = "board_id")
     private BoardEntity board;
     
-    @OneToMany(mappedBy = "column", cascade =  CascadeType.ALL)
+    @OneToMany(mappedBy = "column", cascade =  CascadeType.ALL, orphanRemoval = true)
     private List<TaskEntity> tasks;
 
     public long getId() {

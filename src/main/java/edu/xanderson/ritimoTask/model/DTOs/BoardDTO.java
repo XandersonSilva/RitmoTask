@@ -31,7 +31,7 @@ public class BoardDTO {
     
     private String area_performance;
     
-    private String logo;
+    private String logo = "default_logo";;
 
     @NotBlank()
     private String description;

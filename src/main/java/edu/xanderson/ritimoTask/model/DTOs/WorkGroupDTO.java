@@ -31,7 +31,7 @@ import jakarta.validation.constraints.NotBlank;
         
         private String area;
         
-        private String logo;
+        private String logo = "default_logo";;
     
         @NotBlank
         private String description;

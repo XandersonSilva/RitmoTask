@@ -43,7 +43,7 @@ public class CommentEntity {
     @JoinColumn(name = "task_id")
     private TaskEntity task;
 
-    @OneToMany(mappedBy = "comment", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "comment", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MentionEntity> mentions;
 
     public long getId() {

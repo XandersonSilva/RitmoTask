@@ -6,12 +6,13 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import edu.xanderson.ritimoTask.model.DTOs.ColumnDTO;
 import edu.xanderson.ritimoTask.model.entity.UserEntity;
-import edu.xanderson.ritimoTask.service.BoardService;
 import edu.xanderson.ritimoTask.service.ColumnService;
 
+@RestController
 public class BoardColumnController {
 
     @Autowired

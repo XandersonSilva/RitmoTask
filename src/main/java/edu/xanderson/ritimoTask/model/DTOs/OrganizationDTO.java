@@ -30,7 +30,7 @@ public class OrganizationDTO {
     
     private String sector;
     
-    private String logoUrl;
+    private String logoUrl = "default_logo";;
 
     @NotBlank(message = "A descrição é obrigatoria")
     private String description;

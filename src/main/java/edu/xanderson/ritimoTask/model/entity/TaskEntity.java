@@ -54,10 +54,10 @@ public class TaskEntity {
     @JoinColumn(name = "column_id", nullable = false)
     private ColumnEntity column;
     
-    @OneToMany(mappedBy = "task", cascade =  CascadeType.ALL)
+    @OneToMany(mappedBy = "task", cascade =  CascadeType.ALL, orphanRemoval = true)
     private List<TagEntity> tags;
 
-    @OneToMany(mappedBy = "task", cascade =  CascadeType.ALL)
+    @OneToMany(mappedBy = "task", cascade =  CascadeType.ALL, orphanRemoval = true)
     private List<CommentEntity> comments;
 
     private void setStatusIfIsNull(){
