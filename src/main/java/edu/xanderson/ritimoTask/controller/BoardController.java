@@ -33,6 +33,20 @@ public class BoardController {
         return ResponseEntity.badRequest().body("Usuário não autenticado.");
     }
 
+    @PostMapping("/edite/board")
+    public ResponseEntity editeBoard(@AuthenticationPrincipal UserEntity currentUser, 
+                                @Validated @RequestBody BoardDTO boardDTO) {
+        if (currentUser != null) {
+            long userId = currentUser.getId(); // Obtém o ID do usuário
+                        
+            boardService.editeBoard(boardDTO, userId);
+
+            return ResponseEntity.ok().body("Criando quadro para o usuário com ID: " + userId);
+
+        }
+        return ResponseEntity.badRequest().body("Usuário não autenticado.");
+    }
+
     @PostMapping("/delete/board")
     public ResponseEntity deleteBoard(@AuthenticationPrincipal UserEntity currentUser, 
                                 @RequestParam(value = "boardId", required=true) long boardId) {

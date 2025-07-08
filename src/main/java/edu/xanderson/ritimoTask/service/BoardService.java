@@ -46,6 +46,14 @@ public class BoardService {
         boardMembershipRepository.save(boardMembership);
     }
 
+    public void editeBoard(BoardDTO dto, long userId){
+        if(dto.getId() == 0) return;     
+
+        BoardEntity board = new BoardEntity(dto);
+
+        boardRepository.save(board);
+    }
+
     public void deleteBoard(long boardId, long userId){
         BoardEntity board = boardRepository.getReferenceById(boardId);
 

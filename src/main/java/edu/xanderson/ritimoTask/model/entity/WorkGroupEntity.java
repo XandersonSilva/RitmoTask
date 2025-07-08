@@ -1,5 +1,6 @@
 package edu.xanderson.ritimoTask.model.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.BeanUtils;
@@ -8,6 +9,7 @@ import edu.xanderson.ritimoTask.model.DTOs.WorkGroupDTO;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -48,6 +50,14 @@ public class WorkGroupEntity {
 
     @OneToMany(mappedBy = "workGroup", cascade = CascadeType.ALL)
     private List<BoardEntity> boards;
+
+    @OneToMany(
+        mappedBy = "workGroup", 
+        cascade = CascadeType.ALL,
+        orphanRemoval = true,      // Remove filhos que não estão mais na coleção
+        fetch = FetchType.LAZY
+    )
+    private List<WorkGroupMembership> memberships = new ArrayList<>();
 
     public long getId() {
         return id;

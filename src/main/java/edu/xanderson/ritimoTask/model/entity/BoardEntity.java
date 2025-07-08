@@ -57,7 +57,7 @@ public class BoardEntity {
         orphanRemoval = true,      // Remove filhos que não estão mais na coleção
         fetch = FetchType.LAZY
     )
-    private List<BoardMembership> memberships = new ArrayList<>(); 
+    private List<BoardMembership> memberships = new ArrayList<>();
 
     public long getId() {
         return id;

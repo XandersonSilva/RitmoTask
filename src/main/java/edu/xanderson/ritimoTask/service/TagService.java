@@ -3,8 +3,10 @@ package edu.xanderson.ritimoTask.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import edu.xanderson.ritimoTask.model.DTOs.OrganizationDTO;
 import edu.xanderson.ritimoTask.model.DTOs.TagDTO;
 import edu.xanderson.ritimoTask.model.entity.ColumnEntity;
+import edu.xanderson.ritimoTask.model.entity.OrganizationEntity;
 import edu.xanderson.ritimoTask.model.entity.TagEntity;
 import edu.xanderson.ritimoTask.model.entity.UserEntity;
 import edu.xanderson.ritimoTask.model.repository.ColumnRepository;
@@ -38,5 +40,19 @@ public class TagService {
         if (verifyUserAutority.verifyUserAutorityBoard(user, column.getBoard().getId())) {
             tagRepository.save(new TagEntity(tagDTO));
         }
+    }
+
+    public void editeTag(TagDTO dto, long userId){
+        if(dto.getId() == 0) return;     
+
+        TagEntity tag = new TagEntity(dto);
+
+        tagRepository.save(tag);
+    }
+
+    public void deleteTag(long tagId, long userId){
+        TagEntity tag = tagRepository.getReferenceById(tagId);
+
+        tagRepository.delete(tag);
     }
 }

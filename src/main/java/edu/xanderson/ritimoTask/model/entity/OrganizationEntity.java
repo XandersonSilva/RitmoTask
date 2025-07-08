@@ -9,6 +9,7 @@ import edu.xanderson.ritimoTask.model.DTOs.OrganizationDTO;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -48,7 +49,12 @@ public class OrganizationEntity {
     @OneToMany(mappedBy = "organization", cascade = CascadeType.ALL)
     private List<WorkGroupEntity> groupEntities;
 
-    @OneToMany(mappedBy = "organization", cascade = CascadeType.ALL)
+    @OneToMany(
+        mappedBy = "organization", 
+        cascade = CascadeType.ALL,
+        orphanRemoval = true,      // Remove filhos que não estão mais na coleção
+        fetch = FetchType.LAZY
+    )
     private List<OrganizationMembership> memberships = new ArrayList<>();
 
 
@@ -105,5 +111,13 @@ public class OrganizationEntity {
     }
     public void setWebsiteUrl(String websiteUrl) {
         this.websiteUrl = websiteUrl;
+    }
+
+    public List<OrganizationMembership> getMemberships() {
+        return memberships;
+    }
+
+    public void setMemberships(List<OrganizationMembership> memberships) {
+        this.memberships = memberships;
     }
 }

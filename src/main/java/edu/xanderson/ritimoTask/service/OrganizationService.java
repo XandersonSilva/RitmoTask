@@ -3,8 +3,10 @@ package edu.xanderson.ritimoTask.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import edu.xanderson.ritimoTask.model.DTOs.ColumnDTO;
 import edu.xanderson.ritimoTask.model.DTOs.EditUserResourcePermitionDTO;
 import edu.xanderson.ritimoTask.model.DTOs.OrganizationDTO;
+import edu.xanderson.ritimoTask.model.entity.ColumnEntity;
 import edu.xanderson.ritimoTask.model.entity.NotificationEntity;
 import edu.xanderson.ritimoTask.model.entity.OrganizationEntity;
 import edu.xanderson.ritimoTask.model.entity.OrganizationMembership;
@@ -44,6 +46,20 @@ public class OrganizationService {
 
         organizationMembershipRepository.save(organizationMembership);
 
+    }
+
+    public void editeOrganization(OrganizationDTO dto, long userId){
+        if(dto.getId() == 0) return;     
+
+        OrganizationEntity organization = new OrganizationEntity(dto);
+
+        organizationRepository.save(organization);
+    }
+
+    public void deleteOrganization(long organizationId, long userId){
+        OrganizationEntity organization = organizationRepository.getReferenceById(organizationId);
+
+        organizationRepository.delete(organization);
     }
 
     public void addUserToOrganization(EditUserResourcePermitionDTO data, long adminOrLeaderId){

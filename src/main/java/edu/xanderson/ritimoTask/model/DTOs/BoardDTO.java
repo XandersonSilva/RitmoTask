@@ -33,7 +33,6 @@ public class BoardDTO {
     
     private String logo = "default_logo";;
 
-    @NotBlank()
     private String description;
 
     private WorkGroupEntity workGroup;

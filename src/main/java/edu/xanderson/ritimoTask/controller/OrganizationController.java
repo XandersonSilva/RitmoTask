@@ -6,8 +6,10 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import edu.xanderson.ritimoTask.model.DTOs.BoardDTO;
 import edu.xanderson.ritimoTask.model.DTOs.EditUserResourcePermitionDTO;
 import edu.xanderson.ritimoTask.model.DTOs.OrganizationDTO;
 import edu.xanderson.ritimoTask.model.entity.UserEntity;
@@ -31,6 +33,34 @@ class OrganizationController {
 
         }
         return ResponseEntity.ok().body("Usuário não autenticado.");
+    }
+
+    @PostMapping("/edite/organization")
+    public ResponseEntity editeorganization(@AuthenticationPrincipal UserEntity currentUser, 
+                                @Validated @RequestBody OrganizationDTO organizationDTO) {
+        if (currentUser != null) {
+            long userId = currentUser.getId(); // Obtém o ID do usuário
+                        
+            organizationService.editeOrganization(organizationDTO, userId);
+
+            return ResponseEntity.ok().body("Criando quadro para o usuário com ID: " + userId);
+
+        }
+        return ResponseEntity.badRequest().body("Usuário não autenticado.");
+    }
+
+    @PostMapping("/delete/organization")
+    public ResponseEntity deleteorganization(@AuthenticationPrincipal UserEntity currentUser, 
+                                @RequestParam(value = "organizationId", required=true) long organizationId) {
+        if (currentUser != null) {
+            long userId = currentUser.getId(); // Obtém o ID do usuário
+                        
+            organizationService.deleteOrganization(organizationId, userId);
+
+            return ResponseEntity.ok().body("Deletando quadro para o usuário com ID: " + userId);
+
+        }
+        return ResponseEntity.badRequest().body("Usuário não autenticado.");
     }
 
     @PostMapping("/organization/adduser")

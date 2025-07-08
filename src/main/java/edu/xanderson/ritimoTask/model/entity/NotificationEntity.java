@@ -12,8 +12,6 @@ import jakarta.persistence.ManyToOne;
 
 @Entity
 public class NotificationEntity {
-    @Value("${spring.mail.username}")
-    private String defaultSender;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

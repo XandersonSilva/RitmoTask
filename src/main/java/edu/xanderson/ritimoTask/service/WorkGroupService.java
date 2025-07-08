@@ -4,8 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import edu.xanderson.ritimoTask.model.DTOs.EditUserResourcePermitionDTO;
+import edu.xanderson.ritimoTask.model.DTOs.OrganizationDTO;
 import edu.xanderson.ritimoTask.model.DTOs.WorkGroupDTO;
 import edu.xanderson.ritimoTask.model.entity.NotificationEntity;
+import edu.xanderson.ritimoTask.model.entity.OrganizationEntity;
 import edu.xanderson.ritimoTask.model.entity.RoleType;
 import edu.xanderson.ritimoTask.model.entity.UserEntity;
 import edu.xanderson.ritimoTask.model.entity.WorkGroupEntity;
@@ -44,6 +46,20 @@ public class WorkGroupService {
         workGroupMembership.setWorkGroup(workGroup);
 
         workGroupMembershipRepository.save(workGroupMembership);
+    }
+
+    public void editeWorkGroup(WorkGroupDTO dto, long userId){
+        if(dto.getId() == 0) return;     
+
+        WorkGroupEntity workGroup = new WorkGroupEntity(dto);
+
+        workGroupRepository.save(workGroup);
+    }
+
+    public void deleteWorkGroup(long workGroupId, long userId){
+        WorkGroupEntity workGroup = workGroupRepository.getReferenceById(workGroupId);
+
+        workGroupRepository.delete(workGroup);
     }
 
     public void addUserToWorkGroup(EditUserResourcePermitionDTO data, long adminOrLeaderId){
