@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import edu.xanderson.ritimoTask.model.DTOs.BoardDTO;
+import edu.xanderson.ritimoTask.model.DTOs.AssignUsersDTO;
 import edu.xanderson.ritimoTask.model.DTOs.TaskDTO;
 import edu.xanderson.ritimoTask.model.entity.UserEntity;
 import edu.xanderson.ritimoTask.service.TaskService;
@@ -42,7 +42,7 @@ public class TaskController {
                         
             taskService.editeTask(taskDTO, userId);
 
-            return ResponseEntity.ok().body("Criando quadro para o usuário com ID: " + userId);
+            return ResponseEntity.ok().body("Tentativa de cração de recurso via user: " + userId);
 
         }
         return ResponseEntity.badRequest().body("Usuário não autenticado.");
@@ -56,9 +56,23 @@ public class TaskController {
                         
             taskService.deleteTask(taskId, userId);
 
-            return ResponseEntity.ok().body("Deletando quadro para o usuário com ID: " + userId);
+            return ResponseEntity.ok().body("Tentativa de cração de recurso via user: " + userId);
 
         }
         return ResponseEntity.badRequest().body("Usuário não autenticado.");
+    }
+
+    @PostMapping("/task/AssignUsersToTask")
+    public ResponseEntity AssignUsersToTask(@AuthenticationPrincipal UserEntity currentUser, 
+                                            @Validated @RequestBody AssignUsersDTO assignUsersDTO){
+        if(currentUser != null){
+            long userId = currentUser.getId();
+
+            taskService.AssignUsersToTask(assignUsersDTO, userId);
+
+            return ResponseEntity.ok().body("Tentativa de cração de recurso via user: " + userId);
+        }
+        return ResponseEntity.badRequest().body("Usuário não autenticado.");
+
     }
 }

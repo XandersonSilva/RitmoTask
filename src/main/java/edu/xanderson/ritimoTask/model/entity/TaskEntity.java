@@ -1,6 +1,8 @@
 package edu.xanderson.ritimoTask.model.entity;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.BeanUtils;
@@ -11,6 +13,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -43,13 +46,17 @@ public class TaskEntity {
     @Column(nullable = false)
     private TaskStatus status;
     
-    private LocalDateTime startDate;
+    private Instant startDate = Instant.now();
     
-    private LocalDateTime dueDate;
+    private Instant dueDate;
     
     @Column(nullable = false)
-    private boolean isBlocked;
+    private boolean isBlocked = false;
 
+    @Column(nullable = false)
+    private boolean isCanceled  = false;
+
+    
     @ManyToOne
     @JoinColumn(name = "column_id", nullable = false)
     private ColumnEntity column;
@@ -59,6 +66,14 @@ public class TaskEntity {
 
     @OneToMany(mappedBy = "task", cascade =  CascadeType.ALL, orphanRemoval = true)
     private List<CommentEntity> comments;
+
+    @OneToMany(
+        mappedBy = "task", 
+        cascade = CascadeType.ALL,
+        orphanRemoval = true,      // Remove filhos que não estão mais na coleção
+        fetch = FetchType.LAZY
+    )
+    private List<TaskAssignedUsersEntity> memberships = new ArrayList<>();
 
     private void setStatusIfIsNull(){
         if (this.status == null) {
@@ -98,29 +113,30 @@ public class TaskEntity {
         this.status = status;
     }
 
-    public LocalDateTime getStartDate() {
+    public Instant getStartDate() {
         return startDate;
     }
-
-    public void setStartDate(LocalDateTime startDate) {
+    public void setStartDate(Instant startDate) {
         this.startDate = startDate;
     }
-
-    public LocalDateTime getDueDate() {
+    public Instant getDueDate() {
         return dueDate;
     }
-
-    public void setDueDate(LocalDateTime dueDate) {
+    public void setDueDate(Instant dueDate) {
         this.dueDate = dueDate;
     }
-
     public boolean isBlocked() {
         return isBlocked;
     }
-
     public void setBlocked(boolean isBlocked) {
         this.isBlocked = isBlocked;
     }
+    public boolean isCanceled() {
+        return isCanceled;
+    }
+    public void setCanceled(boolean isCanceled) {
+        this.isCanceled = isCanceled;
+    }    
 
     public ColumnEntity getColumn() {
         return column;
@@ -145,4 +161,13 @@ public class TaskEntity {
     public void setComments(List<CommentEntity> comments) {
         this.comments = comments;
     }
+    
+    public List<TaskAssignedUsersEntity> getMemberships() {
+        return memberships;
+    }
+
+    public void setMemberships(List<TaskAssignedUsersEntity> memberships) {
+        this.memberships = memberships;
+    }
+
 }

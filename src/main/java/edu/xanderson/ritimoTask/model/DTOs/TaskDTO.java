@@ -1,5 +1,6 @@
 package edu.xanderson.ritimoTask.model.DTOs;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -31,12 +32,14 @@ public class TaskDTO {
     
     private TaskStatus status;
     
-    private LocalDateTime startDate;
+    private Instant startDate = Instant.now();
     
-    private LocalDateTime dueDate;
+    private Instant dueDate;
     
-    private boolean isBlocked;
-    
+    private boolean isCanceled  = false;
+
+    private boolean isBlocked = false;
+
     @NotNull
     private long columnId;
 
@@ -76,17 +79,23 @@ public class TaskDTO {
     public void setStatus(TaskStatus status) {
         this.status = status;
     }
-    public LocalDateTime getStartDate() {
+    public Instant getStartDate() {
         return startDate;
     }
-    public void setStartDate(LocalDateTime startDate) {
+    public void setStartDate(Instant startDate) {
         this.startDate = startDate;
     }
-    public LocalDateTime getDueDate() {
+    public Instant getDueDate() {
         return dueDate;
     }
-    public void setDueDate(LocalDateTime dueDate) {
+    public void setDueDate(Instant dueDate) {
         this.dueDate = dueDate;
+    }
+    public boolean isCanceled() {
+        return isCanceled;
+    }
+    public void setCanceled(boolean isCanceled) {
+        this.isCanceled = isCanceled;
     }
     public boolean isBlocked() {
         return isBlocked;
