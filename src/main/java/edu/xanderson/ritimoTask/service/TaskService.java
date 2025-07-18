@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import edu.xanderson.ritimoTask.model.DTOs.AssignUsersDTO;
 import edu.xanderson.ritimoTask.model.DTOs.TaskCreateDTO;
-import edu.xanderson.ritimoTask.model.DTOs.TaskEditeDTO;
+import edu.xanderson.ritimoTask.model.DTOs.TaskEditDTO;
 import edu.xanderson.ritimoTask.model.entity.ColumnEntity;
 import edu.xanderson.ritimoTask.model.entity.TaskAssignedUsersEntity;
 import edu.xanderson.ritimoTask.model.entity.TaskEntity;
@@ -48,7 +48,7 @@ public class TaskService {
         }
     }
 
-    public void editeTask(TaskEditeDTO dto, long userId){
+    public void editeTask(TaskEditDTO dto, long userId){
         if(dto.getId() == 0) return;     
 
         TaskEntity task = new TaskEntity(dto);
@@ -62,7 +62,7 @@ public class TaskService {
         taskRepository.delete(task);
     }
 
-    public void blockTask(TaskEditeDTO dto, long userId){
+    public void blockTask(TaskEditDTO dto, long userId){
         if(dto.getId() == 0) return;     
 
         TaskEntity task = taskRepository.getReferenceById(dto.getId());
@@ -71,7 +71,7 @@ public class TaskService {
         taskRepository.save(task);
     }
 
-    public void unblockTask(TaskEditeDTO dto, long userId){
+    public void unblockTask(TaskEditDTO dto, long userId){
         if(dto.getId() == 0) return;     
         
         TaskEntity task = taskRepository.getReferenceById(dto.getId());
@@ -80,7 +80,7 @@ public class TaskService {
         taskRepository.save(task);
     }
     
-    public void cancelTask(TaskEditeDTO dto, long userId){
+    public void cancelTask(TaskEditDTO dto, long userId){
         if(dto.getId() == 0) return;     
 
         TaskEntity task = taskRepository.getReferenceById(dto.getId());
@@ -89,15 +89,29 @@ public class TaskService {
         taskRepository.save(task);
     }
 
-    public void setTaskDueDate(TaskEditeDTO dto, long userId){
+    public void setTaskDueDate(TaskEditDTO dto, long userId){
         if(dto.getId() == 0) return;
-        if(dto.getDueDate() == null && dto.getDueDate().isBefore(Instant.now().plusSeconds(2400))) return;
+        if(dto.getDueDate() == null || dto.getDueDate().isBefore(Instant.now().plusSeconds(2400))) return;
 
         TaskEntity task = taskRepository.getReferenceById(dto.getId());
         task.setDueDate(dto.getDueDate());
 
         taskRepository.save(task);
-    } 
+    }
+
+    public void moveTaskToCollumn(TaskEditDTO dto, long userId){
+        if(dto.getId() == 0) return;
+        if(dto.getColumnId() == 0 || dto.getColumnId() < 0) return;
+
+        TaskEntity task = taskRepository.getReferenceById(dto.getId());
+
+        ColumnEntity column = new ColumnEntity();
+        column.setId(dto.getColumnId());
+
+        task.setColumn(column);
+
+        taskRepository.save(task);
+    }
     
 
 

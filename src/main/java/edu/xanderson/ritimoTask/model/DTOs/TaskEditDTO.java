@@ -10,14 +10,13 @@ import edu.xanderson.ritimoTask.model.entity.CommentEntity;
 import edu.xanderson.ritimoTask.model.entity.TagEntity;
 import edu.xanderson.ritimoTask.model.entity.TaskEntity;
 import edu.xanderson.ritimoTask.model.entity.TaskStatus;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-public class TaskEditeDTO {
-    public TaskEditeDTO(){
+public class TaskEditDTO {
+    public TaskEditDTO(){
         setStatusIfIsNull();
     }
-    public TaskEditeDTO(TaskEntity taskEntity){
+    public TaskEditDTO(TaskEntity taskEntity){
         BeanUtils.copyProperties(taskEntity, this);
         setStatusIfIsNull();
     }

@@ -7,7 +7,7 @@ import java.util.List;
 import org.springframework.beans.BeanUtils;
 
 import edu.xanderson.ritimoTask.model.DTOs.TaskCreateDTO;
-import edu.xanderson.ritimoTask.model.DTOs.TaskEditeDTO;
+import edu.xanderson.ritimoTask.model.DTOs.TaskEditDTO;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -33,7 +33,7 @@ public class TaskEntity {
         setStatusIfIsNull();
     }
 
-    public TaskEntity(TaskEditeDTO taskDTO){
+    public TaskEntity(TaskEditDTO taskDTO){
         BeanUtils.copyProperties(taskDTO, this);
         this.column = new ColumnEntity();
         this.column.setId(taskDTO.getColumnId());
@@ -74,12 +74,10 @@ public class TaskEntity {
     @OneToMany(mappedBy = "task", cascade =  CascadeType.ALL, orphanRemoval = true)
     private List<CommentEntity> comments;
 
-    @OneToMany(
-        mappedBy = "task", 
-        cascade = CascadeType.ALL,
-        orphanRemoval = true,      // Remove filhos que não estão mais na coleção
-        fetch = FetchType.LAZY
-    )
+    @OneToMany(mappedBy = "task", cascade =  CascadeType.ALL, orphanRemoval = true)
+    private List<SubTaskEntity> subTasks;
+
+    @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<TaskAssignedUsersEntity> memberships = new ArrayList<>();
 
     private void setStatusIfIsNull(){
