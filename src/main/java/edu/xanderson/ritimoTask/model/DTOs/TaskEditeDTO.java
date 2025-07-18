@@ -1,7 +1,6 @@
 package edu.xanderson.ritimoTask.model.DTOs;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.BeanUtils;
@@ -14,33 +13,31 @@ import edu.xanderson.ritimoTask.model.entity.TaskStatus;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-public class TaskDTO {
-    public TaskDTO(){
+public class TaskEditeDTO {
+    public TaskEditeDTO(){
         setStatusIfIsNull();
     }
-    public TaskDTO(TaskEntity taskEntity){
+    public TaskEditeDTO(TaskEntity taskEntity){
         BeanUtils.copyProperties(taskEntity, this);
         setStatusIfIsNull();
     }
 
+    @NotNull
     private long id;
-    @NotBlank
     private String title;
     
-    @NotBlank
     private String description;
     
     private TaskStatus status;
     
-    private Instant startDate = Instant.now();
+    private Instant startDate;
     
     private Instant dueDate;
     
-    private boolean isCanceled  = false;
+    private boolean isCanceled;
 
-    private boolean isBlocked = false;
+    private boolean isBlocked;
 
-    @NotNull
     private long columnId;
 
     private ColumnEntity column;

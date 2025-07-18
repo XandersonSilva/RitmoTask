@@ -10,7 +10,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import edu.xanderson.ritimoTask.model.DTOs.AssignUsersDTO;
-import edu.xanderson.ritimoTask.model.DTOs.TaskDTO;
+import edu.xanderson.ritimoTask.model.DTOs.TaskCreateDTO;
+import edu.xanderson.ritimoTask.model.DTOs.TaskEditeDTO;
 import edu.xanderson.ritimoTask.model.entity.UserEntity;
 import edu.xanderson.ritimoTask.service.TaskService;
 
@@ -22,7 +23,7 @@ public class TaskController {
 
     @PostMapping("/create/boardcolumn/task")
     public ResponseEntity createTask(@AuthenticationPrincipal UserEntity currentUser, 
-                                @Validated @RequestBody TaskDTO taskDTO) {
+                                @Validated @RequestBody TaskCreateDTO taskDTO) {
         if (currentUser != null) {
             long userId = currentUser.getId(); // Obtém o ID do usuário
                         
@@ -36,7 +37,7 @@ public class TaskController {
 
     @PostMapping("/edite/task")
     public ResponseEntity editeTask(@AuthenticationPrincipal UserEntity currentUser, 
-                                @Validated @RequestBody TaskDTO taskDTO) {
+                                @Validated @RequestBody TaskEditeDTO taskDTO) {
         if (currentUser != null) {
             long userId = currentUser.getId(); // Obtém o ID do usuário
                         
@@ -75,4 +76,60 @@ public class TaskController {
         return ResponseEntity.badRequest().body("Usuário não autenticado.");
 
     }
+
+    @PostMapping("/block/task")
+    public ResponseEntity blockTask(@AuthenticationPrincipal UserEntity currentUser, 
+                                @Validated @RequestBody TaskEditeDTO taskDTO) {
+        if (currentUser != null) {
+            long userId = currentUser.getId(); // Obtém o ID do usuário
+                        
+            taskService.blockTask(taskDTO, userId);
+
+            return ResponseEntity.ok().body("Tentativa de cração de recurso via user: " + userId);
+
+        }
+        return ResponseEntity.badRequest().body("Usuário não autenticado.");
+    }
+
+    @PostMapping("/unblock/task")
+    public ResponseEntity unblockTask(@AuthenticationPrincipal UserEntity currentUser, 
+                                @Validated @RequestBody TaskEditeDTO taskDTO) {
+        if (currentUser != null) {
+            long userId = currentUser.getId(); // Obtém o ID do usuário
+                        
+            taskService.unblockTask(taskDTO, userId);
+
+            return ResponseEntity.ok().body("Tentativa de cração de recurso via user: " + userId);
+
+        }
+        return ResponseEntity.badRequest().body("Usuário não autenticado.");
+    }
+
+    @PostMapping("/cancel/task")
+    public ResponseEntity cancelTask(@AuthenticationPrincipal UserEntity currentUser, 
+                                @Validated @RequestBody TaskEditeDTO taskDTO) {
+        if (currentUser != null) {
+            long userId = currentUser.getId(); // Obtém o ID do usuário
+                        
+            taskService.cancelTask(taskDTO, userId);
+
+            return ResponseEntity.ok().body("Tentativa de cração de recurso via user: " + userId);
+
+        }
+        return ResponseEntity.badRequest().body("Usuário não autenticado.");
+    }
+    @PostMapping("/set/duedate/task")
+    public ResponseEntity setTaskDueDate(@AuthenticationPrincipal UserEntity currentUser, 
+                                @Validated @RequestBody TaskEditeDTO taskDTO) {
+        if (currentUser != null) {
+            long userId = currentUser.getId(); // Obtém o ID do usuário
+                        
+            taskService.setTaskDueDate(taskDTO, userId);
+
+            return ResponseEntity.ok().body("Tentativa de cração de recurso via user: " + userId);
+
+        }
+        return ResponseEntity.badRequest().body("Usuário não autenticado.");
+    }
+
 }

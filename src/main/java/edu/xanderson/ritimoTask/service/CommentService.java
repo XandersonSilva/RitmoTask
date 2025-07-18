@@ -3,7 +3,6 @@ package edu.xanderson.ritimoTask.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import edu.xanderson.ritimoTask.model.DTOs.ColumnDTO;
 import edu.xanderson.ritimoTask.model.DTOs.CommentDTO;
 import edu.xanderson.ritimoTask.model.entity.ColumnEntity;
 import edu.xanderson.ritimoTask.model.entity.CommentEntity;

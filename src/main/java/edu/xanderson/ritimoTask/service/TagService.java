@@ -3,10 +3,8 @@ package edu.xanderson.ritimoTask.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import edu.xanderson.ritimoTask.model.DTOs.OrganizationDTO;
 import edu.xanderson.ritimoTask.model.DTOs.TagDTO;
 import edu.xanderson.ritimoTask.model.entity.ColumnEntity;
-import edu.xanderson.ritimoTask.model.entity.OrganizationEntity;
 import edu.xanderson.ritimoTask.model.entity.TagEntity;
 import edu.xanderson.ritimoTask.model.entity.UserEntity;
 import edu.xanderson.ritimoTask.model.repository.ColumnRepository;

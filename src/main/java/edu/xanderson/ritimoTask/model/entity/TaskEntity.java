@@ -1,13 +1,13 @@
 package edu.xanderson.ritimoTask.model.entity;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 
-import edu.xanderson.ritimoTask.model.DTOs.TaskDTO;
+import edu.xanderson.ritimoTask.model.DTOs.TaskCreateDTO;
+import edu.xanderson.ritimoTask.model.DTOs.TaskEditeDTO;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -26,7 +26,14 @@ public class TaskEntity {
     public TaskEntity(){
         setStatusIfIsNull();
     }
-    public TaskEntity(TaskDTO taskDTO){
+    public TaskEntity(TaskCreateDTO taskDTO){
+        BeanUtils.copyProperties(taskDTO, this);
+        this.column = new ColumnEntity();
+        this.column.setId(taskDTO.getColumnId());
+        setStatusIfIsNull();
+    }
+
+    public TaskEntity(TaskEditeDTO taskDTO){
         BeanUtils.copyProperties(taskDTO, this);
         this.column = new ColumnEntity();
         this.column.setId(taskDTO.getColumnId());

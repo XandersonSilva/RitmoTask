@@ -4,10 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import edu.xanderson.ritimoTask.model.DTOs.EditUserResourcePermitionDTO;
-import edu.xanderson.ritimoTask.model.DTOs.OrganizationDTO;
 import edu.xanderson.ritimoTask.model.DTOs.WorkGroupDTO;
 import edu.xanderson.ritimoTask.model.entity.NotificationEntity;
-import edu.xanderson.ritimoTask.model.entity.OrganizationEntity;
 import edu.xanderson.ritimoTask.model.entity.RoleType;
 import edu.xanderson.ritimoTask.model.entity.UserEntity;
 import edu.xanderson.ritimoTask.model.entity.WorkGroupEntity;

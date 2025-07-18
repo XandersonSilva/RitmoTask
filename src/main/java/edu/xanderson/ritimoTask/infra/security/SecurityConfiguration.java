@@ -42,7 +42,15 @@ public class SecurityConfiguration {
     return http
             .csrf(csrf -> csrf.disable())
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            .authorizeRequests(authorize -> authorize
+            .authorizeHttpRequests(authorize -> authorize
+                .requestMatchers(
+                    HttpMethod.GET,
+                    "/v3/api-docs",
+                    "/v3/api-docs/**",
+                    "/swagger-ui/**",
+                    "/swagger-ui/index.html",
+                    "/swagger-ui/index.html/**"
+                ).permitAll()
                 .requestMatchers(HttpMethod.POST, "/").permitAll()
                 .requestMatchers(HttpMethod.GET, "/public/**").permitAll()
                 .requestMatchers(HttpMethod.POST, "/public/**").permitAll()
@@ -72,7 +80,7 @@ public class SecurityConfiguration {
                     }
                     System.out.println(email);
 
-                    // 1. Procurar ou criar o usuário no seu banco de dados
+                    // Procurar ou criar o usuário no seu banco de dados
                     Optional<UserEntity> userOptional = Optional.ofNullable((UserEntity) userRepository.findByEmail(email));
                     UserEntity user;
 
@@ -90,7 +98,7 @@ public class SecurityConfiguration {
                         userRepository.save(user); 
                     }
 
-                    // 2. Gerar o JWT usando o TokenService
+                    // Gerar o JWT usando o TokenService
                     String token = tokenService.generateToken(user);
 
                     System.out.println("Token JWT Gerado: " + token);

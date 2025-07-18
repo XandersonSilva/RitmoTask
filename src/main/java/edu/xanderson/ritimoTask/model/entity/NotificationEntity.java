@@ -1,6 +1,5 @@
 package edu.xanderson.ritimoTask.model.entity;
 
-import org.springframework.beans.factory.annotation.Value;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
