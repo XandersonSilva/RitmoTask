@@ -22,6 +22,10 @@ public class SubTaskEditDTO {
 
     private boolean done;
 
+    private long taskId;
+
+    
+
     public long getId() {
         return id;
     }
@@ -78,6 +82,13 @@ public class SubTaskEditDTO {
         this.done = done;
     }
 
+    public long getTaskId() {
+        return taskId;
+    }
+
+    public void setTaskId(long taskId) {
+        this.taskId = taskId;
+    }
 
 
 }

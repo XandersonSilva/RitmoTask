@@ -24,6 +24,15 @@ public class SubtaskService {
         subtaskRepository.save(subtask);
         
     }
+    public void editSubTask(SubTaskEditDTO subtaskDTO, long userId){
+        //TODO: Verificar se o usuário tem autoridade para realizar essa ação
+        //TODO: Fazer ajustes necessarios pra evitar perda de dados
+        
+        SubTaskEntity subtask = new SubTaskEntity(subtaskDTO);
+
+        subtaskRepository.save(subtask);
+        
+    }
     public void deleteSubTask(SubTaskEditDTO subtaskDTO, long userId){
         //TODO: Verificar se o usuário tem autoridade para realizar essa ação
 

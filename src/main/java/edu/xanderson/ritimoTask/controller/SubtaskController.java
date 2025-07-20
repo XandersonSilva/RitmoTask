@@ -32,6 +32,20 @@ public class SubtaskController {
         return ResponseEntity.badRequest().body("Usuário não autenticado.");
     }
 
+    @PostMapping("/task/edit/subtask")
+    public ResponseEntity editSubtask(@AuthenticationPrincipal UserEntity currentUser, 
+                                @Validated @RequestBody SubTaskEditDTO subtaskDTO) {
+        if (currentUser != null) {
+            long userId = currentUser.getId(); // Obtém o ID do usuário
+            
+            subtaskService.editSubTask(subtaskDTO, userId);
+
+            return ResponseEntity.ok().body("Tentativa de cração de recurso via user: " + userId);
+
+        }
+        return ResponseEntity.badRequest().body("Usuário não autenticado.");
+    }
+
     @PostMapping("/task/delete/subtask")
     public ResponseEntity deleteSubtask(@AuthenticationPrincipal UserEntity currentUser, 
                                 @Validated @RequestBody SubTaskEditDTO subtaskDTO) {

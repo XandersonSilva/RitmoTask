@@ -32,6 +32,10 @@ public class SubTaskEntity {
     }
     public SubTaskEntity(SubTaskEditDTO subtaskDTO){
         BeanUtils.copyProperties(subtaskDTO, this);
+
+        this.task = new TaskEntity();
+        this.task.setId(subtaskDTO.getTaskId());
+
         setStatusIfIsNull();
     }
 
