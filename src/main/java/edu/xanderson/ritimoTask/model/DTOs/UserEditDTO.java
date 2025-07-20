@@ -1,0 +1,63 @@
+package edu.xanderson.ritimoTask.model.DTOs;
+
+
+import org.springframework.beans.BeanUtils;
+
+import edu.xanderson.ritimoTask.model.entity.UserEntity;
+import edu.xanderson.ritimoTask.model.entity.UserSituation;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+
+public class UserEditDTO {
+    public UserEditDTO(){
+    
+    }
+
+    public UserEditDTO(UserEntity user){
+        BeanUtils.copyProperties(user, this);
+    }
+
+    @NotBlank(message = "O id é obrigatorio")
+    private long id;
+    
+    private String name;
+    
+    @Email
+    private String email;
+    
+    private UserSituation situation;
+
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public UserSituation getSituation() {
+        return situation;
+    }
+
+    public void setSituation(UserSituation situation) {
+        this.situation = situation;
+    }
+
+}

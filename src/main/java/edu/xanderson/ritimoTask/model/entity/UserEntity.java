@@ -56,10 +56,10 @@ public class UserEntity implements UserDetails{
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<BoardMembership> boarsEntity;
     
-    @OneToMany(mappedBy = "mentionedUser")
+    @OneToMany(mappedBy = "mentionedUser", cascade = CascadeType.ALL)
     private List<MentionEntity> mentions;
 
-    @OneToMany(mappedBy = "recipientUser")
+    @OneToMany(mappedBy = "recipientUser", cascade = CascadeType.ALL)
     private List<NotificationEntity> notifications;
 
     public long getId() {

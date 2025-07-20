@@ -5,6 +5,7 @@ import org.springframework.beans.BeanUtils;
 import edu.xanderson.ritimoTask.model.DTOs.MentionDTO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -40,7 +41,7 @@ public class MentionEntity {
     @JoinColumn(name = "comment_id")
     private CommentEntity comment;
     
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private UserEntity mentionedUser;
     
