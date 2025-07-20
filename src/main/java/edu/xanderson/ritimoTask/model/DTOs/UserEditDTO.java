@@ -6,7 +6,7 @@ import org.springframework.beans.BeanUtils;
 import edu.xanderson.ritimoTask.model.entity.UserEntity;
 import edu.xanderson.ritimoTask.model.entity.UserSituation;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public class UserEditDTO {
     public UserEditDTO(){
@@ -17,7 +17,7 @@ public class UserEditDTO {
         BeanUtils.copyProperties(user, this);
     }
 
-    @NotBlank(message = "O id é obrigatorio")
+    @NotNull(message = "O id é obrigatorio")
     private long id;
     
     private String name;
@@ -27,6 +27,7 @@ public class UserEditDTO {
     
     private UserSituation situation;
 
+    private String password;
 
     public long getId() {
         return id;
@@ -59,5 +60,14 @@ public class UserEditDTO {
     public void setSituation(UserSituation situation) {
         this.situation = situation;
     }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
 
 }
