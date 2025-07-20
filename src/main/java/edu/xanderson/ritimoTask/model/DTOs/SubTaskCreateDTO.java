@@ -30,6 +30,8 @@ public class SubTaskCreateDTO {
 
     private boolean done = false;
 
+    private long taskId;
+
     public long getId() {
         return id;
     }
@@ -85,7 +87,12 @@ public class SubTaskCreateDTO {
     public void setDone(boolean done) {
         this.done = done;
     }
-
+    public long getTaskId() {
+        return taskId;
+    }
+    public void setTaskId(long taskId) {
+        this.taskId = taskId;
+    }
 
 
 }

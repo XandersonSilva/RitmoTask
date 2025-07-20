@@ -21,12 +21,17 @@ public class SubTaskEntity {
     public SubTaskEntity(){
         setStatusIfIsNull();
     }
-    public SubTaskEntity(SubTaskCreateDTO taskDTO){
-        BeanUtils.copyProperties(taskDTO, this);
+    public SubTaskEntity(SubTaskCreateDTO subtaskDTO){
+        BeanUtils.copyProperties(subtaskDTO, this);
+
+
+        this.task = new TaskEntity();
+        this.task.setId(subtaskDTO.getTaskId());
+
         setStatusIfIsNull();
     }
-    public SubTaskEntity(SubTaskEditDTO taskDTO){
-        BeanUtils.copyProperties(taskDTO, this);
+    public SubTaskEntity(SubTaskEditDTO subtaskDTO){
+        BeanUtils.copyProperties(subtaskDTO, this);
         setStatusIfIsNull();
     }
 
@@ -106,5 +111,11 @@ public class SubTaskEntity {
         if (this.status == null) {
             this.status = TaskStatus.TODO;
         }
+    }
+    public TaskEntity getTask() {
+        return task;
+    }
+    public void setTask(TaskEntity task) {
+        this.task = task;
     }
 }
