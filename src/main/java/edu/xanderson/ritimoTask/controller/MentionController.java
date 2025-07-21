@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import edu.xanderson.ritimoTask.model.DTOs.MentionDTO;
 import edu.xanderson.ritimoTask.model.entity.UserEntity;
-import edu.xanderson.ritimoTask.service.BoardService;
 import edu.xanderson.ritimoTask.service.MentionService;
 
 @RestController

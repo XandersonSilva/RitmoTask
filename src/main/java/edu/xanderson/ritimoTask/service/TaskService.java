@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import edu.xanderson.ritimoTask.model.DTOs.AssignUsersDTO;
 import edu.xanderson.ritimoTask.model.DTOs.TaskCreateDTO;
 import edu.xanderson.ritimoTask.model.DTOs.TaskEditDTO;
+import edu.xanderson.ritimoTask.model.DTOs.TaskSummaryDTO;
 import edu.xanderson.ritimoTask.model.entity.ColumnEntity;
 import edu.xanderson.ritimoTask.model.entity.TaskAssignedUsersEntity;
 import edu.xanderson.ritimoTask.model.entity.TaskEntity;
@@ -46,6 +47,13 @@ public class TaskService {
             TaskEntity task = new TaskEntity(taskDTO);
             taskRepository.save(task);
         }
+    }
+
+    public TaskSummaryDTO getTask(long taskId, long userId){
+        //TODO: Verificar se o usuário tem autoridade para realizar essa ação
+
+        TaskSummaryDTO taskDTO = new TaskSummaryDTO(taskRepository.getReferenceById(taskId));
+        return taskDTO;
     }
 
     public void editeTask(TaskEditDTO dto, long userId){

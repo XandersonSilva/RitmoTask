@@ -40,7 +40,7 @@ public class MentionService {
         long columnId       = taskRepository.getReferenceById(taskId).getColumn().getId();
         ColumnEntity column = columnRepository.getReferenceById(columnId);
 
-        
+        //TODO:Garantir Que somente o criador do comentario poderá mensionar alguem 
         if (verifyUserAutority.verifyUserAutorityBoard(user, column.getBoard().getId())) {
             mentionRepository.save(new MentionEntity(mentionDTO));
         }

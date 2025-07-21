@@ -4,7 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import edu.xanderson.ritimoTask.model.DTOs.AssignUsersDTO;
 import edu.xanderson.ritimoTask.model.DTOs.TaskCreateDTO;
 import edu.xanderson.ritimoTask.model.DTOs.TaskEditDTO;
+import edu.xanderson.ritimoTask.model.DTOs.TaskSummaryDTO;
 import edu.xanderson.ritimoTask.model.entity.UserEntity;
 import edu.xanderson.ritimoTask.service.TaskService;
 
@@ -35,7 +39,7 @@ public class TaskController {
         return ResponseEntity.badRequest().body("Usuário não autenticado.");
     }
 
-    @PostMapping("/edite/task")
+    @PutMapping("/edite/task")
     public ResponseEntity editeTask(@AuthenticationPrincipal UserEntity currentUser, 
                                 @Validated @RequestBody TaskEditDTO taskDTO) {
         if (currentUser != null) {
@@ -49,7 +53,22 @@ public class TaskController {
         return ResponseEntity.badRequest().body("Usuário não autenticado.");
     }
 
-    @PostMapping("/delete/task")
+    @GetMapping("/get/task")
+    public ResponseEntity<TaskSummaryDTO> getTask(@AuthenticationPrincipal UserEntity currentUser, 
+                                @RequestParam(value = "taskId", required=true) long taskId) {
+        if (currentUser != null) {
+            long userId = currentUser.getId(); // Obtém o ID do usuário
+                        
+            TaskSummaryDTO taskDTO = taskService.getTask(taskId, userId);
+
+            return ResponseEntity.ok(taskDTO);
+
+        }
+        return (ResponseEntity<TaskSummaryDTO>) ResponseEntity.badRequest();
+    }
+
+
+    @DeleteMapping("/delete/task")
     public ResponseEntity deleteTask(@AuthenticationPrincipal UserEntity currentUser, 
                                 @RequestParam(value = "taskId", required=true) long taskId) {
         if (currentUser != null) {
@@ -63,8 +82,8 @@ public class TaskController {
         return ResponseEntity.badRequest().body("Usuário não autenticado.");
     }
 
-    @PostMapping("/task/AssignUsersToTask")
-    public ResponseEntity AssignUsersToTask(@AuthenticationPrincipal UserEntity currentUser, 
+    @PostMapping("/task/assignUserToTask")
+    public ResponseEntity assignUserToTask(@AuthenticationPrincipal UserEntity currentUser, 
                                             @Validated @RequestBody AssignUsersDTO assignUsersDTO){
         if(currentUser != null){
             long userId = currentUser.getId();
