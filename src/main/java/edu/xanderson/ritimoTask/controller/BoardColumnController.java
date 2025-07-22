@@ -6,15 +6,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import edu.xanderson.ritimoTask.model.DTOs.ColumnDTO;
 import edu.xanderson.ritimoTask.model.DTOs.ColumnSummaryDTO;
-import edu.xanderson.ritimoTask.model.DTOs.TaskSummaryDTO;
 import edu.xanderson.ritimoTask.model.entity.UserEntity;
 import edu.xanderson.ritimoTask.service.ColumnService;
 
@@ -24,7 +25,7 @@ public class BoardColumnController {
     @Autowired
     private ColumnService columnService;
 
-    @PostMapping("/create/boardcolumn")
+    @PostMapping("/create/board/column")
     public ResponseEntity createBoardColumn(@AuthenticationPrincipal UserEntity currentUser, 
                                 @Validated @RequestBody ColumnDTO columnDTO) {
         if (currentUser != null) {
@@ -49,10 +50,10 @@ public class BoardColumnController {
             return ResponseEntity.ok(columnsDTO);
 
         }
-        return (ResponseEntity<List<ColumnSummaryDTO>>) ResponseEntity.badRequest();
+        return ResponseEntity.badRequest().body(List.of());
     }
 
-    @PostMapping("/edite/boardcolumn")
+    @PutMapping("/edite/board/column")
     public ResponseEntity editecolumn(@AuthenticationPrincipal UserEntity currentUser, 
                                 @Validated @RequestBody ColumnDTO columnDTO) {
         if (currentUser != null) {
@@ -66,7 +67,7 @@ public class BoardColumnController {
         return ResponseEntity.badRequest().body("Usuário não autenticado.");
     }
 
-    @PostMapping("/delete/boardcolumn")
+    @DeleteMapping("/delete/board/column")
     public ResponseEntity deletecolumn(@AuthenticationPrincipal UserEntity currentUser, 
                                 @RequestParam(value = "columnId", required=true) long columnId) {
         if (currentUser != null) {

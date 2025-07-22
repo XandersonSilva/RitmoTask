@@ -4,7 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,7 +35,7 @@ public class BoardController {
         return ResponseEntity.badRequest().body("Usuário não autenticado.");
     }
 
-    @PostMapping("/edite/board")
+    @PutMapping("/edite/board")
     public ResponseEntity editeBoard(@AuthenticationPrincipal UserEntity currentUser, 
                                 @Validated @RequestBody BoardDTO boardDTO) {
         if (currentUser != null) {
@@ -47,7 +49,7 @@ public class BoardController {
         return ResponseEntity.badRequest().body("Usuário não autenticado.");
     }
 
-    @PostMapping("/delete/board")
+    @DeleteMapping("/delete/board")
     public ResponseEntity deleteBoard(@AuthenticationPrincipal UserEntity currentUser, 
                                 @RequestParam(value = "boardId", required=true) long boardId) {
         if (currentUser != null) {
@@ -61,7 +63,7 @@ public class BoardController {
         return ResponseEntity.badRequest().body("Usuário não autenticado.");
     }
 
-    @PostMapping("/board/adduser")
+    @PutMapping("/board/adduser")
     public ResponseEntity addUserToBoard(@AuthenticationPrincipal UserEntity currentUser, 
                                 @Validated @RequestBody EditUserResourcePermitionDTO data ) {
         if (currentUser != null) {

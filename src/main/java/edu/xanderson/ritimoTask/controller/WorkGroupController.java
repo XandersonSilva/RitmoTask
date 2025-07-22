@@ -4,7 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -34,7 +36,7 @@ public class WorkGroupController {
         return ResponseEntity.badRequest().body("Usuário não autenticado.");
     }
 
-    @PostMapping("/edite/workgroup")
+    @PutMapping("/edite/workgroup")
     public ResponseEntity editeWorkGroup(@AuthenticationPrincipal UserEntity currentUser, 
                                 @Validated @RequestBody WorkGroupDTO workGroupDTO) {
         if (currentUser != null) {
@@ -48,7 +50,7 @@ public class WorkGroupController {
         return ResponseEntity.badRequest().body("Usuário não autenticado.");
     }
 
-    @PostMapping("/delete/workgroup")
+    @DeleteMapping("/delete/workgroup")
     public ResponseEntity deleteWorkGroup(@AuthenticationPrincipal UserEntity currentUser, 
                                 @RequestParam(value = "workgroupId", required=true) long workGroupId) {
         if (currentUser != null) {
@@ -62,7 +64,7 @@ public class WorkGroupController {
         return ResponseEntity.badRequest().body("Usuário não autenticado.");
     }
 
-    @PostMapping("/workgoup/adduser")
+    @PutMapping("/workgoup/adduser")
     public ResponseEntity addUserToWorkGroup(@AuthenticationPrincipal UserEntity currentUser, 
                                 @Validated @RequestBody EditUserResourcePermitionDTO data ) {
         if (currentUser != null) {

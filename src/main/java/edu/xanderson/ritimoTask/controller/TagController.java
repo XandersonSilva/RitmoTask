@@ -4,7 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -31,7 +33,7 @@ public class TagController {
         return ResponseEntity.badRequest().body("Usuário não autenticado.");
     }
 
-    @PostMapping("/edite/tag")
+    @PutMapping("/edite/tag")
     public ResponseEntity editeTag(@AuthenticationPrincipal UserEntity currentUser, 
                                 @Validated @RequestBody TagDTO tagDTO) {
         if (currentUser != null) {
@@ -45,7 +47,7 @@ public class TagController {
         return ResponseEntity.badRequest().body("Usuário não autenticado.");
     }
 
-    @PostMapping("/delete/tag")
+    @DeleteMapping("/delete/tag")
     public ResponseEntity deletetag(@AuthenticationPrincipal UserEntity currentUser, 
                                 @RequestParam(value = "tagId", required=true) long tagId) {
         if (currentUser != null) {

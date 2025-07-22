@@ -4,7 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -34,7 +36,7 @@ class OrganizationController {
         return ResponseEntity.ok().body("Usuário não autenticado.");
     }
 
-    @PostMapping("/edite/organization")
+    @PutMapping("/edite/organization")
     public ResponseEntity editeorganization(@AuthenticationPrincipal UserEntity currentUser, 
                                 @Validated @RequestBody OrganizationDTO organizationDTO) {
         if (currentUser != null) {
@@ -48,7 +50,7 @@ class OrganizationController {
         return ResponseEntity.badRequest().body("Usuário não autenticado.");
     }
 
-    @PostMapping("/delete/organization")
+    @DeleteMapping("/delete/organization")
     public ResponseEntity deleteorganization(@AuthenticationPrincipal UserEntity currentUser, 
                                 @RequestParam(value = "organizationId", required=true) long organizationId) {
         if (currentUser != null) {
@@ -62,7 +64,7 @@ class OrganizationController {
         return ResponseEntity.badRequest().body("Usuário não autenticado.");
     }
 
-    @PostMapping("/organization/adduser")
+    @PutMapping("/organization/adduser")
     public ResponseEntity addUserToOrganization(@AuthenticationPrincipal UserEntity currentUser, 
                                 @Validated @RequestBody EditUserResourcePermitionDTO data ) {
         if (currentUser != null) {

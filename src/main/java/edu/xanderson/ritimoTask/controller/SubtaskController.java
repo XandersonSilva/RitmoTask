@@ -4,7 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import edu.xanderson.ritimoTask.model.DTOs.SubTaskCreateDTO;
@@ -18,7 +20,7 @@ public class SubtaskController {
     @Autowired
     private SubtaskService subtaskService;
 
-    @PostMapping("/task/create/subtask")
+    @PostMapping("/create/subtask")
     public ResponseEntity createSubtask(@AuthenticationPrincipal UserEntity currentUser, 
                                 @Validated @RequestBody SubTaskCreateDTO subtaskDTO) {
         if (currentUser != null) {
@@ -32,7 +34,7 @@ public class SubtaskController {
         return ResponseEntity.badRequest().body("Usuário não autenticado.");
     }
 
-    @PostMapping("/task/edit/subtask")
+    @PutMapping("/edit/subtask")
     public ResponseEntity editSubtask(@AuthenticationPrincipal UserEntity currentUser, 
                                 @Validated @RequestBody SubTaskEditDTO subtaskDTO) {
         if (currentUser != null) {
@@ -46,7 +48,7 @@ public class SubtaskController {
         return ResponseEntity.badRequest().body("Usuário não autenticado.");
     }
 
-    @PostMapping("/task/delete/subtask")
+    @DeleteMapping("/delete/subtask")
     public ResponseEntity deleteSubtask(@AuthenticationPrincipal UserEntity currentUser, 
                                 @Validated @RequestBody SubTaskEditDTO subtaskDTO) {
         if (currentUser != null) {

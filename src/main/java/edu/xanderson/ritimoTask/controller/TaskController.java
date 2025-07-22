@@ -66,7 +66,7 @@ public class TaskController {
             return ResponseEntity.ok(taskDTO);
 
         }
-        return (ResponseEntity<TaskSummaryDTO>) ResponseEntity.badRequest();
+        return ResponseEntity.badRequest().body(null);
     }
     @GetMapping("/get/board/tasks")
     public ResponseEntity<List<TaskSummaryDTO>> getBoardTasks(@AuthenticationPrincipal UserEntity currentUser,
@@ -79,7 +79,7 @@ public class TaskController {
             return ResponseEntity.ok(taskDTO);
 
         }
-        return (ResponseEntity<List<TaskSummaryDTO>>) ResponseEntity.badRequest();
+        return ResponseEntity.badRequest().body(List.of());
     }
 
 
@@ -97,7 +97,7 @@ public class TaskController {
         return ResponseEntity.badRequest().body("Usuário não autenticado.");
     }
 
-    @PostMapping("/task/assignUserToTask")
+    @PutMapping("/task/assignUserToTask")
     public ResponseEntity assignUserToTask(@AuthenticationPrincipal UserEntity currentUser, 
                                             @Validated @RequestBody AssignUsersDTO assignUsersDTO){
         if(currentUser != null){
@@ -111,7 +111,7 @@ public class TaskController {
 
     }
 
-    @PostMapping("/block/task")
+    @PutMapping("/block/task")
     public ResponseEntity blockTask(@AuthenticationPrincipal UserEntity currentUser, 
                                 @Validated @RequestBody TaskEditDTO taskDTO) {
         if (currentUser != null) {
@@ -125,7 +125,7 @@ public class TaskController {
         return ResponseEntity.badRequest().body("Usuário não autenticado.");
     }
 
-    @PostMapping("/unblock/task")
+    @PutMapping("/unblock/task")
     public ResponseEntity unblockTask(@AuthenticationPrincipal UserEntity currentUser, 
                                 @Validated @RequestBody TaskEditDTO taskDTO) {
         if (currentUser != null) {
@@ -139,7 +139,7 @@ public class TaskController {
         return ResponseEntity.badRequest().body("Usuário não autenticado.");
     }
 
-    @PostMapping("/cancel/task")
+    @PutMapping("/cancel/task")
     public ResponseEntity cancelTask(@AuthenticationPrincipal UserEntity currentUser, 
                                 @Validated @RequestBody TaskEditDTO taskDTO) {
         if (currentUser != null) {
@@ -152,7 +152,7 @@ public class TaskController {
         }
         return ResponseEntity.badRequest().body("Usuário não autenticado.");
     }
-    @PostMapping("/set/duedate/task")
+    @PutMapping("/set/duedate/task")
     public ResponseEntity setTaskDueDate(@AuthenticationPrincipal UserEntity currentUser, 
                                 @Validated @RequestBody TaskEditDTO taskDTO) {
         if (currentUser != null) {
@@ -167,7 +167,7 @@ public class TaskController {
     }
 
 
-    @PostMapping("/move/task")
+    @PutMapping("/move/task")
     public ResponseEntity moveTaskToCollumn(@AuthenticationPrincipal UserEntity currentUser, 
                                 @Validated @RequestBody TaskEditDTO taskDTO) {
         if (currentUser != null) {

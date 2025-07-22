@@ -17,7 +17,7 @@ public class MentionController {
 @Autowired
     private MentionService mentionService;
 
-    @PostMapping("/create/boardcolumn/task/comment/mention")
+    @PostMapping("/create/mention")
     public ResponseEntity createMention(@AuthenticationPrincipal UserEntity currentUser, 
                                 @Validated @RequestBody MentionDTO mentionDTO) {
         if (currentUser != null) {
