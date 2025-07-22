@@ -1,9 +1,13 @@
 package edu.xanderson.ritimoTask.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import edu.xanderson.ritimoTask.model.DTOs.ColumnDTO;
+import edu.xanderson.ritimoTask.model.DTOs.ColumnSummaryDTO;
 import edu.xanderson.ritimoTask.model.entity.BoardEntity;
 import edu.xanderson.ritimoTask.model.entity.ColumnEntity;
 import edu.xanderson.ritimoTask.model.entity.UserEntity;
@@ -34,6 +38,20 @@ public class ColumnService {
         if (verifyUserAutority.verifyUserAutorityBoard(user, board.getId())) {
             createColumn(columnDTO, user, board);
         }
+    }
+
+    public List<ColumnSummaryDTO> getBoardColumns(long boardId, long userId){
+        //TODO:Fazer a verificação se o usuário pode realizar essa ação
+
+        List<ColumnSummaryDTO> columnsDTO = new ArrayList();
+        //TODO: Verificar outros locais onde foi criado um obijeto para a query no lugar de usar o id
+        List<ColumnEntity> columns = columnRepository.findByBoardId(boardId);
+        for (ColumnEntity column : columns) {
+            columnsDTO.add(new ColumnSummaryDTO(column));
+        }
+
+        return columnsDTO;
+
     }
 
     public void editeColumn(ColumnDTO dto, long userId){

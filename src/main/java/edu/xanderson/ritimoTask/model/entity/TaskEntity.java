@@ -174,5 +174,11 @@ public class TaskEntity {
     public void setMemberships(List<TaskAssignedUsersEntity> memberships) {
         this.memberships = memberships;
     }
+    public List<SubTaskEntity> getSubTasks() {
+        return subTasks;
+    }
+    public void setSubTasks(List<SubTaskEntity> subTasks) {
+        this.subTasks = subTasks;
+    }
 
 }

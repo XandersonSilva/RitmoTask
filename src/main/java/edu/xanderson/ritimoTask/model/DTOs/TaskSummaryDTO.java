@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.beans.BeanUtils;
 
 import edu.xanderson.ritimoTask.model.entity.CommentEntity;
+import edu.xanderson.ritimoTask.model.entity.SubTaskEntity;
 import edu.xanderson.ritimoTask.model.entity.TagEntity;
 import edu.xanderson.ritimoTask.model.entity.TaskEntity;
 import edu.xanderson.ritimoTask.model.entity.TaskStatus;
@@ -41,6 +42,14 @@ public class TaskSummaryDTO {
             }
             this.comments = commentDTO;
         }
+
+        if (taskEntity.getSubTasks() != null) {
+            List<SubTaskSummaryDTO> subtaskDTO = new ArrayList<>();
+            for (SubTaskEntity subtask : taskEntity.getSubTasks()) {
+                subtaskDTO.add(new SubTaskSummaryDTO(subtask));
+            }
+            this.subTasks = subtaskDTO;
+        }
     }
 
     @NotNull
@@ -64,6 +73,8 @@ public class TaskSummaryDTO {
     private List<TagSummaryDTO> tags;
 
     private List<CommentSummaryDTO> comments;
+
+    private List<SubTaskSummaryDTO> subTasks;
 
     private void setStatusIfIsNull(){
         if (this.status == null) {
@@ -137,6 +148,11 @@ public class TaskSummaryDTO {
     public void setComments(List<CommentSummaryDTO> comments) {
         this.comments = comments;
     }
-
+    public List<SubTaskSummaryDTO> getSubTasks() {
+        return subTasks;
+    }
+    public void setSubTasks(List<SubTaskSummaryDTO> subTasks) {
+        this.subTasks = subTasks;
+    }
     
 }

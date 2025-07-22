@@ -68,7 +68,7 @@ public class TaskController {
         }
         return (ResponseEntity<TaskSummaryDTO>) ResponseEntity.badRequest();
     }
-    @GetMapping("/get/board/task")
+    @GetMapping("/get/board/tasks")
     public ResponseEntity<List<TaskSummaryDTO>> getBoardTasks(@AuthenticationPrincipal UserEntity currentUser,
                                 @RequestParam(value = "boardId", required=true) long boardId) {
         if (currentUser != null) {

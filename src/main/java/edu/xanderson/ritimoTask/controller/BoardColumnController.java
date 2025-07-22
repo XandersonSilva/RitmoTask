@@ -1,15 +1,20 @@
 package edu.xanderson.ritimoTask.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import edu.xanderson.ritimoTask.model.DTOs.ColumnDTO;
+import edu.xanderson.ritimoTask.model.DTOs.ColumnSummaryDTO;
+import edu.xanderson.ritimoTask.model.DTOs.TaskSummaryDTO;
 import edu.xanderson.ritimoTask.model.entity.UserEntity;
 import edu.xanderson.ritimoTask.service.ColumnService;
 
@@ -31,6 +36,20 @@ public class BoardColumnController {
 
         }
         return ResponseEntity.badRequest().body("Usuário não autenticado.");
+    }
+    
+    @GetMapping("/get/board/columns")
+    public ResponseEntity<List<ColumnSummaryDTO>> getBoardColumns(@AuthenticationPrincipal UserEntity currentUser,
+                                @RequestParam(value = "boardId", required=true) long boardId) {
+        if (currentUser != null) {
+            long userId = currentUser.getId(); // Obtém o ID do usuário
+                        
+            List<ColumnSummaryDTO> columnsDTO = columnService.getBoardColumns(boardId, userId);
+
+            return ResponseEntity.ok(columnsDTO);
+
+        }
+        return (ResponseEntity<List<ColumnSummaryDTO>>) ResponseEntity.badRequest();
     }
 
     @PostMapping("/edite/boardcolumn")
