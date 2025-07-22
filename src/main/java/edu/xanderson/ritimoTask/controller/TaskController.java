@@ -1,5 +1,7 @@
 package edu.xanderson.ritimoTask.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -65,6 +67,19 @@ public class TaskController {
 
         }
         return (ResponseEntity<TaskSummaryDTO>) ResponseEntity.badRequest();
+    }
+    @GetMapping("/get/board/task")
+    public ResponseEntity<List<TaskSummaryDTO>> getBoardTasks(@AuthenticationPrincipal UserEntity currentUser,
+                                @RequestParam(value = "boardId", required=true) long boardId) {
+        if (currentUser != null) {
+            long userId = currentUser.getId(); // Obtém o ID do usuário
+                        
+            List<TaskSummaryDTO> taskDTO = taskService.getBoardTasks(boardId, userId);
+
+            return ResponseEntity.ok(taskDTO);
+
+        }
+        return (ResponseEntity<List<TaskSummaryDTO>>) ResponseEntity.badRequest();
     }
 
 

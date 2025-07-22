@@ -1,6 +1,8 @@
 package edu.xanderson.ritimoTask.service;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -54,6 +56,17 @@ public class TaskService {
 
         TaskSummaryDTO taskDTO = new TaskSummaryDTO(taskRepository.getReferenceById(taskId));
         return taskDTO;
+    }
+
+    public List<TaskSummaryDTO> getBoardTasks(long boardId, long userId){
+        //TODO: Verificar se o usuário tem autoridade para realizar essa ação
+
+
+        List<TaskSummaryDTO> tasksDTO = new ArrayList<>();
+        for (TaskEntity task : taskRepository.findTasksByBoardId(boardId)) {
+            tasksDTO.add(new TaskSummaryDTO(task));
+        }
+        return tasksDTO;
     }
 
     public void editeTask(TaskEditDTO dto, long userId){
