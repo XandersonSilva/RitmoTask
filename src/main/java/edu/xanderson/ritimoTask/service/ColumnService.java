@@ -43,7 +43,7 @@ public class ColumnService {
     public List<ColumnSummaryDTO> getBoardColumns(long boardId, long userId){
         //TODO:Fazer a verificação se o usuário pode realizar essa ação
 
-        List<ColumnSummaryDTO> columnsDTO = new ArrayList();
+        List<ColumnSummaryDTO> columnsDTO = new ArrayList<>();
         //TODO: Verificar outros locais onde foi criado um obijeto para a query no lugar de usar o id
         List<ColumnEntity> columns = columnRepository.findByBoardId(boardId);
         for (ColumnEntity column : columns) {

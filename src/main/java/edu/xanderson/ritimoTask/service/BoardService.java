@@ -1,9 +1,13 @@
 package edu.xanderson.ritimoTask.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import edu.xanderson.ritimoTask.model.DTOs.BoardDTO;
+import edu.xanderson.ritimoTask.model.DTOs.BoardSummaryDTO;
 import edu.xanderson.ritimoTask.model.DTOs.EditUserResourcePermitionDTO;
 import edu.xanderson.ritimoTask.model.entity.BoardEntity;
 import edu.xanderson.ritimoTask.model.entity.BoardMembership;
@@ -46,7 +50,39 @@ public class BoardService {
         boardMembershipRepository.save(boardMembership);
     }
 
+    public BoardSummaryDTO getBoard(long boardId, long userId){
+        //TODO:Fazer a verificação se o usuário pode realizar essa ação
+
+        BoardSummaryDTO board = new BoardSummaryDTO(boardRepository.getReferenceById(boardId));
+
+        return board;
+    }
+
+    public List<BoardSummaryDTO> getBoardsByUser(long userId){
+        //TODO:Fazer a verificação se o usuário pode realizar essa ação
+
+        List<BoardSummaryDTO> boards = new ArrayList<>();
+        for (BoardEntity board : boardRepository.findBoardsByUser(userId)) {
+            boards.add(new BoardSummaryDTO(board));
+        }
+
+        return boards;
+    }
+
+    public List<BoardSummaryDTO> getBoardsByWorkGroup(long workGroupId, long userId){
+        //TODO:Fazer a verificação se o usuário pode realizar essa ação
+
+        List<BoardSummaryDTO> boards = new ArrayList<>();
+        for (BoardEntity board : boardRepository.findByWorkGroupId(workGroupId)) {
+            boards.add(new BoardSummaryDTO(board));
+        }
+
+        return boards;
+    }
+
     public void editeBoard(BoardDTO dto, long userId){
+        //TODO:Fazer a verificação se o usuário pode realizar essa ação
+
         if(dto.getId() == 0) return;     
 
         BoardEntity board = new BoardEntity(dto);
@@ -55,6 +91,8 @@ public class BoardService {
     }
 
     public void deleteBoard(long boardId, long userId){
+        //TODO:Fazer a verificação se o usuário pode realizar essa ação
+
         BoardEntity board = boardRepository.getReferenceById(boardId);
 
         boardRepository.delete(board);
