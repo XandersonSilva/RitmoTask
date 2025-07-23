@@ -72,7 +72,6 @@ public class WorkGroupController {
             long userId = currentUser.getId(); // Obtém o ID do usuário
                         
             List<WorkGroupSummaryDTO> workgroups = workGroupService.getOrganizationWorkgroups(organizationId, userId);
-            System.out.println(userId);
             return ResponseEntity.ok().body(workgroups);
         }
         return ResponseEntity.badRequest().body(null);

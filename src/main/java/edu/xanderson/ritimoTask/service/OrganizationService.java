@@ -1,10 +1,14 @@
 package edu.xanderson.ritimoTask.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import edu.xanderson.ritimoTask.model.DTOs.EditUserResourcePermitionDTO;
 import edu.xanderson.ritimoTask.model.DTOs.OrganizationDTO;
+import edu.xanderson.ritimoTask.model.DTOs.OrganizationSummaryDTO;
 import edu.xanderson.ritimoTask.model.entity.NotificationEntity;
 import edu.xanderson.ritimoTask.model.entity.OrganizationEntity;
 import edu.xanderson.ritimoTask.model.entity.OrganizationMembership;
@@ -44,6 +48,42 @@ public class OrganizationService {
 
         organizationMembershipRepository.save(organizationMembership);
 
+    }
+
+    public OrganizationSummaryDTO getOrganization(long organizationId, long userId){
+        //TODO:Verificar se o usuário tem autoridade para realizar essa ação
+
+        try {
+            OrganizationEntity organization = organizationRepository.getReferenceById(organizationId);
+            OrganizationSummaryDTO organizationDTO = new OrganizationSummaryDTO(organization);
+    
+            return organizationDTO;
+            
+        } catch (Exception e) {
+            // TODO: handle exception
+            // Erro: Usuário solicitou dados inexistentes ou ID incorreto
+            System.out.println(e);
+            return null;
+        }
+    }
+
+    public List<OrganizationSummaryDTO> getOrganizations(long userId){
+        //TODO:Verificar se o usuário tem autoridade para realizar essa ação
+
+        try {
+            List<OrganizationSummaryDTO> organizationsDTO = new ArrayList<>();
+            for (OrganizationEntity organization : organizationRepository.findByUser(userId)) {
+                organizationsDTO.add(new OrganizationSummaryDTO(organization));
+            }
+
+            return organizationsDTO;
+            
+        } catch (Exception e) {
+            // TODO: handle exception
+            // Erro: Usuário inexistentes ou ID incorreto
+            System.out.println(e);
+            return null;
+        }
     }
 
     public void editeOrganization(OrganizationDTO dto, long userId){

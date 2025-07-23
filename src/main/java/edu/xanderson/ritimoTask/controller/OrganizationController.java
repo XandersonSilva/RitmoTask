@@ -1,10 +1,13 @@
 package edu.xanderson.ritimoTask.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import edu.xanderson.ritimoTask.model.DTOs.EditUserResourcePermitionDTO;
 import edu.xanderson.ritimoTask.model.DTOs.OrganizationDTO;
+import edu.xanderson.ritimoTask.model.DTOs.OrganizationSummaryDTO;
 import edu.xanderson.ritimoTask.model.entity.UserEntity;
 import edu.xanderson.ritimoTask.service.OrganizationService;
 
@@ -34,6 +38,28 @@ class OrganizationController {
 
         }
         return ResponseEntity.ok().body("Usuário não autenticado.");
+    }
+
+    @GetMapping("/get/organization")
+    public ResponseEntity<OrganizationSummaryDTO> getOrganization(@AuthenticationPrincipal UserEntity currentUser,
+                                            @RequestParam(value = "organizationId", required = true) long organizationId){
+        if(currentUser != null){
+            long userId = currentUser.getId();
+            OrganizationSummaryDTO organization = organizationService.getOrganization(organizationId, userId);
+
+            return ResponseEntity.ok().body(organization);
+        }
+        return ResponseEntity.badRequest().body(null);
+    }
+    @GetMapping("/get/organizations")
+    public ResponseEntity<List<OrganizationSummaryDTO>> getOrganizations(@AuthenticationPrincipal UserEntity currentUser){
+        if(currentUser != null){
+            long userId = currentUser.getId();
+            List<OrganizationSummaryDTO> organizations = organizationService.getOrganizations(userId);
+
+            return ResponseEntity.ok().body(organizations);
+        }
+        return ResponseEntity.badRequest().body(null);
     }
 
     @PutMapping("/edite/organization")
