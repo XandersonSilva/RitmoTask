@@ -1,10 +1,14 @@
 package edu.xanderson.ritimoTask.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import edu.xanderson.ritimoTask.model.DTOs.EditUserResourcePermitionDTO;
 import edu.xanderson.ritimoTask.model.DTOs.WorkGroupDTO;
+import edu.xanderson.ritimoTask.model.DTOs.WorkGroupSummaryDTO;
 import edu.xanderson.ritimoTask.model.entity.NotificationEntity;
 import edu.xanderson.ritimoTask.model.entity.RoleType;
 import edu.xanderson.ritimoTask.model.entity.UserEntity;
@@ -32,7 +36,7 @@ public class WorkGroupService {
     NotificationService notificationService;
 
     public void createWorkGroupService(WorkGroupDTO dto, long userId){
-        
+        //TODO:Verificar se o usuário tem autoridade para realizar essa ação
         WorkGroupEntity workGroup = new WorkGroupEntity(dto);
         WorkGroupMembership workGroupMembership = new WorkGroupMembership();
         
@@ -46,7 +50,38 @@ public class WorkGroupService {
         workGroupMembershipRepository.save(workGroupMembership);
     }
 
+    public WorkGroupSummaryDTO getWorkGroup(long workgroupId, long userId){
+        //TODO:Verificar se o usuário tem autoridade para realizar essa ação
+        
+        WorkGroupEntity workgroup = workGroupRepository.getReferenceById(workgroupId);
+        
+        return new WorkGroupSummaryDTO(workgroup);
+    }
+
+    public List<WorkGroupSummaryDTO> getWorkGroups(long userId){
+        //TODO:Verificar se o usuário tem autoridade para realizar essa ação
+        
+        List<WorkGroupSummaryDTO> workgroups = new ArrayList<>();
+        for (WorkGroupEntity workgroup : workGroupRepository.findByUserId(userId)) {
+            workgroups.add(new WorkGroupSummaryDTO(workgroup));
+        }
+        
+        return workgroups;
+    } 
+
+    public List<WorkGroupSummaryDTO> getOrganizationWorkgroups(long organizationId, long userId){
+        //TODO:Verificar se o usuário tem autoridade para realizar essa ação
+        
+        List<WorkGroupSummaryDTO> workgroups = new ArrayList<>();
+        for (WorkGroupEntity workgroup : workGroupRepository.findByOrganizationId(organizationId)) {
+            workgroups.add(new WorkGroupSummaryDTO(workgroup));
+        }
+        
+        return workgroups;
+    } 
+
     public void editeWorkGroup(WorkGroupDTO dto, long userId){
+        //TODO:Verificar se o usuário tem autoridade para realizar essa ação
         if(dto.getId() == 0) return;     
 
         WorkGroupEntity workGroup = new WorkGroupEntity(dto);
@@ -55,6 +90,7 @@ public class WorkGroupService {
     }
 
     public void deleteWorkGroup(long workGroupId, long userId){
+        //TODO:Verificar se o usuário tem autoridade para realizar essa ação
         WorkGroupEntity workGroup = workGroupRepository.getReferenceById(workGroupId);
 
         workGroupRepository.delete(workGroup);
