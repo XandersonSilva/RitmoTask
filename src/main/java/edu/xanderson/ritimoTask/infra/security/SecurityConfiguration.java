@@ -37,6 +37,7 @@ public class SecurityConfiguration {
     @Autowired
     private UserRepository userRepository;
 
+
    @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     return http
@@ -63,35 +64,41 @@ public class SecurityConfiguration {
             )
             .oauth2Login(oauth2 -> oauth2
                 //.loginPage("/login/oauth2/code/google")
-                .defaultSuccessUrl("/auth/oauth2/success", true)
+                .defaultSuccessUrl("http://localhost:8080/swagger-ui/index.html", true)
                 .successHandler((request, response, authentication) -> {
                     OAuth2AuthenticationToken oauthToken = 
                         (OAuth2AuthenticationToken) authentication;
                     OAuth2User oauth2User = oauthToken.getPrincipal();
 
+                    String SubjectId = oauthToken.getName();
                     // Gerando o token com o email que veio do google 
-                    
-                    String email = oauth2User.getAttribute("email"); // Obtém o email do Google
+                    String email = oauth2User.getAttribute("email"); 
 
                     if (email == null) {
                         // Tratar caso onde o email não é fornecido pelo OAuth2 provider
                         response.sendRedirect("/auth/login?error=email_not_found");
                         return;
                     }
-                    System.out.println(email);
 
                     // Procurar ou criar o usuário no seu banco de dados
                     Optional<UserEntity> userOptional = Optional.ofNullable((UserEntity) userRepository.findByEmail(email));
                     UserEntity user;
 
+                    // TODO:Atualizar dados do usuário se necessário (e.g., nome, foto de perfil)
                     if (userOptional.isPresent()) {
                         user = userOptional.get();
-                        // Atualizar dados do usuário se necessário (e.g., nome, foto de perfil)
+                        if (user.getGoogleId() == null) {
+                            user.setGoogleId(SubjectId);//Referencia do usuário na tabela oauth2_authorized_client
+
+                            // Salvar o novo usuário no banco de dados
+                            userRepository.save(user); 
+                        }
                     } else {
                         // Criar novo usuário se não existir
                         user = new UserEntity();
                         user.setEmail(email);
                         user.setUsername(email);
+                        user.setGoogleId(SubjectId);//Referencia do usuário na tabela oauth2_authorized_client
                         user.setName(oauth2User.getAttribute("name")); 
                         user.setSituation(UserSituation.ACTIVE);
                         // Salvar o novo usuário no banco de dados

@@ -34,3 +34,10 @@ build/
 
 ### Envs ###
 .env
+
+### Json ###
+credentials.json
+
+### Tokens ###
+tokens/*
+tokens/StoredCredential

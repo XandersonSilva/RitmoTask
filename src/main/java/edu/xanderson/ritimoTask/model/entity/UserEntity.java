@@ -43,6 +43,9 @@ public class UserEntity implements UserDetails{
     private String email;
     
     private String password;
+    
+    @Column(name = "google_id", unique = true)
+    private String googleId;
 
     @Enumerated(EnumType.STRING)
     private UserSituation situation;
@@ -153,5 +156,13 @@ public class UserEntity implements UserDetails{
 
     public void setSituation(UserSituation situation) {
         this.situation = situation;
+    }
+
+    public String getGoogleId() {
+        return googleId;
+    }
+
+    public void setGoogleId(String googleId) {
+        this.googleId = googleId;
     }
 }
