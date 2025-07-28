@@ -71,16 +71,14 @@ public class SecurityConfiguration {
                     OAuth2User oauth2User = oauthToken.getPrincipal();
 
                     String SubjectId = oauthToken.getName();
-                    // Gerando o token com o email que veio do google 
                     String email = oauth2User.getAttribute("email"); 
 
                     if (email == null) {
-                        // Tratar caso onde o email não é fornecido pelo OAuth2 provider
+                        // TODO:Tratar caso onde o email não é fornecido pelo OAuth2 provider
                         response.sendRedirect("/auth/login?error=email_not_found");
                         return;
                     }
 
-                    // Procurar ou criar o usuário no seu banco de dados
                     Optional<UserEntity> userOptional = Optional.ofNullable((UserEntity) userRepository.findByEmail(email));
                     UserEntity user;
 
