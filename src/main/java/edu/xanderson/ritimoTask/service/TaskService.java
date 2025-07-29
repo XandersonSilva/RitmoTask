@@ -74,13 +74,14 @@ public class TaskService {
 
     public void editeTask(TaskEditDTO dto, long userId) throws IOException, GeneralSecurityException{
         TaskEntity taskDB = taskRepository.getReferenceById(dto.getId());
+        Instant originalBdDueDate = taskDB.getDueDate();
         if(taskDB == null) return; 
 
         TaskEntity task = new TaskEntity(dto);
 
         taskRepository.save(task);
-
-        if (task.getDueDate() != null && task.getDueDate() != taskDB.getDueDate()) {
+        
+        if (task.getDueDate() != null && task.getDueDate() != originalBdDueDate) {
             ColumnEntity column = columnRepository.getReferenceById(task.getColumn().getId());
             long boardId = column.getId();
             calendarService.saveTaskOnGoogleCalendar(task.getId(), boardId);
