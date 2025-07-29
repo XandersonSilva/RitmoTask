@@ -49,11 +49,11 @@ public class TagController {
 
     @DeleteMapping("/delete/tag")
     public ResponseEntity deletetag(@AuthenticationPrincipal UserEntity currentUser, 
-                                @RequestParam(value = "tagId", required=true) long tagId) {
+                                @Validated @RequestBody TagDTO tagDTO) {
         if (currentUser != null) {
             long userId = currentUser.getId(); // Obtém o ID do usuário
                         
-            tagService.deleteTag(tagId, userId);
+            tagService.deleteTag(tagDTO, userId);
 
             return ResponseEntity.ok().body("Deletando quadro para o usuário com ID: " + userId);
 

@@ -26,10 +26,6 @@ public class CommentService {
 
     @Autowired
     TaskRepository taskRepository;
-    
-    @Autowired
-    VerifyUserAutority verifyUserAutority;
-
 
     @Transactional
     @PreAuthorize("@boardSecurityService.verifyIfUserIsLeaderOrMember(#userId, #commentDTO.getBoardId())")

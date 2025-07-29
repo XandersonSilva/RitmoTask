@@ -34,10 +34,6 @@ public class BoardService {
     @Autowired
     NotificationService notificationService;
 
-    @Autowired
-    VerifyUserAutority verifyUserAutority;
-
-
     public void createBoard(BoardDTO dto, long userId){
         BoardEntity board = new BoardEntity(dto);
         BoardMembership boardMembership = new BoardMembership();

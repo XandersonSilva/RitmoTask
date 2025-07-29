@@ -1,16 +1,16 @@
 package edu.xanderson.ritimoTask.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import edu.xanderson.ritimoTask.model.DTOs.TagDTO;
-import edu.xanderson.ritimoTask.model.entity.ColumnEntity;
 import edu.xanderson.ritimoTask.model.entity.TagEntity;
-import edu.xanderson.ritimoTask.model.entity.UserEntity;
 import edu.xanderson.ritimoTask.model.repository.ColumnRepository;
 import edu.xanderson.ritimoTask.model.repository.TagRepository;
 import edu.xanderson.ritimoTask.model.repository.TaskRepository;
 import edu.xanderson.ritimoTask.model.repository.UserRepository;
+import jakarta.transaction.Transactional;
 
 @Service
 public class TagService {
@@ -26,30 +26,27 @@ public class TagService {
     @Autowired
     TaskRepository taskRepository;
 
-    @Autowired
-    VerifyUserAutority verifyUserAutority;
 
-    public void createBoardColumnTaskTag(TagDTO tagDTO, long userId){
-        UserEntity   user   = userRepository.getReferenceById(userId);
-        long columnId       = taskRepository.getReferenceById(tagDTO.getTaskId()).getColumn().getId();
-        ColumnEntity column = columnRepository.getReferenceById(columnId);
-
-        
-        if (verifyUserAutority.verifyUserAutorityBoard(user, column.getBoard().getId())) {
-            tagRepository.save(new TagEntity(tagDTO));
-        }
+    @Transactional
+    @PreAuthorize("@boardSecurityService.verifyIfUserIsLeaderOrMember(#userId, #tagDTO.getBoardId())")
+    public void createBoardColumnTaskTag(TagDTO tagDTO, long userId){        
+        tagRepository.save(new TagEntity(tagDTO));
     }
 
-    public void editeTag(TagDTO dto, long userId){
-        if(dto.getId() == 0) return;     
+    @Transactional
+    @PreAuthorize("@boardSecurityService.verifyIfUserIsLeaderOrMember(#userId, #tagDTO.getBoardId())")
+    public void editeTag(TagDTO tagDTO, long userId){
+        if(tagDTO.getId() == 0) return;     
 
-        TagEntity tag = new TagEntity(dto);
+        TagEntity tag = new TagEntity(tagDTO);
 
         tagRepository.save(tag);
     }
 
-    public void deleteTag(long tagId, long userId){
-        TagEntity tag = tagRepository.getReferenceById(tagId);
+    @Transactional
+    @PreAuthorize("@boardSecurityService.verifyIfUserIsLeaderOrMember(#userId, #tagDTO.getBoardId())")
+    public void deleteTag(TagDTO tagDTO, long userId){
+        TagEntity tag = tagRepository.getReferenceById(tagDTO.getId());
 
         tagRepository.delete(tag);
     }

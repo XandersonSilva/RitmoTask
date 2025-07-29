@@ -21,7 +21,6 @@ import edu.xanderson.ritimoTask.model.entity.UserEntity;
 import edu.xanderson.ritimoTask.model.repository.ColumnRepository;
 import edu.xanderson.ritimoTask.model.repository.TaskAssignedUsersRepository;
 import edu.xanderson.ritimoTask.model.repository.TaskRepository;
-import edu.xanderson.ritimoTask.model.repository.UserRepository;
 import jakarta.transaction.Transactional;
 
 @Service
@@ -31,12 +30,6 @@ public class TaskService {
 
     @Autowired
     private ColumnRepository columnRepository;
-
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private VerifyUserAutority verifyUserAutority;
 
     @Autowired
     private TaskAssignedUsersRepository taskAssignedUsersRepository;
@@ -54,14 +47,14 @@ public class TaskService {
 
     @Transactional
     @PreAuthorize("@boardSecurityService.verifyIfUserIsAdministratorOrLeaderOrMemberOrGuest(#userId, #taskDTO.getBoardId())")
-    public TaskSummaryDTO getTask(long taskId, long userId){
+    public TaskSummaryDTO getTask(TaskEditDTO taskDTO, long userId){
 
-        TaskSummaryDTO taskDTO = new TaskSummaryDTO(taskRepository.getReferenceById(taskId));
-        return taskDTO;
+        TaskSummaryDTO task = new TaskSummaryDTO(taskRepository.getReferenceById(taskDTO.getId()));
+        return task;
     }
 
     @Transactional
-    @PreAuthorize("@boardSecurityService.verifyIfUserIsAdministratorOrLeaderOrMemberOrGuest(#userId, #taskDTO.getBoardId())")
+    @PreAuthorize("@boardSecurityService.verifyIfUserIsAdministratorOrLeaderOrMemberOrGuest(#userId, #boardId)")
     public List<TaskSummaryDTO> getBoardTasks(long boardId, long userId){
 
 
@@ -74,12 +67,12 @@ public class TaskService {
 
     @Transactional
     @PreAuthorize("@boardSecurityService.verifyIfUserIsLeaderOrMember(#userId, #taskDTO.getBoardId())")
-    public void editeTask(TaskEditDTO dto, long userId) throws IOException, GeneralSecurityException{
-        TaskEntity taskDB = taskRepository.getReferenceById(dto.getId());
+    public void editeTask(TaskEditDTO taskDTO, long userId) throws IOException, GeneralSecurityException{
+        TaskEntity taskDB = taskRepository.getReferenceById(taskDTO.getId());
         Instant originalBdDueDate = taskDB.getDueDate();
         if(taskDB == null) return; 
 
-        TaskEntity task = new TaskEntity(dto);
+        TaskEntity task = new TaskEntity(taskDTO);
 
         taskRepository.save(task);
         
@@ -92,18 +85,18 @@ public class TaskService {
 
     @Transactional
     @PreAuthorize("@boardSecurityService.verifyIfUserIsLeader(#userId, #taskDTO.getBoardId())")
-    public void deleteTask(long taskId, long userId){
-        TaskEntity task = taskRepository.getReferenceById(taskId);
+    public void deleteTask(TaskEditDTO taskDTO, long userId){
+        TaskEntity task = taskRepository.getReferenceById(taskDTO.getId());
 
         taskRepository.delete(task);
     }
 
     @Transactional
     @PreAuthorize("@boardSecurityService.verifyIfUserIsLeader(#userId, #taskDTO.getBoardId())")
-    public void blockTask(TaskEditDTO dto, long userId){
-        if(dto.getId() == 0) return;     
+    public void blockTask(TaskEditDTO taskDTO, long userId){
+        if(taskDTO.getId() == 0) return;     
 
-        TaskEntity task = taskRepository.getReferenceById(dto.getId());
+        TaskEntity task = taskRepository.getReferenceById(taskDTO.getId());
         task.setBlocked(true);
 
         taskRepository.save(task);
@@ -111,10 +104,10 @@ public class TaskService {
 
     @Transactional
     @PreAuthorize("@boardSecurityService.verifyIfUserIsLeader(#userId, #taskDTO.getBoardId())")
-    public void unblockTask(TaskEditDTO dto, long userId){
-        if(dto.getId() == 0) return;     
+    public void unblockTask(TaskEditDTO taskDTO, long userId){
+        if(taskDTO.getId() == 0) return;     
         
-        TaskEntity task = taskRepository.getReferenceById(dto.getId());
+        TaskEntity task = taskRepository.getReferenceById(taskDTO.getId());
         task.setBlocked(false);
         
         taskRepository.save(task);
@@ -122,10 +115,10 @@ public class TaskService {
     
     @Transactional
     @PreAuthorize("@boardSecurityService.verifyIfUserIsLeader(#userId, #taskDTO.getBoardId())")
-    public void cancelTask(TaskEditDTO dto, long userId){
-        if(dto.getId() == 0) return;     
+    public void cancelTask(TaskEditDTO taskDTO, long userId){
+        if(taskDTO.getId() == 0) return;     
 
-        TaskEntity task = taskRepository.getReferenceById(dto.getId());
+        TaskEntity task = taskRepository.getReferenceById(taskDTO.getId());
         task.setCanceled(true);
 
         taskRepository.save(task);
@@ -133,26 +126,26 @@ public class TaskService {
 
     @Transactional
     @PreAuthorize("@boardSecurityService.verifyIfUserIsLeader(#userId, #taskDTO.getBoardId())")
-    public void setTaskDueDate(TaskEditDTO dto, long userId){
-        if(dto.getId() == 0) return;
-        if(dto.getDueDate() == null || dto.getDueDate().isBefore(Instant.now().plusSeconds(2400))) return;
+    public void setTaskDueDate(TaskEditDTO taskDTO, long userId){
+        if(taskDTO.getId() == 0) return;
+        if(taskDTO.getDueDate() == null || taskDTO.getDueDate().isBefore(Instant.now().plusSeconds(2400))) return;
 
-        TaskEntity task = taskRepository.getReferenceById(dto.getId());
-        task.setDueDate(dto.getDueDate());
+        TaskEntity task = taskRepository.getReferenceById(taskDTO.getId());
+        task.setDueDate(taskDTO.getDueDate());
 
         taskRepository.save(task);
     }
 
     @Transactional
     @PreAuthorize("@boardSecurityService.verifyIfUserIsLeaderOrMember(#userId, #taskDTO.getBoardId())")
-    public void moveTaskToCollumn(TaskEditDTO dto, long userId){
-        if(dto.getId() == 0) return;
-        if(dto.getColumnId() == 0 || dto.getColumnId() < 0) return;
+    public void moveTaskToCollumn(TaskEditDTO taskDTO, long userId){
+        if(taskDTO.getId() == 0) return;
+        if(taskDTO.getColumnId() == 0 || taskDTO.getColumnId() < 0) return;
 
-        TaskEntity task = taskRepository.getReferenceById(dto.getId());
+        TaskEntity task = taskRepository.getReferenceById(taskDTO.getId());
 
         ColumnEntity column = new ColumnEntity();
-        column.setId(dto.getColumnId());
+        column.setId(taskDTO.getColumnId());
 
         task.setColumn(column);
 
@@ -160,24 +153,23 @@ public class TaskService {
     }
 
     @Transactional
-    @PreAuthorize("@boardSecurityService.verifyIfUserIsLeader(#userId, #taskDTO.getBoardId())")
+    @PreAuthorize("@boardSecurityService.verifyIfUserIsLeader(#userId, #dto.getBoardId())")
     public void AssignUsersToTask(AssignUsersDTO dto, long userId) throws IOException, GeneralSecurityException{
-        UserEntity user = userRepository.getReferenceById(userId);
-        if (verifyUserAutority.verifyUserAutorityBoard(user, dto.getBoardId())) {
-            TaskAssignedUsersEntity assignedUsersEntity = new TaskAssignedUsersEntity();
-            
-            TaskEntity task = new TaskEntity();
-            task.setId(dto.getTaskId());
+        
+        TaskAssignedUsersEntity assignedUsersEntity = new TaskAssignedUsersEntity();
+        
+        TaskEntity task = new TaskEntity();
+        task.setId(dto.getTaskId());
 
-            UserEntity userAssigned = new UserEntity();
-            userAssigned.setId(dto.getUserId());
+        UserEntity userAssigned = new UserEntity();
+        userAssigned.setId(dto.getUserId());
 
-            assignedUsersEntity.setTask(task);
-            assignedUsersEntity.setUser(userAssigned);
+        assignedUsersEntity.setTask(task);
+        assignedUsersEntity.setUser(userAssigned);
 
-            taskAssignedUsersRepository.save(assignedUsersEntity);
+        taskAssignedUsersRepository.save(assignedUsersEntity);
 
-            calendarService.createEvent(userId, task.getId());
-        }
+        calendarService.createEvent(userId, task.getId());
+    
     }
 }

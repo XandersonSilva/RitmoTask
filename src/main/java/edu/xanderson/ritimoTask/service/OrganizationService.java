@@ -30,9 +30,6 @@ public class OrganizationService {
     private UserRepository userRepository;
 
     @Autowired
-    private VerifyUserAutority verifyUserAutority;
-
-    @Autowired
     private NotificationService notificationService;
 
     public void createOrganization(OrganizationDTO dto, long userId){
@@ -104,29 +101,29 @@ public class OrganizationService {
         if (!data.getRole().equals(RoleType.ADMINISTRATOR)) return;
         System.out.println(data.getRole());
         UserEntity   adminOrLeader   = userRepository.getReferenceById(adminOrLeaderId);
-        if (verifyUserAutority.verifyUserAutorityOrganization(adminOrLeader, data.getResoarceId())) {
-            OrganizationMembership organizationMembership = new OrganizationMembership();
-            OrganizationEntity organization = new OrganizationEntity();
-            UserEntity user = userRepository.getReferenceById(data.getUserId());
-            organization.setId(data.getResoarceId());
+    
+        OrganizationMembership organizationMembership = new OrganizationMembership();
+        OrganizationEntity organization = new OrganizationEntity();
+        UserEntity user = userRepository.getReferenceById(data.getUserId());
+        organization.setId(data.getResoarceId());
 
 
-            organizationMembership.setOrganization(organization);
-            organizationMembership.setRole(data.getRole());
-            organizationMembership.setUser(user);
+        organizationMembership.setOrganization(organization);
+        organizationMembership.setRole(data.getRole());
+        organizationMembership.setUser(user);
 
-            organizationMembershipRepository.save(organizationMembership);
+        organizationMembershipRepository.save(organizationMembership);
 
-            NotificationEntity notification = new NotificationEntity();
+        NotificationEntity notification = new NotificationEntity();
 
-            notification.setRecipientEmail(user.getEmail());
-            notification.setRecipientUser(user);
-            notification.setRecipientUsername(user.getUsername());
-            
-            notification.setSubject("Você foi adicionado a uma organização por " + adminOrLeader.getName());
-            notification.setContent("Você foi adicionado a uma organização por " + adminOrLeader.getName());
+        notification.setRecipientEmail(user.getEmail());
+        notification.setRecipientUser(user);
+        notification.setRecipientUsername(user.getUsername());
+        
+        notification.setSubject("Você foi adicionado a uma organização por " + adminOrLeader.getName());
+        notification.setContent("Você foi adicionado a uma organização por " + adminOrLeader.getName());
 
-            notificationService.sendNotification(notification);
-        }
+        notificationService.sendNotification(notification);
+    
     }
 }

@@ -18,7 +18,6 @@ import com.google.api.services.calendar.model.Event;
 import com.google.api.services.calendar.model.EventDateTime;
 
 import edu.xanderson.ritimoTask.model.entity.BoardMembership;
-import edu.xanderson.ritimoTask.model.entity.OauthAuthorizedClientEntity;
 import edu.xanderson.ritimoTask.model.entity.TaskEntity;
 import edu.xanderson.ritimoTask.model.entity.UserEntity;
 import edu.xanderson.ritimoTask.model.repository.BoardMembershipRepository;

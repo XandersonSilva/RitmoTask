@@ -59,13 +59,13 @@ public class TaskController {
 
     @GetMapping("/get/task")
     public ResponseEntity<TaskSummaryDTO> getTask(@AuthenticationPrincipal UserEntity currentUser, 
-                                @RequestParam(value = "taskId", required=true) long taskId) {
+                                @Validated @RequestBody TaskEditDTO taskDTO) {
         if (currentUser != null) {
             long userId = currentUser.getId(); // Obtém o ID do usuário
                         
-            TaskSummaryDTO taskDTO = taskService.getTask(taskId, userId);
+            TaskSummaryDTO task = taskService.getTask(taskDTO, userId);
 
-            return ResponseEntity.ok(taskDTO);
+            return ResponseEntity.ok(task);
 
         }
         return ResponseEntity.badRequest().body(null);
@@ -87,11 +87,11 @@ public class TaskController {
 
     @DeleteMapping("/delete/task")
     public ResponseEntity deleteTask(@AuthenticationPrincipal UserEntity currentUser, 
-                                @RequestParam(value = "taskId", required=true) long taskId) {
+                                @Validated @RequestBody TaskEditDTO taskDTO) {
         if (currentUser != null) {
             long userId = currentUser.getId(); // Obtém o ID do usuário
                         
-            taskService.deleteTask(taskId, userId);
+            taskService.deleteTask(taskDTO, userId);
 
             return ResponseEntity.ok().body("Tentativa de cração de recurso via user: " + userId);
 

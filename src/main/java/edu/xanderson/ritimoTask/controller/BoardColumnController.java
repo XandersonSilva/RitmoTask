@@ -69,11 +69,11 @@ public class BoardColumnController {
 
     @DeleteMapping("/delete/board/column")
     public ResponseEntity deletecolumn(@AuthenticationPrincipal UserEntity currentUser, 
-                                @RequestParam(value = "columnId", required=true) long columnId) {
+                                @Validated @RequestBody ColumnDTO columnDTO) {
         if (currentUser != null) {
             long userId = currentUser.getId(); // Obtém o ID do usuário
                         
-            columnService.deletecolumn(columnId, userId);
+            columnService.deletecolumn(columnDTO, userId);
 
             return ResponseEntity.ok().body("Deletando quadro para o usuário com ID: " + userId);
 

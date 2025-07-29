@@ -22,7 +22,7 @@ public class TagDTO {
     @NotBlank
     private String tag;
 
-    private String color = "#00ff00";
+    private String color = "#000000";
 
     private String textColor = "#ffffff";
 
@@ -30,6 +30,17 @@ public class TagDTO {
     private long taskId;
 
     private TaskEntity task;
+    
+    @NotNull
+    private long boardId;
+    
+    public long getBoardId() {
+        return boardId;
+    }
+
+    public void setBoardId(long boardId) {
+        this.boardId = boardId;
+    }
 
     public long getId() {
         return id;

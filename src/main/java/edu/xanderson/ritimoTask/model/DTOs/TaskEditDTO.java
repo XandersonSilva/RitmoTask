@@ -23,6 +23,7 @@ public class TaskEditDTO {
 
     @NotNull
     private long id;
+
     private String title;
     
     private String description;
@@ -45,12 +46,21 @@ public class TaskEditDTO {
 
     private List<CommentEntity> comments;
 
+    @NotNull
+    private long boardId;
+
     private void setStatusIfIsNull(){
         if (this.status == null) {
             this.status = TaskStatus.TODO;
         }
     }
-
+    
+    public long getBoardId() {
+        return boardId;
+    }
+    public void setBoardId(long boardId) {
+        this.boardId = boardId;
+    }
     public long getId() {
         return id;
     }

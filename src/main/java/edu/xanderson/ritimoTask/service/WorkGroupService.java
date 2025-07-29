@@ -30,9 +30,6 @@ public class WorkGroupService {
     UserRepository userRepository;
 
     @Autowired
-    VerifyUserAutority verifyUserAutority;
-
-    @Autowired
     NotificationService notificationService;
 
     public void createWorkGroupService(WorkGroupDTO dto, long userId){
@@ -98,31 +95,29 @@ public class WorkGroupService {
 
     public void addUserToWorkGroup(EditUserResourcePermitionDTO data, long adminOrLeaderId){
         UserEntity   adminOrLeader   = userRepository.getReferenceById(adminOrLeaderId);
-        if (verifyUserAutority.verifyUserAutorityWorkGroup(adminOrLeader, data.getResoarceId())) {
-            WorkGroupMembership workGroupMembership = new WorkGroupMembership();
-            WorkGroupEntity workGroup = new WorkGroupEntity();
-            UserEntity user = userRepository.getReferenceById(data.getUserId());
-            workGroup.setId(data.getResoarceId());
+        
+        WorkGroupMembership workGroupMembership = new WorkGroupMembership();
+        WorkGroupEntity workGroup = new WorkGroupEntity();
+        UserEntity user = userRepository.getReferenceById(data.getUserId());
+        workGroup.setId(data.getResoarceId());
 
 
-            workGroupMembership.setWorkGroup(workGroup);
-            workGroupMembership.setRole(data.getRole());
-            workGroupMembership.setUser(user);
+        workGroupMembership.setWorkGroup(workGroup);
+        workGroupMembership.setRole(data.getRole());
+        workGroupMembership.setUser(user);
 
-            workGroupMembershipRepository.save(workGroupMembership);
+        workGroupMembershipRepository.save(workGroupMembership);
 
-            NotificationEntity notification = new NotificationEntity();
+        NotificationEntity notification = new NotificationEntity();
 
-            notification.setRecipientEmail(user.getEmail());
-            notification.setRecipientUser(user);
-            notification.setRecipientUsername(user.getUsername());
-            
-            notification.setSubject("Você foi adicionado a um work goup por " + adminOrLeader.getName());
-            notification.setContent("Você foi adicionado a um work goup por " + adminOrLeader.getName());
+        notification.setRecipientEmail(user.getEmail());
+        notification.setRecipientUser(user);
+        notification.setRecipientUsername(user.getUsername());
+        
+        notification.setSubject("Você foi adicionado a um work goup por " + adminOrLeader.getName());
+        notification.setContent("Você foi adicionado a um work goup por " + adminOrLeader.getName());
 
-            notificationService.sendNotification(notification);
-            
-        }
+        notificationService.sendNotification(notification);
     }
     
 }
