@@ -24,7 +24,18 @@ public class SubTaskEditDTO {
 
     private long taskId;
 
+    @NotNull
+    private long boardId;
+
     
+
+    public long getBoardId() {
+        return boardId;
+    }
+
+    public void setBoardId(long boardId) {
+        this.boardId = boardId;
+    }
 
     public long getId() {
         return id;

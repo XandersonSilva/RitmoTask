@@ -38,6 +38,17 @@ public class CommentDTO {
 
     private List<MentionEntity> mentions;
 
+    @NotNull
+    private long boardId;
+
+    public long getBoardId() {
+        return boardId;
+    }
+
+    public void setBoardId(long boardId) {
+        this.boardId = boardId;
+    }
+
     public long getId() {
         return id;
     }

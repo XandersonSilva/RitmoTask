@@ -35,11 +35,11 @@ public class CommentController {
 
     @DeleteMapping("/delete/comment")
     public ResponseEntity deleteComment(@AuthenticationPrincipal UserEntity currentUser, 
-                                @RequestParam(value = "commentId", required=true) long commentId) {
+                                @Validated @RequestBody CommentDTO commentDTO) {
         if (currentUser != null) {
             long userId = currentUser.getId(); // Obtém o ID do usuário
                         
-            commentService.deleteComment(commentId, userId);
+            commentService.deleteComment(commentDTO, userId);
 
             return ResponseEntity.ok().body("Deletando quadro para o usuário com ID: " + userId);
 

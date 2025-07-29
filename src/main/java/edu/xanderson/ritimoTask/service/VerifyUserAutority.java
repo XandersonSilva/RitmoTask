@@ -48,16 +48,16 @@ public class VerifyUserAutority {
     public boolean verifyUserAutorityBoard(UserEntity user, long boardId){
         BoardEntity board = boardRepository.getReferenceById(boardId);
         Optional<BoardMembership> boardMembership;
-        boardMembership = boardMembershipRepository.findByUserAndBoard(user, board);
-        if (boardMembership.isPresent()) {
-            RoleType userRole = boardMembership.get().getRole();
+        // boardMembership = boardMembershipRepository.findByUserAndBoard(user, board);
+        // if (boardMembership.isPresent()) {
+        //     RoleType userRole = boardMembership.get().getRole();
             
-            if (userRole != RoleType.ADMINISTRATOR &&
-                userRole != RoleType.LEADER) {
-                return false;
-            }
-            return true;
-        }
+        //     if (userRole != RoleType.ADMINISTRATOR &&
+        //         userRole != RoleType.LEADER) {
+        //         return false;
+        //     }
+        //     return true;
+        // }
         return false;
     }
 

@@ -42,6 +42,9 @@ public class TaskCreateDTO {
     @NotNull
     private long columnId;
 
+    @NotNull
+    private long boardId;
+
     private ColumnEntity column;
     
     private List<TagEntity> tags;
@@ -126,6 +129,11 @@ public class TaskCreateDTO {
     public void setComments(List<CommentEntity> comments) {
         this.comments = comments;
     }
-
+    public long getBoardId() {
+        return boardId;
+    }
+    public void setBoardId(long boardId) {
+        this.boardId = boardId;
+    }
     
 }

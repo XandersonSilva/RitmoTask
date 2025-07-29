@@ -31,7 +31,18 @@ public class MentionDTO {
     private UserEntity mentionedUser;
     
     private boolean mentionedUserNotified = false;
+
+    @NotNull
+    private long boardId;
         
+    public long getBoardId() {
+        return boardId;
+    }
+
+    public void setBoardId(long boardId) {
+        this.boardId = boardId;
+    }
+
     public long getId() {
         return id;
     }
