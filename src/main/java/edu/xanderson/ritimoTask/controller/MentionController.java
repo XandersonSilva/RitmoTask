@@ -1,5 +1,8 @@
 package edu.xanderson.ritimoTask.controller;
 
+import java.io.IOException;
+import java.security.GeneralSecurityException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -19,7 +22,7 @@ public class MentionController {
 
     @PostMapping("/create/mention")
     public ResponseEntity createMention(@AuthenticationPrincipal UserEntity currentUser, 
-                                @Validated @RequestBody MentionDTO mentionDTO) {
+                                @Validated @RequestBody MentionDTO mentionDTO) throws IOException, GeneralSecurityException {
         if (currentUser != null) {
             long userId = currentUser.getId(); // Obtém o ID do usuário
             mentionService.createBoardColumnTaskCommentMention(mentionDTO, userId);

@@ -1,5 +1,7 @@
 package edu.xanderson.ritimoTask.service;
 
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +17,6 @@ import edu.xanderson.ritimoTask.model.entity.ColumnEntity;
 import edu.xanderson.ritimoTask.model.entity.TaskAssignedUsersEntity;
 import edu.xanderson.ritimoTask.model.entity.TaskEntity;
 import edu.xanderson.ritimoTask.model.entity.UserEntity;
-import edu.xanderson.ritimoTask.model.repository.BoardRepository;
 import edu.xanderson.ritimoTask.model.repository.ColumnRepository;
 import edu.xanderson.ritimoTask.model.repository.TaskAssignedUsersRepository;
 import edu.xanderson.ritimoTask.model.repository.TaskRepository;
@@ -24,30 +25,32 @@ import edu.xanderson.ritimoTask.model.repository.UserRepository;
 @Service
 public class TaskService {
     @Autowired
-    TaskRepository taskRepository;
+    private TaskRepository taskRepository;
 
     @Autowired
-    ColumnRepository columnRepository;
+    private ColumnRepository columnRepository;
 
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
     @Autowired
-    BoardRepository boardRepository;
+    private VerifyUserAutority verifyUserAutority;
 
     @Autowired
-    VerifyUserAutority verifyUserAutority;
+    private TaskAssignedUsersRepository taskAssignedUsersRepository;
 
     @Autowired
-    TaskAssignedUsersRepository taskAssignedUsersRepository;
+    private CalendarService calendarService;
 
-    public void createBoardColumnTask(TaskCreateDTO taskDTO, long userId){
+    public void createBoardColumnTask(TaskCreateDTO taskDTO, long userId) throws IOException, GeneralSecurityException{
         UserEntity   user   = userRepository.getReferenceById(userId);
         ColumnEntity column = columnRepository.getReferenceById(taskDTO.getColumnId());
+        long boardId = column.getBoard().getId();
 
-        if (verifyUserAutority.verifyUserAutorityBoard(user, column.getBoard().getId())) {
+        if (verifyUserAutority.verifyUserAutorityBoard(user, boardId)) {
             TaskEntity task = new TaskEntity(taskDTO);
             taskRepository.save(task);
+            calendarService.saveTaskOnGoogleCalendar(task.getId(), boardId);
         }
     }
 
@@ -69,12 +72,19 @@ public class TaskService {
         return tasksDTO;
     }
 
-    public void editeTask(TaskEditDTO dto, long userId){
-        if(dto.getId() == 0) return;     
+    public void editeTask(TaskEditDTO dto, long userId) throws IOException, GeneralSecurityException{
+        TaskEntity taskDB = taskRepository.getReferenceById(dto.getId());
+        if(taskDB == null) return; 
 
         TaskEntity task = new TaskEntity(dto);
 
         taskRepository.save(task);
+
+        if (task.getDueDate() != null && task.getDueDate() != taskDB.getDueDate()) {
+            ColumnEntity column = columnRepository.getReferenceById(task.getColumn().getId());
+            long boardId = column.getId();
+            calendarService.saveTaskOnGoogleCalendar(task.getId(), boardId);
+        }
     }
 
     public void deleteTask(long taskId, long userId){
@@ -133,10 +143,8 @@ public class TaskService {
 
         taskRepository.save(task);
     }
-    
 
-
-    public void AssignUsersToTask(AssignUsersDTO dto, long userId){
+    public void AssignUsersToTask(AssignUsersDTO dto, long userId) throws IOException, GeneralSecurityException{
         UserEntity user = userRepository.getReferenceById(userId);
         if (verifyUserAutority.verifyUserAutorityBoard(user, dto.getBoardId())) {
             TaskAssignedUsersEntity assignedUsersEntity = new TaskAssignedUsersEntity();
@@ -151,7 +159,8 @@ public class TaskService {
             assignedUsersEntity.setUser(userAssigned);
 
             taskAssignedUsersRepository.save(assignedUsersEntity);
-        }
 
+            calendarService.createEvent(userId, task.getId());
+        }
     }
 }

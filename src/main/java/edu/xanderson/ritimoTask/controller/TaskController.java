@@ -1,5 +1,7 @@
 package edu.xanderson.ritimoTask.controller;
 
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +31,7 @@ public class TaskController {
 
     @PostMapping("/create/boardcolumn/task")
     public ResponseEntity createTask(@AuthenticationPrincipal UserEntity currentUser, 
-                                @Validated @RequestBody TaskCreateDTO taskDTO) {
+                                @Validated @RequestBody TaskCreateDTO taskDTO) throws IOException, GeneralSecurityException {
         if (currentUser != null) {
             long userId = currentUser.getId(); // Obtém o ID do usuário
                         
@@ -43,7 +45,7 @@ public class TaskController {
 
     @PutMapping("/edite/task")
     public ResponseEntity editeTask(@AuthenticationPrincipal UserEntity currentUser, 
-                                @Validated @RequestBody TaskEditDTO taskDTO) {
+                                @Validated @RequestBody TaskEditDTO taskDTO) throws IOException, GeneralSecurityException {
         if (currentUser != null) {
             long userId = currentUser.getId(); // Obtém o ID do usuário
                         
@@ -99,7 +101,7 @@ public class TaskController {
 
     @PutMapping("/task/assignUserToTask")
     public ResponseEntity assignUserToTask(@AuthenticationPrincipal UserEntity currentUser, 
-                                            @Validated @RequestBody AssignUsersDTO assignUsersDTO){
+                                            @Validated @RequestBody AssignUsersDTO assignUsersDTO) throws IOException, GeneralSecurityException{
         if(currentUser != null){
             long userId = currentUser.getId();
 
