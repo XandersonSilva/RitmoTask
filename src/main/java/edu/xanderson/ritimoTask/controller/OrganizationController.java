@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import edu.xanderson.ritimoTask.model.DTOs.EditUserResourcePermitionDTO;
 import edu.xanderson.ritimoTask.model.DTOs.OrganizationDTO;
+import edu.xanderson.ritimoTask.model.DTOs.OrganizationEditDTO;
 import edu.xanderson.ritimoTask.model.DTOs.OrganizationSummaryDTO;
 import edu.xanderson.ritimoTask.model.entity.UserEntity;
 import edu.xanderson.ritimoTask.service.OrganizationService;
@@ -64,7 +65,7 @@ class OrganizationController {
 
     @PutMapping("/edite/organization")
     public ResponseEntity editeorganization(@AuthenticationPrincipal UserEntity currentUser, 
-                                @Validated @RequestBody OrganizationDTO organizationDTO) {
+                                @Validated @RequestBody OrganizationEditDTO organizationDTO) {
         if (currentUser != null) {
             long userId = currentUser.getId(); // Obtém o ID do usuário
                         
