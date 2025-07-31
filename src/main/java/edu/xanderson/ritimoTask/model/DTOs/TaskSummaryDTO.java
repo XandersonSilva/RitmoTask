@@ -5,32 +5,50 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import edu.xanderson.ritimoTask.model.entity.CommentEntity;
 import edu.xanderson.ritimoTask.model.entity.SubTaskEntity;
-import edu.xanderson.ritimoTask.model.entity.TagEntity;
 import edu.xanderson.ritimoTask.model.entity.TaskEntity;
 import edu.xanderson.ritimoTask.model.entity.TaskStatus;
+import edu.xanderson.ritimoTask.model.entity.TaskTagsEntity;
+import edu.xanderson.ritimoTask.model.entity.UserEntity;
+import edu.xanderson.ritimoTask.service.TagService;
 import jakarta.validation.constraints.NotNull;
 
 public class TaskSummaryDTO {
+    @Autowired
+    private TagService tagService;
+
+    
     public TaskSummaryDTO(){
         setStatusIfIsNull();
     }
     public TaskSummaryDTO(TaskEntity taskEntity){
         BeanUtils.copyProperties(taskEntity, this);
         setStatusIfIsNull();
-
+        
         //Preenchendo campos que o BeanUtils não consegue por conta do 
         //tipo original não ser igual ao dessa classe
         if (taskEntity.getColumn() != null) {
             this.column = new ColumnSummaryDTO(taskEntity.getColumn());
         }
-
-        if (taskEntity.getTags() != null) {
+        
+        if (taskEntity.getTags() != null && taskEntity.getColumn().getBoard() != null) {
             List<TagSummaryDTO> tagsDTO = new ArrayList<>();
-            for (TagEntity tag : taskEntity.getTags()) {
-                tagsDTO.add(new TagSummaryDTO(tag));
+            TagEditDTO tagDTO = new TagEditDTO();
+            for (TaskTagsEntity tagTask : taskEntity.getTags()) {
+                tagDTO.setId(tagTask.getTag().getId());
+                tagDTO.setBoardId(taskEntity.getColumn().getBoard().getId());
+                
+    
+                UserEntity currentUser = (UserEntity) SecurityContextHolder
+                                                    .getContext()
+                                                    .getAuthentication()
+                                                    .getPrincipal();
+                TagSummaryDTO tag = tagService.getTag(tagDTO, currentUser.getId());
+                tagsDTO.add(tag);
             }
             this.tags = tagsDTO;
         }

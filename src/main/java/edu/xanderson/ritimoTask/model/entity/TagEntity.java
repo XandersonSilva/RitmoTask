@@ -1,8 +1,12 @@
 package edu.xanderson.ritimoTask.model.entity;
 
+import java.util.List;
+
 import org.springframework.beans.BeanUtils;
 
 import edu.xanderson.ritimoTask.model.DTOs.TagDTO;
+import edu.xanderson.ritimoTask.model.DTOs.TagEditDTO;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -10,6 +14,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 
 @Entity
 public class TagEntity {
@@ -19,8 +24,16 @@ public class TagEntity {
 
     public TagEntity(TagDTO tagTDO ){
         BeanUtils.copyProperties(tagTDO, this);
-        this.task = new TaskEntity();
-        this.task.setId(tagTDO.getTaskId());
+        if (tagTDO.getBoardId() != 0) {
+            this.board.setId(tagTDO.getBoardId());
+        }
+    }
+
+    public TagEntity(TagEditDTO tagTDO ){
+        BeanUtils.copyProperties(tagTDO, this);
+        if (tagTDO.getBoardId() != 0) {
+            this.board.setId(tagTDO.getBoardId());
+        }
     }
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,17 +43,20 @@ public class TagEntity {
     private String tag;
     
     //Padrão de cores hexadeciamal aceito
-    //Cor padrão verde
+    //Cor padrão preto
     @Column(nullable = false)
-    private String color = "#00ff00";
+    private String color = "#000000";
 
     //Cor padrão branco
     @Column(nullable = false)
     private String textColor = "#ffffff";
 
     @ManyToOne
-    @JoinColumn(name = "task_id", nullable = false)
-    private TaskEntity task;
+    @JoinColumn(name = "board_id", nullable = false)
+    private BoardEntity board;
+
+    @OneToMany(mappedBy = "tag", cascade = CascadeType.ALL)
+    private List<TaskTagsEntity> taskTags;
 
     public long getId() {
         return id;
@@ -74,11 +90,11 @@ public class TagEntity {
         this.textColor = textColor;
     }
 
-    public TaskEntity getTask() {
-        return task;
+    public BoardEntity getBoard() {
+        return board;
     }
 
-    public void setTask(TaskEntity task) {
-        this.task = task;
+    public void setBoard(BoardEntity board) {
+        this.board = board;
     }
 }

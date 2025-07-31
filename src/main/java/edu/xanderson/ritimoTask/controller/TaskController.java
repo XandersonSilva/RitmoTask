@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import edu.xanderson.ritimoTask.model.DTOs.AssignUsersDTO;
+import edu.xanderson.ritimoTask.model.DTOs.TagEditDTO;
 import edu.xanderson.ritimoTask.model.DTOs.TaskCreateDTO;
 import edu.xanderson.ritimoTask.model.DTOs.TaskEditDTO;
 import edu.xanderson.ritimoTask.model.DTOs.TaskSummaryDTO;
@@ -70,6 +71,21 @@ public class TaskController {
         }
         return ResponseEntity.badRequest().body(null);
     }
+
+    @GetMapping("/get/task")
+    public ResponseEntity<List<TaskSummaryDTO>> getTasksByTag(@AuthenticationPrincipal UserEntity currentUser, 
+                                @Validated @RequestBody TagEditDTO tagDTO) {
+        if (currentUser != null) {
+            long userId = currentUser.getId(); // Obtém o ID do usuário
+                        
+            List<TaskSummaryDTO> task = taskService.getTasksByTag(tagDTO, userId);
+
+            return ResponseEntity.ok(task);
+
+        }
+        return ResponseEntity.badRequest().body(null);
+    }
+
     @GetMapping("/get/board/tasks")
     public ResponseEntity<List<TaskSummaryDTO>> getBoardTasks(@AuthenticationPrincipal UserEntity currentUser,
                                 @RequestParam(value = "boardId", required=true) long boardId) {

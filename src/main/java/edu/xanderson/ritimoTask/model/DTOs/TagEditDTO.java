@@ -3,26 +3,25 @@ package edu.xanderson.ritimoTask.model.DTOs;
 import org.springframework.beans.BeanUtils;
 
 import edu.xanderson.ritimoTask.model.entity.TagEntity;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-public class TagDTO {
-    public TagDTO(){
+public class TagEditDTO {
+    public TagEditDTO(){
 
     }
 
-    public TagDTO(TagEntity tagEntity){
+    public TagEditDTO(TagEntity tagEntity){
         BeanUtils.copyProperties(tagEntity, this);
     }
 
+    @NotNull
     private long id;
     
-    @NotBlank
     private String tag;
 
-    private String color = "#000000";
+    private String color;
 
-    private String textColor = "#ffffff";
+    private String textColor;
     
     @NotNull
     private long boardId;

@@ -8,10 +8,10 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import edu.xanderson.ritimoTask.model.DTOs.TagDTO;
+import edu.xanderson.ritimoTask.model.DTOs.TagEditDTO;
 import edu.xanderson.ritimoTask.model.entity.UserEntity;
 import edu.xanderson.ritimoTask.service.TagService;
 
@@ -22,11 +22,11 @@ public class TagController {
     private TagService tagService;
 
     @PostMapping("/create/tag")
-    public ResponseEntity createBoardColumnTaskTag(@AuthenticationPrincipal UserEntity currentUser, 
+    public ResponseEntity createTag(@AuthenticationPrincipal UserEntity currentUser, 
                                 @Validated @RequestBody TagDTO tagDTO) {
         if (currentUser != null) {
             long userId = currentUser.getId(); // Obtém o ID do usuário
-            tagService.createBoardColumnTaskTag(tagDTO, userId);
+            tagService.createTag(tagDTO, userId);
             return ResponseEntity.ok().body("Tentativa de cração de recurso via user: " + userId);
 
         }
@@ -35,7 +35,7 @@ public class TagController {
 
     @PutMapping("/edite/tag")
     public ResponseEntity editeTag(@AuthenticationPrincipal UserEntity currentUser, 
-                                @Validated @RequestBody TagDTO tagDTO) {
+                                @Validated @RequestBody TagEditDTO tagDTO) {
         if (currentUser != null) {
             long userId = currentUser.getId(); // Obtém o ID do usuário
                         
@@ -48,8 +48,8 @@ public class TagController {
     }
 
     @DeleteMapping("/delete/tag")
-    public ResponseEntity deletetag(@AuthenticationPrincipal UserEntity currentUser, 
-                                @Validated @RequestBody TagDTO tagDTO) {
+    public ResponseEntity deleteTag(@AuthenticationPrincipal UserEntity currentUser, 
+                                @Validated @RequestBody TagEditDTO tagDTO) {
         if (currentUser != null) {
             long userId = currentUser.getId(); // Obtém o ID do usuário
                         

@@ -11,6 +11,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import edu.xanderson.ritimoTask.model.DTOs.AssignUsersDTO;
+import edu.xanderson.ritimoTask.model.DTOs.TagEditDTO;
 import edu.xanderson.ritimoTask.model.DTOs.TaskCreateDTO;
 import edu.xanderson.ritimoTask.model.DTOs.TaskEditDTO;
 import edu.xanderson.ritimoTask.model.DTOs.TaskSummaryDTO;
@@ -60,6 +61,15 @@ public class TaskService {
 
         List<TaskSummaryDTO> tasksDTO = new ArrayList<>();
         for (TaskEntity task : taskRepository.findTasksByBoardId(boardId)) {
+            tasksDTO.add(new TaskSummaryDTO(task));
+        }
+        return tasksDTO;
+    }
+    @Transactional
+    @PreAuthorize("@boardSecurityService.verifyIfUserIsAdministratorOrLeaderOrMemberOrGuest(#userId, #dto.getBoardId())")
+    public List<TaskSummaryDTO> getTasksByTag(TagEditDTO dto, long userId){
+        List<TaskSummaryDTO> tasksDTO = new ArrayList<>();
+        for (TaskEntity task : taskRepository.findTasksByTagId(dto.getId())) {
             tasksDTO.add(new TaskSummaryDTO(task));
         }
         return tasksDTO;

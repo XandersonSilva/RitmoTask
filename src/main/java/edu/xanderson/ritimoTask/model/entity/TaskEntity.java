@@ -69,7 +69,7 @@ public class TaskEntity {
     private ColumnEntity column;
     
     @OneToMany(mappedBy = "task", cascade =  CascadeType.ALL, orphanRemoval = true)
-    private List<TagEntity> tags;
+    private List<TaskTagsEntity> tags;
 
     @OneToMany(mappedBy = "task", cascade =  CascadeType.ALL, orphanRemoval = true)
     private List<CommentEntity> comments;
@@ -151,11 +151,11 @@ public class TaskEntity {
         this.column = column;
     }
 
-    public List<TagEntity> getTags() {
+    public List<TaskTagsEntity> getTags() {
         return tags;
     }
 
-    public void setTags(List<TagEntity> tags) {
+    public void setTags(List<TaskTagsEntity> tags) {
         this.tags = tags;
     }
 
