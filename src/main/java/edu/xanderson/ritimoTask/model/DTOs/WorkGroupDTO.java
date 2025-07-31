@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.beans.BeanUtils;
 
 import edu.xanderson.ritimoTask.model.entity.BoardEntity;
-import edu.xanderson.ritimoTask.model.entity.OrganizationEntity;
 import edu.xanderson.ritimoTask.model.entity.WorkGroupEntity;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -17,6 +16,9 @@ import jakarta.validation.constraints.NotBlank;
 
         public WorkGroupDTO(WorkGroupEntity workGroup){
             BeanUtils.copyProperties(workGroup, this);
+            if (workGroup.getOrganization() != null) {
+                this.organizationId = workGroup.getOrganization().getId();
+            }
         }
     
         private long id;
@@ -36,8 +38,8 @@ import jakarta.validation.constraints.NotBlank;
         @NotBlank
         private String description;
         
-        private OrganizationEntity organization;
-    
+        private long organizationId;
+
         private List<BoardEntity> boards;
 
         public long getId() {
@@ -96,12 +98,12 @@ import jakarta.validation.constraints.NotBlank;
             this.description = description;
         }
 
-        public OrganizationEntity getOrganization() {
-            return organization;
+        public long getOrganizationId() {
+            return organizationId;
         }
 
-        public void setOrganization(OrganizationEntity organization) {
-            this.organization = organization;
+        public void setOrganizationId(long organizationId) {
+            this.organizationId = organizationId;
         }
 
         public List<BoardEntity> getBoards() {

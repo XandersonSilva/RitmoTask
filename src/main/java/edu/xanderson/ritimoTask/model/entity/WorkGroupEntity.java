@@ -25,6 +25,9 @@ public class WorkGroupEntity {
 
     public WorkGroupEntity(WorkGroupDTO workGroup){
         BeanUtils.copyProperties(workGroup, this);
+        if (workGroup.getOrganizationId() != 0) {
+            this.organization.setId(workGroup.getOrganizationId());
+        }
     }
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -54,7 +57,7 @@ public class WorkGroupEntity {
     @OneToMany(
         mappedBy = "workGroup", 
         cascade = CascadeType.ALL,
-        orphanRemoval = true,      // Remove filhos que não estão mais na coleção
+        orphanRemoval = true,
         fetch = FetchType.LAZY
     )
     private List<WorkGroupMembership> memberships = new ArrayList<>();

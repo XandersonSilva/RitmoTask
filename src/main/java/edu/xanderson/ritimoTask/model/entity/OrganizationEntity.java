@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.BeanUtils;
 
 import edu.xanderson.ritimoTask.model.DTOs.OrganizationDTO;
+import edu.xanderson.ritimoTask.model.DTOs.OrganizationEditDTO;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -22,6 +23,9 @@ public class OrganizationEntity {
     }
     
     public OrganizationEntity(OrganizationDTO organization){
+        BeanUtils.copyProperties(organization, this);
+    }
+    public OrganizationEntity(OrganizationEditDTO organization){
         BeanUtils.copyProperties(organization, this);
     }
     @Id

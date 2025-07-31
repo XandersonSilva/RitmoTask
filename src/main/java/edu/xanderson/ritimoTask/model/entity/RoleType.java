@@ -5,5 +5,5 @@ public enum RoleType {
     LEADER,
     MEMBER,
     GUEST,
-    VISITOR
+    REMOVED
 }

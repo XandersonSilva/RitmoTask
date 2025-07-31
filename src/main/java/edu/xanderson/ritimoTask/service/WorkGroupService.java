@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import edu.xanderson.ritimoTask.model.DTOs.EditUserResourcePermitionDTO;
@@ -17,47 +18,60 @@ import edu.xanderson.ritimoTask.model.entity.WorkGroupMembership;
 import edu.xanderson.ritimoTask.model.repository.UserRepository;
 import edu.xanderson.ritimoTask.model.repository.WorkGroupMembershipRepository;
 import edu.xanderson.ritimoTask.model.repository.WorkGroupRepository;
+import jakarta.transaction.Transactional;
 
 @Service
 public class WorkGroupService {
     @Autowired
-    WorkGroupRepository workGroupRepository;
+    private WorkGroupRepository workGroupRepository;
     
     @Autowired
-    WorkGroupMembershipRepository workGroupMembershipRepository;
+    private WorkGroupMembershipRepository workGroupMembershipRepository;
 
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
     @Autowired
-    NotificationService notificationService;
+    private OrganizationSecurityService organizationSecurityService;
+
+    @Autowired
+    private NotificationService notificationService;
 
     public void createWorkGroupService(WorkGroupDTO dto, long userId){
-        //TODO:Verificar se o usuário tem autoridade para realizar essa ação
+        if (dto.getOrganizationId() != 0 && 
+            !(organizationSecurityService.verifyIfUserIsAdministratorOrLeader(userId, dto.getOrganizationId()))) {
+            return;
+        }
+
         WorkGroupEntity workGroup = new WorkGroupEntity(dto);
         WorkGroupMembership workGroupMembership = new WorkGroupMembership();
-        
         workGroupRepository.save(workGroup);
 
-
         workGroupMembership.setUser((UserEntity) userRepository.getReferenceById(userId));
-        workGroupMembership.setRole(RoleType.ADMINISTRATOR);
         workGroupMembership.setWorkGroup(workGroup);
-
+        
+        if (dto.getOrganizationId() != 0 && 
+            (organizationSecurityService.verifyIfUserIsLeader(userId, dto.getOrganizationId()))) {
+            workGroupMembership.setRole(RoleType.LEADER);
+            workGroupMembershipRepository.save(workGroupMembership);
+            return;
+        }
+        
+        workGroupMembership.setRole(RoleType.ADMINISTRATOR);
         workGroupMembershipRepository.save(workGroupMembership);
     }
 
+    @Transactional
+    @PreAuthorize("@workGroupSecurityService.verifyIfUserIsAdministratorOrLeaderOrMemberOrGuest(#userId, #workgroupId)")
     public WorkGroupSummaryDTO getWorkGroup(long workgroupId, long userId){
-        //TODO:Verificar se o usuário tem autoridade para realizar essa ação
         
         WorkGroupEntity workgroup = workGroupRepository.getReferenceById(workgroupId);
         
         return new WorkGroupSummaryDTO(workgroup);
     }
 
-    public List<WorkGroupSummaryDTO> getWorkGroups(long userId){
-        //TODO:Verificar se o usuário tem autoridade para realizar essa ação
-        
+
+    public List<WorkGroupSummaryDTO> getWorkGroups(long userId){        
         List<WorkGroupSummaryDTO> workgroups = new ArrayList<>();
         for (WorkGroupEntity workgroup : workGroupRepository.findByUserId(userId)) {
             workgroups.add(new WorkGroupSummaryDTO(workgroup));
@@ -66,9 +80,9 @@ public class WorkGroupService {
         return workgroups;
     } 
 
-    public List<WorkGroupSummaryDTO> getOrganizationWorkgroups(long organizationId, long userId){
-        //TODO:Verificar se o usuário tem autoridade para realizar essa ação
-        
+    @Transactional
+    @PreAuthorize("@organizationSecurityService.verifyIfUserIsAdministratorOrLeaderOrMemberOrGuest(#userId, #organizationId)")
+    public List<WorkGroupSummaryDTO> getOrganizationWorkgroups(long organizationId, long userId){        
         List<WorkGroupSummaryDTO> workgroups = new ArrayList<>();
         for (WorkGroupEntity workgroup : workGroupRepository.findByOrganizationId(organizationId)) {
             workgroups.add(new WorkGroupSummaryDTO(workgroup));
@@ -77,8 +91,9 @@ public class WorkGroupService {
         return workgroups;
     } 
 
+    @Transactional
+    @PreAuthorize("@workGroupSecurityService.verifyIfUserIsLeaderOrMember(#userId, #taskDTO.getBoardId())")
     public void editeWorkGroup(WorkGroupDTO dto, long userId){
-        //TODO:Verificar se o usuário tem autoridade para realizar essa ação
         if(dto.getId() == 0) return;     
 
         WorkGroupEntity workGroup = new WorkGroupEntity(dto);
@@ -86,13 +101,16 @@ public class WorkGroupService {
         workGroupRepository.save(workGroup);
     }
 
+    @Transactional
+    @PreAuthorize("@workGroupSecurityService.verifyIfUserIsAdministratorOrLeader(#userId, #workgroupId)")
     public void deleteWorkGroup(long workGroupId, long userId){
-        //TODO:Verificar se o usuário tem autoridade para realizar essa ação
         WorkGroupEntity workGroup = workGroupRepository.getReferenceById(workGroupId);
 
         workGroupRepository.delete(workGroup);
     }
 
+    @Transactional
+    @PreAuthorize("@workGroupSecurityService.verifyIfUserIsAdministratorOrLeader(#userId, #workgroupId)")
     public void addUserToWorkGroup(EditUserResourcePermitionDTO data, long adminOrLeaderId){
         UserEntity   adminOrLeader   = userRepository.getReferenceById(adminOrLeaderId);
         
