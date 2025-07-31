@@ -2,12 +2,14 @@ package edu.xanderson.ritimoTask.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import edu.xanderson.ritimoTask.model.DTOs.BoardDTO;
+import edu.xanderson.ritimoTask.model.DTOs.BoardEditDTO;
 import edu.xanderson.ritimoTask.model.DTOs.BoardSummaryDTO;
 import edu.xanderson.ritimoTask.model.DTOs.EditUserResourcePermitionDTO;
 import edu.xanderson.ritimoTask.model.entity.BoardEntity;
@@ -57,8 +59,6 @@ public class BoardService {
     }
 
     public List<BoardSummaryDTO> getBoardsByUser(long userId){
-        //TODO:Fazer a verificação se o usuário pode realizar essa ação
-
         List<BoardSummaryDTO> boards = new ArrayList<>();
         for (BoardEntity board : boardRepository.findBoardsByUser(userId)) {
             boards.add(new BoardSummaryDTO(board));
@@ -80,7 +80,7 @@ public class BoardService {
 
     @Transactional
     @PreAuthorize("@boardSecurityService.verifyIfUserIsAdministratorOrLeader(#userId, #dto.getId())")
-    public void editeBoard(BoardDTO dto, long userId){
+    public void editeBoard(BoardEditDTO dto, long userId){
 
         if(dto.getId() == 0) return;     
 
@@ -95,6 +95,19 @@ public class BoardService {
         BoardEntity board = boardRepository.getReferenceById(boardId);
 
         boardRepository.delete(board);
+    }
+
+    public BoardSummaryDTO getBoardByLink(String link){
+        return new BoardSummaryDTO(boardRepository.findByLink(UUID.fromString(link)));
+    }
+
+    @Transactional
+    @PreAuthorize("@boardSecurityService.verifyIfUserIsAdministratorOrLeader(#userId, #dto.getId())")
+    public void generetePublicLink(BoardEditDTO dto, long userId){
+        BoardEntity board = boardRepository.getReferenceById(dto.getId());
+        board.setLink(UUID.randomUUID());
+
+        boardRepository.save(board);
     }
 
     @Transactional

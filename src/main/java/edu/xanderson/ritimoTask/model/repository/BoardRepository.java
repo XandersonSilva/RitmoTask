@@ -1,6 +1,7 @@
 package edu.xanderson.ritimoTask.model.repository;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -12,4 +13,6 @@ public interface BoardRepository extends JpaRepository<BoardEntity, Long>{
     List<BoardEntity> findBoardsByUser(long userId);
 
     List<BoardEntity> findByWorkGroupId(long workGroupId);
+
+    BoardEntity findByLink(UUID link);
 }

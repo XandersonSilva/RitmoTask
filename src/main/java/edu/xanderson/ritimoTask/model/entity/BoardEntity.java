@@ -2,10 +2,12 @@ package edu.xanderson.ritimoTask.model.entity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.BeanUtils;
 
 import edu.xanderson.ritimoTask.model.DTOs.BoardDTO;
+import edu.xanderson.ritimoTask.model.DTOs.BoardEditDTO;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.CascadeType;
@@ -24,6 +26,9 @@ public class BoardEntity {
     }
     
     public BoardEntity(BoardDTO board){
+        BeanUtils.copyProperties(board, this);
+    }
+    public BoardEntity(BoardEditDTO board){
         BeanUtils.copyProperties(board, this);
     }
     @Id
@@ -58,6 +63,10 @@ public class BoardEntity {
         fetch = FetchType.LAZY
     )
     private List<BoardMembership> memberships = new ArrayList<>();
+
+    private UUID link;
+
+    private boolean isPublic = false;
 
     public long getId() {
         return id;
@@ -137,5 +146,20 @@ public class BoardEntity {
 
     public void setMemberships(List<BoardMembership> memberships) {
         this.memberships = memberships;
+    }
+    public UUID getLink() {
+        return link;
+    }
+
+    public void setLink(UUID link) {
+        this.link = link;
+    }
+
+    public boolean isPublic() {
+        return isPublic;
+    }
+
+    public void setPublic(boolean isPublic) {
+        this.isPublic = isPublic;
     }
 }

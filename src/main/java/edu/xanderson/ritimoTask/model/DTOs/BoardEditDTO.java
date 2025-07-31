@@ -1,24 +1,26 @@
 package edu.xanderson.ritimoTask.model.DTOs;
 
-
-import java.util.UUID;
+import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 
 import edu.xanderson.ritimoTask.model.entity.BoardEntity;
+import edu.xanderson.ritimoTask.model.entity.ColumnEntity;
+import edu.xanderson.ritimoTask.model.entity.WorkGroupEntity;
+import jakarta.validation.constraints.NotNull;
 
-public class BoardSummaryDTO {
-    public BoardSummaryDTO(){
+public class BoardEditDTO {
+    public BoardEditDTO(){
 
     }
     
-    public BoardSummaryDTO(BoardEntity board){
+    public BoardEditDTO(BoardEntity board){
         BeanUtils.copyProperties(board, this);
-        
     }
 
+    @NotNull
     private long id;
-
+    
     private String name;
     
     private String identifier;
@@ -31,7 +33,9 @@ public class BoardSummaryDTO {
 
     private String description;
 
-    private UUID link;
+    private WorkGroupEntity workGroup;
+
+    private List<ColumnEntity> columns;
 
     public long getId() {
         return id;
@@ -89,11 +93,19 @@ public class BoardSummaryDTO {
         this.description = description;
     }
 
-    public UUID getLink() {
-        return link;
+    public WorkGroupEntity getWorkGroup() {
+        return workGroup;
     }
 
-    public void setLink(UUID link) {
-        this.link = link;
+    public void setWorkGroup(WorkGroupEntity workGroup) {
+        this.workGroup = workGroup;
+    }
+
+    public List<ColumnEntity> getColumns() {
+        return columns;
+    }
+
+    public void setColumns(List<ColumnEntity> columns) {
+        this.columns = columns;
     }
 }

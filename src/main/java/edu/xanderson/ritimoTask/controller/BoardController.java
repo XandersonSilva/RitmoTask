@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import edu.xanderson.ritimoTask.model.DTOs.BoardDTO;
+import edu.xanderson.ritimoTask.model.DTOs.BoardEditDTO;
 import edu.xanderson.ritimoTask.model.DTOs.BoardSummaryDTO;
 import edu.xanderson.ritimoTask.model.DTOs.EditUserResourcePermitionDTO;
 import edu.xanderson.ritimoTask.model.entity.UserEntity;
@@ -80,19 +81,41 @@ public class BoardController {
         return ResponseEntity.badRequest().body(null);
     }
 
+    @GetMapping("/public/board")
+    public ResponseEntity<BoardSummaryDTO> getBoardByLink(@RequestParam(value = "code", required=true) String link) {
+        BoardSummaryDTO boardsDTO = boardService.getBoardByLink(link);
+
+        return ResponseEntity.ok(boardsDTO);
+    }
+
     @PutMapping("/edite/board")
     public ResponseEntity editeBoard(@AuthenticationPrincipal UserEntity currentUser, 
-                                @Validated @RequestBody BoardDTO boardDTO) {
+                                @Validated @RequestBody BoardEditDTO boardDTO) {
         if (currentUser != null) {
             long userId = currentUser.getId(); // Obtém o ID do usuário
                         
             boardService.editeBoard(boardDTO, userId);
+
+            return ResponseEntity.ok().body("Criando recurso para o usuário com ID: " + userId);
+
+        }
+        return ResponseEntity.badRequest().body("Usuário não autenticado.");
+    }
+
+    @PutMapping("/create/board/link")
+    public ResponseEntity crateBoardLink(@AuthenticationPrincipal UserEntity currentUser, 
+                                @Validated @RequestBody BoardEditDTO boardDTO) {
+        if (currentUser != null) {
+            long userId = currentUser.getId(); // Obtém o ID do usuário
+                        
+            boardService.generetePublicLink(boardDTO, userId);
 
             return ResponseEntity.ok().body("Criando quadro para o usuário com ID: " + userId);
 
         }
         return ResponseEntity.badRequest().body("Usuário não autenticado.");
     }
+
 
     @DeleteMapping("/delete/board")
     public ResponseEntity deleteBoard(@AuthenticationPrincipal UserEntity currentUser, 

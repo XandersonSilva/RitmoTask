@@ -72,7 +72,7 @@ public class TaskController {
         return ResponseEntity.badRequest().body(null);
     }
 
-    @GetMapping("/get/task")
+    @GetMapping("/get/tag/task")
     public ResponseEntity<List<TaskSummaryDTO>> getTasksByTag(@AuthenticationPrincipal UserEntity currentUser, 
                                 @Validated @RequestBody TagEditDTO tagDTO) {
         if (currentUser != null) {
