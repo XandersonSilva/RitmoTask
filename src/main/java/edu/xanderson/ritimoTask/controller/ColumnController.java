@@ -20,7 +20,7 @@ import edu.xanderson.ritimoTask.model.entity.UserEntity;
 import edu.xanderson.ritimoTask.service.ColumnService;
 
 @RestController
-public class BoardColumnController {
+public class ColumnController {
 
     @Autowired
     private ColumnService columnService;

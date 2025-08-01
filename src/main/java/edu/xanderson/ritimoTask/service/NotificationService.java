@@ -1,10 +1,14 @@
 package edu.xanderson.ritimoTask.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import edu.xanderson.ritimoTask.model.DTOs.NotificationDTO;
 import edu.xanderson.ritimoTask.model.entity.NotificationEntity;
 import edu.xanderson.ritimoTask.model.repository.NotificationRepository;
 
@@ -37,5 +41,22 @@ public class NotificationService {
 
             System.out.println("Erro ao enviar notificação \n" + e);
         }
+    }
+
+    public List<NotificationDTO> getNotificationsByUser(long userId){
+        List<NotificationDTO> notifications = new ArrayList<>();
+
+        for (NotificationEntity notification : notificationRepository.findByRecipientUserId(userId)) {
+            notifications.add(new NotificationDTO(notification));
+        }
+        
+        return notifications;
+    }
+    public void setNotificationAsRead(NotificationDTO dto, long userId){
+        NotificationEntity notification = notificationRepository.getReferenceById(dto.getId());
+        if (notification.getRecipientUser().getId() != userId) return;
+        
+        notification.setReaded(true);
+        notificationRepository.save(notification);
     }
 }

@@ -1,6 +1,11 @@
 package edu.xanderson.ritimoTask.model.entity;
 
 
+import java.time.Instant;
+
+import org.springframework.beans.BeanUtils;
+
+import edu.xanderson.ritimoTask.model.DTOs.NotificationDTO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -12,6 +17,16 @@ import jakarta.persistence.ManyToOne;
 
 @Entity
 public class NotificationEntity {
+    public NotificationEntity(){
+
+    }
+    public NotificationEntity(NotificationDTO notification){
+        BeanUtils.copyProperties(notification, this);
+        if (notification.getrecipientUserId() != 0) {
+            this.recipientUser.setId(notification.getrecipientUserId());
+        }
+    }
+    
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,6 +50,10 @@ public class NotificationEntity {
     private String content;
 
     private boolean sended = false;
+
+    private boolean readed = false;
+
+    private Instant createdate = Instant.now();
 
     public long getId() {
         return id;
@@ -100,4 +119,19 @@ public class NotificationEntity {
         this.sended = sended;
     }
 
+    public boolean isReaded() {
+        return readed;
+    }
+
+    public void setReaded(boolean readed) {
+        this.readed = readed;
+    }
+
+    public Instant getCreatedate() {
+        return createdate;
+    }
+
+    public void setCreatedate(Instant createdate) {
+        this.createdate = createdate;
+    }
 }
