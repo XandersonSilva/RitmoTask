@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +22,7 @@ import edu.xanderson.ritimoTask.model.entity.NotificationEntity;
 import edu.xanderson.ritimoTask.model.entity.NotificationsTypes;
 import edu.xanderson.ritimoTask.model.entity.TaskAssignedUsersEntity;
 import edu.xanderson.ritimoTask.model.entity.TaskEntity;
+import edu.xanderson.ritimoTask.model.entity.TaskStatus;
 import edu.xanderson.ritimoTask.model.entity.UserEntity;
 import edu.xanderson.ritimoTask.model.repository.ColumnRepository;
 import edu.xanderson.ritimoTask.model.repository.TaskAssignedUsersRepository;
@@ -170,6 +173,78 @@ public class TaskService {
 
         taskRepository.save(task);
     }
+
+    @Transactional
+    @PreAuthorize("@boardSecurityService.verifyIfUserIsAdministratorOrLeaderOrMemberOrGuest(#userId, #boardId)")
+    public List<TaskSummaryDTO> findTasksByStatus(long boardId, TaskStatus status, long userId){
+        List<TaskSummaryDTO> tasksDTO = new ArrayList<>();
+        for (TaskEntity task : taskRepository.findTasksByStatus(boardId, status)) {
+            tasksDTO.add(new TaskSummaryDTO(task));
+        }
+        return tasksDTO;
+    }
+
+    @Transactional
+    @PreAuthorize("@boardSecurityService.verifyIfUserIsAdministratorOrLeaderOrMemberOrGuest(#userId, #boardId)")
+    public List<TaskSummaryDTO> findCanceledTasks(long boardId, long userId){
+        List<TaskSummaryDTO> tasksDTO = new ArrayList<>();
+        for (TaskEntity task : taskRepository.findCanceledTasks(boardId)) {
+            tasksDTO.add(new TaskSummaryDTO(task));
+        }
+        return tasksDTO;
+    }
+
+    @Transactional
+    @PreAuthorize("@boardSecurityService.verifyIfUserIsAdministratorOrLeaderOrMemberOrGuest(#userId, #boardId)")
+    public List<TaskSummaryDTO> findBlockedTasks(long boardId, long userId){
+        List<TaskSummaryDTO> tasksDTO = new ArrayList<>();
+        for (TaskEntity task : taskRepository.findBlockedTasks(boardId)) {
+            tasksDTO.add(new TaskSummaryDTO(task));
+        }
+        return tasksDTO;
+    }
+
+    @Transactional
+    @PreAuthorize("@boardSecurityService.verifyIfUserIsAdministratorOrLeaderOrMemberOrGuest(#userId, #boardId)")
+    public List<TaskSummaryDTO> findByDueDateBetween(long boardId, Instant inicio, Instant fim, long userId){
+        List<TaskSummaryDTO> tasksDTO = new ArrayList<>();
+        for (TaskEntity task : taskRepository.findByDueDateBetween(boardId, inicio, fim)) {
+            tasksDTO.add(new TaskSummaryDTO(task));
+        }
+        return tasksDTO;
+    }
+
+    @Transactional
+    @PreAuthorize("@boardSecurityService.verifyIfUserIsAdministratorOrLeaderOrMemberOrGuest(#userId, #boardId)")
+    public List<TaskSummaryDTO> findByStartDateBetween(long boardId, Instant inicio, Instant fim, long userId){
+        List<TaskSummaryDTO> tasksDTO = new ArrayList<>();
+        for (TaskEntity task : taskRepository.findByStartDateBetween(boardId, inicio, fim)) {
+            tasksDTO.add(new TaskSummaryDTO(task));
+        }
+        return tasksDTO;
+    }
+
+    @Transactional
+    @PreAuthorize("@boardSecurityService.verifyIfUserIsAdministratorOrLeaderOrMemberOrGuest(#userId, #boardId)")
+    public List<TaskSummaryDTO> findByOverdue(long boardId, Instant today, long userId){
+        List<TaskSummaryDTO> tasksDTO = new ArrayList<>();
+        for (TaskEntity task : taskRepository.findByOverdue(boardId, today)) {
+            tasksDTO.add(new TaskSummaryDTO(task));
+        }
+        return tasksDTO;
+    }
+
+    @Transactional
+    @PreAuthorize("@boardSecurityService.verifyIfUserIsAdministratorOrLeaderOrMemberOrGuest(#userId, #boardId)")
+    public List<TaskSummaryDTO> findByMemberships(long boardId, long userId){
+        List<TaskSummaryDTO> tasksDTO = new ArrayList<>();
+        for (TaskEntity task : taskRepository.findByMemberships(boardId, userId)) {
+            tasksDTO.add(new TaskSummaryDTO(task));
+        }
+        return tasksDTO;
+    }
+   
+
 
     @Transactional
     @PreAuthorize("@boardSecurityService.verifyIfUserIsLeader(#userId, #dto.getBoardId())")

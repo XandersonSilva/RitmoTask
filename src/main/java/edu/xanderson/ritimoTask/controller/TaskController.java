@@ -2,10 +2,13 @@ package edu.xanderson.ritimoTask.controller;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -20,9 +23,13 @@ import edu.xanderson.ritimoTask.model.DTOs.AssignUsersDTO;
 import edu.xanderson.ritimoTask.model.DTOs.TagEditDTO;
 import edu.xanderson.ritimoTask.model.DTOs.TaskCreateDTO;
 import edu.xanderson.ritimoTask.model.DTOs.TaskEditDTO;
+import edu.xanderson.ritimoTask.model.DTOs.TaskFilterDTO;
 import edu.xanderson.ritimoTask.model.DTOs.TaskSummaryDTO;
+import edu.xanderson.ritimoTask.model.entity.TaskEntity;
+import edu.xanderson.ritimoTask.model.entity.TaskStatus;
 import edu.xanderson.ritimoTask.model.entity.UserEntity;
 import edu.xanderson.ritimoTask.service.TaskService;
+import jakarta.transaction.Transactional;
 
 @RestController
 public class TaskController {
@@ -97,7 +104,7 @@ public class TaskController {
             return ResponseEntity.ok(taskDTO);
 
         }
-        return ResponseEntity.badRequest().body(List.of());
+        return ResponseEntity.badRequest().body(null);
     }
 
 
@@ -197,5 +204,99 @@ public class TaskController {
 
         }
         return ResponseEntity.badRequest().body("Usuário não autenticado.");
+    }
+
+    @GetMapping("/filter/status")
+    public ResponseEntity<List<TaskSummaryDTO>> findTasksByStatus(
+            @AuthenticationPrincipal UserEntity currentUser,
+            @RequestBody TaskFilterDTO filterDTO) {
+
+        if (currentUser != null) {
+            long userId = currentUser.getId();
+            List<TaskSummaryDTO> tasks = taskService.findTasksByStatus(filterDTO.getBoardId(), filterDTO.getStatus(), userId);
+            return ResponseEntity.ok(tasks);
+        }
+        return ResponseEntity.badRequest().build();
+    }
+
+    @GetMapping("/filter/canceled")
+    public ResponseEntity<List<TaskSummaryDTO>> findCanceledTasks(
+            @AuthenticationPrincipal UserEntity currentUser,
+            @RequestBody TaskFilterDTO filterDTO) {
+
+        if (currentUser != null) {
+            long userId = currentUser.getId();
+            List<TaskSummaryDTO> tasks = taskService.findCanceledTasks(filterDTO.getBoardId(), userId);
+            return ResponseEntity.ok(tasks);
+        }
+        return ResponseEntity.badRequest().build();
+    }
+
+    @GetMapping("/filter/blocked")
+    public ResponseEntity<List<TaskSummaryDTO>> findBlockedTasks(
+            @AuthenticationPrincipal UserEntity currentUser,
+            @RequestBody TaskFilterDTO filterDTO) {
+
+        if (currentUser != null) {
+            long userId = currentUser.getId();
+            List<TaskSummaryDTO> tasks = taskService.findBlockedTasks(filterDTO.getBoardId(), userId);
+            return ResponseEntity.ok(tasks);
+        }
+        return ResponseEntity.badRequest().build();
+    }
+
+    @GetMapping("/filter/duedate")
+    public ResponseEntity<List<TaskSummaryDTO>> findByDueDateBetween(
+            @AuthenticationPrincipal UserEntity currentUser,
+            @RequestBody TaskFilterDTO filterDTO) {
+
+        if (currentUser != null) {
+            long userId = currentUser.getId();
+            List<TaskSummaryDTO> tasks = taskService.findByDueDateBetween(
+                filterDTO.getBoardId(), filterDTO.getDueDateStart(), filterDTO.getDueDateEnd(), userId);
+            return ResponseEntity.ok(tasks);
+        }
+        return ResponseEntity.badRequest().build();
+    }
+
+    @GetMapping("/filter/startdate")
+    public ResponseEntity<List<TaskSummaryDTO>> findByStartDateBetween(
+            @AuthenticationPrincipal UserEntity currentUser,
+            @RequestBody TaskFilterDTO filterDTO) {
+
+        if (currentUser != null) {
+            long userId = currentUser.getId();
+            List<TaskSummaryDTO> tasks = taskService.findByStartDateBetween(
+                filterDTO.getBoardId(), filterDTO.getStartDateStart(), filterDTO.getStartDateEnd(), userId);
+            return ResponseEntity.ok(tasks);
+        }
+        return ResponseEntity.badRequest().build();
+    }
+
+    @GetMapping("/filter/overdue")
+    public ResponseEntity<List<TaskSummaryDTO>> findByOverdue(
+            @AuthenticationPrincipal UserEntity currentUser,
+            @RequestBody TaskFilterDTO filterDTO) {
+
+        if (currentUser != null) {
+            long userId = currentUser.getId();
+            List<TaskSummaryDTO> tasks = taskService.findByOverdue(
+                filterDTO.getBoardId(), filterDTO.getToday(), userId);
+            return ResponseEntity.ok(tasks);
+        }
+        return ResponseEntity.badRequest().build();
+    }
+
+    @GetMapping("/filter/memberships")
+    public ResponseEntity<List<TaskSummaryDTO>> findByMemberships(
+            @AuthenticationPrincipal UserEntity currentUser,
+            @RequestBody TaskFilterDTO filterDTO) {
+
+        if (currentUser != null) {
+            long userId = currentUser.getId();
+            List<TaskSummaryDTO> tasks = taskService.findByMemberships(filterDTO.getBoardId(), userId);
+            return ResponseEntity.ok(tasks);
+        }
+        return ResponseEntity.badRequest().build();
     }
 }
