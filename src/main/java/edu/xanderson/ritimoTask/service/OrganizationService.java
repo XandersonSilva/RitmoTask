@@ -12,6 +12,7 @@ import edu.xanderson.ritimoTask.model.DTOs.OrganizationDTO;
 import edu.xanderson.ritimoTask.model.DTOs.OrganizationEditDTO;
 import edu.xanderson.ritimoTask.model.DTOs.OrganizationSummaryDTO;
 import edu.xanderson.ritimoTask.model.entity.NotificationEntity;
+import edu.xanderson.ritimoTask.model.entity.NotificationsTypes;
 import edu.xanderson.ritimoTask.model.entity.OrganizationEntity;
 import edu.xanderson.ritimoTask.model.entity.OrganizationMembership;
 import edu.xanderson.ritimoTask.model.entity.RoleType;
@@ -60,7 +61,7 @@ public class OrganizationService {
     }
 
     public List<OrganizationSummaryDTO> getOrganizations(long userId) {
-        UserEntity user = userRepository.getById(userId);
+        UserEntity user = userRepository.getReferenceById(userId);
         if(user == null) return null;
 
         List<OrganizationSummaryDTO> organizationsDTO = new ArrayList<>();
@@ -111,6 +112,8 @@ public class OrganizationService {
         notification.setRecipientEmail(user.getEmail());
         notification.setRecipientUser(user);
         notification.setRecipientUsername(user.getUsername());
+        notification.setNotificationsType(NotificationsTypes.ESSENTIAL_AND_UPDATES);
+
 
         notification.setSubject("Você foi adicionado a uma organização por " + adminOrLeader.getName());
         notification.setContent("Você foi adicionado a uma organização por " + adminOrLeader.getName());

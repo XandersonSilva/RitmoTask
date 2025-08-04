@@ -34,6 +34,10 @@ public class UserService {
     @Autowired
     private OrganizationMembershipRepository organizationMembershipRepository;
 
+    public void updateUserInfo(UserEditDTO userDTO){
+        userRepository.save(new UserEntity(userDTO));
+    }
+
     public void deleteUser(long userId){
         userRepository.deleteById(userId);
     }
@@ -77,10 +81,3 @@ public class UserService {
         }
     }
 }
-/*
- * INSERT INTO ritmo_task.board_membership (`role`,board_id,user_id) VALUES
-	 ('LEADER',1,2),
-	 ('LEADER',2,2),
-	 ('LEADER',2,7);
-
- */

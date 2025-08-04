@@ -16,16 +16,22 @@ import edu.xanderson.ritimoTask.model.DTOs.TaskCreateDTO;
 import edu.xanderson.ritimoTask.model.DTOs.TaskEditDTO;
 import edu.xanderson.ritimoTask.model.DTOs.TaskSummaryDTO;
 import edu.xanderson.ritimoTask.model.entity.ColumnEntity;
+import edu.xanderson.ritimoTask.model.entity.NotificationEntity;
+import edu.xanderson.ritimoTask.model.entity.NotificationsTypes;
 import edu.xanderson.ritimoTask.model.entity.TaskAssignedUsersEntity;
 import edu.xanderson.ritimoTask.model.entity.TaskEntity;
 import edu.xanderson.ritimoTask.model.entity.UserEntity;
 import edu.xanderson.ritimoTask.model.repository.ColumnRepository;
 import edu.xanderson.ritimoTask.model.repository.TaskAssignedUsersRepository;
 import edu.xanderson.ritimoTask.model.repository.TaskRepository;
+import edu.xanderson.ritimoTask.model.repository.UserRepository;
 import jakarta.transaction.Transactional;
 
 @Service
 public class TaskService {
+    @Autowired
+    private UserRepository userRepository;
+
     @Autowired
     private TaskRepository taskRepository;
 
@@ -37,6 +43,9 @@ public class TaskService {
 
     @Autowired
     private CalendarService calendarService;
+
+    @Autowired
+    private NotificationService notificationService;
 
     @Transactional
     @PreAuthorize("@boardSecurityService.verifyIfUserIsLeaderOrMember(#userId, #taskDTO.getBoardId())")
@@ -181,5 +190,21 @@ public class TaskService {
 
         calendarService.createEvent(userId, task.getId());
     
+        //Avisando ao usuário que ele é responsavel por uma tarefa
+
+        UserEntity user = userRepository.getReferenceById(dto.getUserId());
+        UserEntity leader = userRepository.getReferenceById(userId);
+        
+        NotificationEntity notification = new NotificationEntity();
+
+        notification.setRecipientEmail(user.getEmail());
+        notification.setRecipientUser(user);
+        notification.setRecipientUsername(user.getUsername());
+        notification.setNotificationsType(NotificationsTypes.ESSENTIAL_AND_UPDATES);
+        
+        notification.setSubject("Você foi atribuido a uma task por " + leader.getName());
+        notification.setContent("Você foi atribuido a uma task por " + leader.getName());
+
+        notificationService.sendNotification(notification);
     }
 }

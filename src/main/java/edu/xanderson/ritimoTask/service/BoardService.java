@@ -15,6 +15,7 @@ import edu.xanderson.ritimoTask.model.DTOs.EditUserResourcePermitionDTO;
 import edu.xanderson.ritimoTask.model.entity.BoardEntity;
 import edu.xanderson.ritimoTask.model.entity.BoardMembership;
 import edu.xanderson.ritimoTask.model.entity.NotificationEntity;
+import edu.xanderson.ritimoTask.model.entity.NotificationsTypes;
 import edu.xanderson.ritimoTask.model.entity.RoleType;
 import edu.xanderson.ritimoTask.model.entity.UserEntity;
 import edu.xanderson.ritimoTask.model.repository.BoardMembershipRepository;
@@ -25,16 +26,16 @@ import jakarta.transaction.Transactional;
 @Service
 public class BoardService {
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
     @Autowired
-    BoardRepository boardRepository;
+    private BoardRepository boardRepository;
 
     @Autowired
-    BoardMembershipRepository boardMembershipRepository;
+    private BoardMembershipRepository boardMembershipRepository;
 
     @Autowired
-    NotificationService notificationService;
+    private NotificationService notificationService;
 
     public void createBoard(BoardDTO dto, long userId){
         BoardEntity board = new BoardEntity(dto);
@@ -133,6 +134,8 @@ public class BoardService {
         notification.setRecipientEmail(user.getEmail());
         notification.setRecipientUser(user);
         notification.setRecipientUsername(user.getUsername());
+        notification.setNotificationsType(NotificationsTypes.ESSENTIAL_AND_UPDATES);
+
         notification.setSubject("Você foi adicionado a um board por " + adminOrLeader.getName());
         notification.setContent("Você foi adicionado a um board por " + adminOrLeader.getName());
 

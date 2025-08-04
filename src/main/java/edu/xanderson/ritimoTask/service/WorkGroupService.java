@@ -11,6 +11,7 @@ import edu.xanderson.ritimoTask.model.DTOs.EditUserResourcePermitionDTO;
 import edu.xanderson.ritimoTask.model.DTOs.WorkGroupDTO;
 import edu.xanderson.ritimoTask.model.DTOs.WorkGroupSummaryDTO;
 import edu.xanderson.ritimoTask.model.entity.NotificationEntity;
+import edu.xanderson.ritimoTask.model.entity.NotificationsTypes;
 import edu.xanderson.ritimoTask.model.entity.RoleType;
 import edu.xanderson.ritimoTask.model.entity.UserEntity;
 import edu.xanderson.ritimoTask.model.entity.WorkGroupEntity;
@@ -131,6 +132,7 @@ public class WorkGroupService {
         notification.setRecipientEmail(user.getEmail());
         notification.setRecipientUser(user);
         notification.setRecipientUsername(user.getUsername());
+        notification.setNotificationsType(NotificationsTypes.ESSENTIAL_AND_UPDATES);
         
         notification.setSubject("Você foi adicionado a um work goup por " + adminOrLeader.getName());
         notification.setContent("Você foi adicionado a um work goup por " + adminOrLeader.getName());

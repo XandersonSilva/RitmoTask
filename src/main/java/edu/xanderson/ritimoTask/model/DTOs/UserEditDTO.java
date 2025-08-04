@@ -3,6 +3,7 @@ package edu.xanderson.ritimoTask.model.DTOs;
 
 import org.springframework.beans.BeanUtils;
 
+import edu.xanderson.ritimoTask.model.entity.NotificationsTypes;
 import edu.xanderson.ritimoTask.model.entity.UserEntity;
 import edu.xanderson.ritimoTask.model.entity.UserSituation;
 import jakarta.validation.constraints.Email;
@@ -26,6 +27,8 @@ public class UserEditDTO {
     private String email;
     
     private UserSituation situation;
+
+    private NotificationsTypes notificationsPreferences;
 
     private String password;
 
@@ -69,5 +72,11 @@ public class UserEditDTO {
         this.password = password;
     }
 
+    public NotificationsTypes getNotificationsPreferences() {
+        return notificationsPreferences;
+    }
 
+    public void setNotificationsPreferences(NotificationsTypes notificationsPreferences) {
+        this.notificationsPreferences = notificationsPreferences;
+    }
 }

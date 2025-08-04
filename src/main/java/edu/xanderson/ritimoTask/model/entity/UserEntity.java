@@ -9,6 +9,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import edu.xanderson.ritimoTask.model.DTOs.UserDTO;
+import edu.xanderson.ritimoTask.model.DTOs.UserEditDTO;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -26,6 +27,9 @@ public class UserEntity implements UserDetails{
     }
 
     public UserEntity(UserDTO dto){
+        BeanUtils.copyProperties(dto, this);
+    }
+    public UserEntity(UserEditDTO dto){
         BeanUtils.copyProperties(dto, this);
     }
 
@@ -46,6 +50,9 @@ public class UserEntity implements UserDetails{
     
     @Column(name = "google_id", unique = true)
     private String googleId;
+
+    @Enumerated(EnumType.STRING)
+    private NotificationsTypes notificationsPreferences = NotificationsTypes.ESSENTIAL;
 
     @Enumerated(EnumType.STRING)
     private UserSituation situation;
@@ -145,24 +152,33 @@ public class UserEntity implements UserDetails{
         this.notifications = notifications;
     }
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+    
+    public NotificationsTypes getNotificationsPreferences() {
+        return notificationsPreferences;
     }
-
+    
+    public void setNotificationsPreferences(NotificationsTypes notificationsPreferences) {
+        this.notificationsPreferences = notificationsPreferences;
+    }
+    
     public UserSituation getSituation() {
         return situation;
     }
-
+    
     public void setSituation(UserSituation situation) {
         this.situation = situation;
     }
-
+    
     public String getGoogleId() {
         return googleId;
     }
-
+    
     public void setGoogleId(String googleId) {
         this.googleId = googleId;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
     }
 }
