@@ -31,20 +31,18 @@ public class NotificationService {
 
     @Async
     public void sendNotification(NotificationEntity notification){
-
+        notification.setSender(notification.getSender() == null ? 
+                                        sender :
+                                        notification.getSender());
         notification.setSended(false);
         notificationRepository.save(notification);
 
         if (! verifyIfcanSendNotification(notification)) return;
-
         try {
             emailService.sendTextMail(
                 notification.getRecipientEmail(), 
                 notification.getSubject(), 
                 notification.getContent());
-                notification.setSender(notification.getSender() == null ? 
-                                        sender :
-                                        notification.getSender());
 
             notification.setSended(true);
             System.out.println("email enviado");
