@@ -296,7 +296,7 @@ Com base nesses requisitos, também foram definidos diversos **casos de uso** qu
 
 * **Descrição dos casos de uso**
 
-![Diagrama de casos de uso](casos_de_uso.drawio.svg)
+![Diagrama de casos de uso](/docs/casos_de_uso.drawio.svg)
 
 | **\[UC01\]**| **Cadastrar usuário** |
 | -- | -- |
