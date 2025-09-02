@@ -575,7 +575,7 @@ Com base nesses requisitos, também foram definidos diversos **casos de uso** qu
 | **Pré-condições** | Ter acesso a um recurso (quadro de tarefas) com prazos|
 | **Fluxo de eventos** | - Usuário acessa o recurso e solicita a integração <br> - Sistema valida juntamente ao Google calendar se é possível realizar a ação e retorna para o usuário se foi possível|
 
-* **Diagrama de classes**
+* **Diagrama de classes(somente entidades)**
 
 ```mermaid
 classDiagram
@@ -802,7 +802,7 @@ UserEntity *-- Email
     Board "1" -- "N" BoardMembership : has
 ```
 
-* **Diagrama relacional*
+* **Diagrama relacional**
 ```mermaid
   erDiagram
     User {
