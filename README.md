@@ -6,7 +6,7 @@ Este projeto visa o desenvolvimento de um sistema de gerenciamento de tarefas ba
 Entre os principais **requisitos funcionais** estão funcionalidades como:
 
 
--   Cadastro, login e recuperação de senha de usuários;
+-   Cadastro, login, recuperação de senha de usuários e login com google (OAuth2);
   
 -   Criação e gerenciamento de organizações, grupos e quadros Kanban;
   
@@ -14,7 +14,7 @@ Entre os principais **requisitos funcionais** estão funcionalidades como:
   
 -   Compartilhamento de quadros com permissões personalizadas;
   
--   Integrações com serviços externos, como Google Calendar.
+-   Integrações com serviço Google Calendar.
   
 
 
@@ -27,7 +27,7 @@ O sistema também contempla **requisitos não funcionais**, como:
   
 -   Segurança de dados;
   
--   Capacidade de escalar para grandes equipes.
+-   Capacidade de escalar.
   
 
 
