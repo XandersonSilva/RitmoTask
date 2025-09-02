@@ -1,5 +1,4 @@
-# Descrição do Projeto – Quadro Kanban
-
+# Descrição do Projeto
 
 Este projeto visa o desenvolvimento de um sistema de gerenciamento de tarefas baseado no modelo **Kanban**. O sistema será acessado por diferentes tipos de usuários, como **administrador**, **líder**, **membro**, **convidado** e **visitante**, cada um com permissões específicas.
 
