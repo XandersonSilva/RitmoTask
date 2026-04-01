@@ -805,158 +805,209 @@ UserEntity *-- Email
 * **Diagrama relacional**
 ```mermaid
   erDiagram
-    User {
-        BIGINT user_id PK
-        VARCHAR name
-        VARCHAR username "UNIQUE"
-        VARCHAR email "UNIQUE"
-        VARCHAR password
+    erDiagram
+
+    ORGANIZATION_ENTITY {
+        int id
+        string description
+        string email
+        string identifier
+        string logo
+        string name
+        string phone_number
+        string sector
+        string website_url
     }
 
-    Organization {
-        BIGIn org_id PK
-        VARCHAR name
-        VARCHAR identifier "UNIQUE"
-        VARCHAR phone_number
-        VARCHAR email
-        VARCHAR sector
-        VARCHAR logo_url
-        TEXT description
-        VARCHAR websiteUrl
-        
+    WORK_GROUP_ENTITY {
+        int id
+        string area
+        string description
+        string email
+        string identifier
+        string logo
+        string name
+        int organization_id
     }
 
-    WorkGroup {
-        BIGINT workgroup_id PK
-        VARCHAR name
-        BIGINT org_id FK
-        
+    BOARD_ENTITY {
+        int id
+        string area_performance
+        string description
+        string email
+        string identifier
+        string logo
+        string name
+        int work_group_id
+        boolean is_public
+        string link
     }
 
-    Board {
-        BIGINT board_id PK
-        VARCHAR name
-        BIGINT workgroup_id FK
-        
+    COLUMN_ENTITY {
+        int id
+        int column_order
+        string name
+        int board_id
     }
 
-    Columns {
-        BIGINT column_id PK
-        VARCHAR name
-        INTEGER display_order
-        BIGINT board_id FK
-        
+    TASK_ENTITY {
+        int id
+        string title
+        string description
+        date start_date
+        date due_date
+        string status
+        boolean is_blocked
+        boolean is_canceled
+        int column_id
     }
 
-    Task {
-        BIGINT task_id PK
-        VARCHAR title
-        TEXT description
-        VARCHAR status
-        TIMESTAMP start_date
-        TIMESTAMP due_date
-        BOOLEAN is_blocked
-        BIGINT column_id FK
-        BIGINT assignee_user_id FK
+    SUB_TASK_ENTITY {
+        int id
+        date create_date
+        string description
+        boolean done
+        date due_date
+        int position
+        string status
+        int task_id
     }
 
-    Checklist {
-        BIGINT checklist_id PK
-        BIGINT task_id FK
-        
+    TAG_ENTITY {
+        int id
+        string tag
+        string color
+        string text_color
+        int task_id
+        int board_id
     }
 
-    SubTask {
-        BIGINT subtask_id PK
-        TEXT description
-        BOOLEAN status
-        BIGINT checklist_id FK
+    TASK_TAGS_ENTITY {
+        string tag
+        string task
     }
 
-    Comment {
-        BIGINT comment_id PK
-        TEXT comment_text
-        BIGINT task_id FK
-        BIGINT user_id FK
-        TIMESTAMP created_at
+    TASK_ASSIGNED_USERS_ENTITY {
+        int id
+        int task_id
+        int user_id
     }
 
-    Tag {
-        BIGINT tag_id PK
-        VARCHAR name
-        VARCHAR color
+    COMMENT_ENTITY {
+        int id
+        string comment
+        int task_id
+        int user_id
     }
 
-    Mention {
-        BIGINT mention_id PK
-        BIGINT comment_id FK
-        BIGINT mentioned_user_id FK
-        BOOLEAN mentioned_user_notified
+    MENTION_ENTITY {
+        int id
+        boolean mentioned_user_notified
+        int comment_id
+        int user_id
     }
 
-    Notification {
-        BIGINT notification_id PK
-        BIGINT sender_user_id FK
-        BIGINT recipient_user_id FK
-        VARCHAR type
-        TEXT content
-        BOOLEAN is_read
-        TIMESTAMP created_at
+    USER_ENTITY {
+        int id
+        string email
+        string name
+        string password
+        string situation
+        string username
+        string google_id
+        string notifications_preferences
     }
 
-   
-
-    OrganizationMembership {
-        BIGINT user_id PK,FK
-        BIGINT org_id PK,FK
-        VARCHAR role
+    NOTIFICATION_ENTITY {
+        int id
+        string content
+        string recipient_email
+        string recipient_username
+        string sender
+        string subject
+        int user_id
+        datetime createdate
+        boolean readed
+        string notifications_type
     }
 
-    WorkGroupMembership {
-        BIGINT user_id PK,FK
-        BIGINT workgroup_id PK,FK
-        VARCHAR role
+    PASSWORD_RECOVERY_ENTITY {
+        int id
+        datetime expiration_date
+        string token
+        int user_id
     }
 
-    BoardMembership {
-        BIGINT user_id PK,FK
-        BIGINT board_id PK,FK
-        VARCHAR role
+    USER_VERIFY_ENTITY {
+        int id
+        datetime date_expiration
+        string uuid
+        int user_id
     }
 
-    TaskTag {
-        BIGINT task_id PK,FK
-        BIGINT tag_id PK,FK
+    ORGANIZATION_MEMBERSHIP {
+        int id
+        string role
+        int organization_id
+        int user_id
     }
 
-  
+    WORK_GROUP_MEMBERSHIP {
+        int id
+        string role
+        int user_id
+        int work_group_id
+    }
 
-    Organization ||--o{ WorkGroup : contém
-    WorkGroup ||--o{ Board : contém
-    Board ||--o{ Columns : contém
-    Columns ||--o{ Task : contém
+    BOARD_MEMBERSHIP {
+        int id
+        string role
+        int board_id
+        int user_id
+    }
 
-    Task ||--o| Checklist : tem_uma
-    Task ||--o{ Comment : tem_muitos
-    Task }o--o{ TaskTag : tem_muitas_tags
-    Tag }o--o{ TaskTag : usada_em_muitas_tasks
+    OAUTH2_AUTHORIZED_CLIENT {
+        string client_registration_id
+        string principal_name
+        datetime access_token_expires_at
+        datetime access_token_issued_at
+        string access_token_scopes
+        string access_token_type
+        string access_token_value
+        datetime refresh_token_issued_at
+        string refresh_token_value
+    }
 
-    Comment ||--o{ Mention : contém
 
-    Checklist ||--o{ SubTask : contém
+    ORGANIZATION_ENTITY ||--o{ WORK_GROUP_ENTITY : contains
+    ORGANIZATION_ENTITY ||--o{ ORGANIZATION_MEMBERSHIP : has
+    USER_ENTITY ||--o{ ORGANIZATION_MEMBERSHIP : member
 
-    User ||--o{ Notification : envia_ou_recebe
-    User ||--o{ OrganizationMembership : é_membro_de
-    Organization ||--o{ OrganizationMembership : tem_membros
+    WORK_GROUP_ENTITY ||--o{ BOARD_ENTITY : contains
+    WORK_GROUP_ENTITY ||--o{ WORK_GROUP_MEMBERSHIP : has
+    USER_ENTITY ||--o{ WORK_GROUP_MEMBERSHIP : member
 
-    User ||--o{ WorkGroupMembership : é_membro_de
-    WorkGroup ||--o{ WorkGroupMembership : tem_membros
+    BOARD_ENTITY ||--o{ COLUMN_ENTITY : contains
+    BOARD_ENTITY ||--o{ BOARD_MEMBERSHIP : has
+    USER_ENTITY ||--o{ BOARD_MEMBERSHIP : member
 
-    User ||--o{ BoardMembership : é_membro_de
-    Board ||--o{ BoardMembership : tem_membros
+    COLUMN_ENTITY ||--o{ TASK_ENTITY : contains
+    TASK_ENTITY ||--o{ SUB_TASK_ENTITY : contains
 
-    User ||--o{ Comment : fez
-    User }o--o{ Task : é_atribuído_a
-    User ||--o{ Mention : mencionado_em
+    TASK_ENTITY ||--o{ COMMENT_ENTITY : has
+    USER_ENTITY ||--o{ COMMENT_ENTITY : writes
+
+    COMMENT_ENTITY ||--o{ MENTION_ENTITY : has
+    USER_ENTITY ||--o{ MENTION_ENTITY : mentioned
+
+    TASK_ENTITY ||--o{ TASK_ASSIGNED_USERS_ENTITY : assigned
+    USER_ENTITY ||--o{ TASK_ASSIGNED_USERS_ENTITY : assigned
+
+    BOARD_ENTITY ||--o{ TAG_ENTITY : has
+    TASK_ENTITY ||--o{ TAG_ENTITY : tagged
+
+    USER_ENTITY ||--o{ NOTIFICATION_ENTITY : receives
+    USER_ENTITY ||--o{ PASSWORD_RECOVERY_ENTITY : recovery
+    USER_ENTITY ||--o{ USER_VERIFY_ENTITY : verification
 ´´´
   
