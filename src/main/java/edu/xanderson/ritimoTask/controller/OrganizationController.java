@@ -20,8 +20,10 @@ import edu.xanderson.ritimoTask.model.DTOs.OrganizationEditDTO;
 import edu.xanderson.ritimoTask.model.DTOs.OrganizationSummaryDTO;
 import edu.xanderson.ritimoTask.model.entity.UserEntity;
 import edu.xanderson.ritimoTask.service.OrganizationService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 @RestController
+@SecurityRequirement(name = "bearerAuth")
 class OrganizationController {
 
     @Autowired
@@ -63,7 +65,7 @@ class OrganizationController {
         return ResponseEntity.badRequest().body(null);
     }
 
-    @PutMapping("/edite/organization")
+    @PutMapping("/edit/organization")
     public ResponseEntity editeorganization(@AuthenticationPrincipal UserEntity currentUser, 
                                 @Validated @RequestBody OrganizationEditDTO organizationDTO) {
         if (currentUser != null) {

@@ -24,8 +24,8 @@ public class NotificationEntity {
     }
     public NotificationEntity(NotificationDTO notification){
         BeanUtils.copyProperties(notification, this);
-        if (notification.getrecipientUserId() != 0) {
-            this.recipientUser.setId(notification.getrecipientUserId());
+        if (notification.recipientUserId() != 0) {
+            this.recipientUser.setId(notification.recipientUserId());
         }
     }
     

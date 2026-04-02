@@ -8,6 +8,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,8 +19,10 @@ import edu.xanderson.ritimoTask.model.DTOs.ColumnDTO;
 import edu.xanderson.ritimoTask.model.DTOs.ColumnSummaryDTO;
 import edu.xanderson.ritimoTask.model.entity.UserEntity;
 import edu.xanderson.ritimoTask.service.ColumnService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 @RestController
+@SecurityRequirement(name = "bearerAuth")
 public class ColumnController {
 
     @Autowired
@@ -53,7 +56,7 @@ public class ColumnController {
         return ResponseEntity.badRequest().body(List.of());
     }
 
-    @PutMapping("/edite/board/column")
+    @PutMapping("/edit/board/column")
     public ResponseEntity editecolumn(@AuthenticationPrincipal UserEntity currentUser, 
                                 @Validated @RequestBody ColumnDTO columnDTO) {
         if (currentUser != null) {
@@ -67,13 +70,13 @@ public class ColumnController {
         return ResponseEntity.badRequest().body("Usuário não autenticado.");
     }
 
-    @DeleteMapping("/delete/board/column")
+    @DeleteMapping("/columns/{id}")
     public ResponseEntity deletecolumn(@AuthenticationPrincipal UserEntity currentUser, 
-                                @Validated @RequestBody ColumnDTO columnDTO) {
+                                @Validated @PathVariable long columnId ) {
         if (currentUser != null) {
             long userId = currentUser.getId(); // Obtém o ID do usuário
                         
-            columnService.deletecolumn(columnDTO, userId);
+            columnService.deletecolumn(columnId, userId);
 
             return ResponseEntity.ok().body("Deletando quadro para o usuário com ID: " + userId);
 

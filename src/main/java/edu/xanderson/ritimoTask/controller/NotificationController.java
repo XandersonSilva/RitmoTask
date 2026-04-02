@@ -14,8 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
 import edu.xanderson.ritimoTask.model.DTOs.NotificationDTO;
 import edu.xanderson.ritimoTask.model.entity.UserEntity;
 import edu.xanderson.ritimoTask.service.NotificationService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 @RestController
+@SecurityRequirement(name = "bearerAuth")
 public class NotificationController {
     @Autowired
     NotificationService  notificationService;

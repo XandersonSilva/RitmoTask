@@ -13,9 +13,12 @@ import edu.xanderson.ritimoTask.model.DTOs.SubTaskCreateDTO;
 import edu.xanderson.ritimoTask.model.DTOs.SubTaskEditDTO;
 import edu.xanderson.ritimoTask.model.entity.UserEntity;
 import edu.xanderson.ritimoTask.service.SubtaskService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+
 import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
+@SecurityRequirement(name = "bearerAuth")
 public class SubtaskController {
     @Autowired
     private SubtaskService subtaskService;

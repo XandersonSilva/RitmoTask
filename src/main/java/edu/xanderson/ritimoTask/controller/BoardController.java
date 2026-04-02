@@ -20,8 +20,10 @@ import edu.xanderson.ritimoTask.model.DTOs.BoardSummaryDTO;
 import edu.xanderson.ritimoTask.model.DTOs.EditUserResourcePermitionDTO;
 import edu.xanderson.ritimoTask.model.entity.UserEntity;
 import edu.xanderson.ritimoTask.service.BoardService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 @RestController
+@SecurityRequirement(name = "bearerAuth")
 public class BoardController {
     @Autowired
     private BoardService boardService;
@@ -82,6 +84,7 @@ public class BoardController {
     }
 
     @GetMapping("/public/board")
+    @SecurityRequirement(name = "public")
     public ResponseEntity<BoardSummaryDTO> getBoardByLink(@RequestParam(value = "code", required=true) String link) {
         BoardSummaryDTO boardsDTO = boardService.getBoardByLink(link);
 
@@ -102,8 +105,8 @@ public class BoardController {
         return ResponseEntity.badRequest().body("Usuário não autenticado.");
     }
 
-    @PutMapping("/create/board/link")
-    public ResponseEntity crateBoardLink(@AuthenticationPrincipal UserEntity currentUser, 
+    @PostMapping("/create/board/link")
+    public ResponseEntity createBoardLink(@AuthenticationPrincipal UserEntity currentUser, 
                                 @Validated @RequestBody BoardEditDTO boardDTO) {
         if (currentUser != null) {
             long userId = currentUser.getId(); // Obtém o ID do usuário

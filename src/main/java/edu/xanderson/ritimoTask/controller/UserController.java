@@ -14,9 +14,11 @@ import edu.xanderson.ritimoTask.model.DTOs.ResourceMembershipDTO;
 import edu.xanderson.ritimoTask.model.DTOs.UserEditDTO;
 import edu.xanderson.ritimoTask.model.entity.UserEntity;
 import edu.xanderson.ritimoTask.service.UserService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 
 @RestController
+@SecurityRequirement(name = "bearerAuth")
 public class UserController {
     @Autowired
     UserService userService;

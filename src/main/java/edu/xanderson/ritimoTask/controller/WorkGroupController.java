@@ -19,8 +19,10 @@ import edu.xanderson.ritimoTask.model.DTOs.WorkGroupDTO;
 import edu.xanderson.ritimoTask.model.DTOs.WorkGroupSummaryDTO;
 import edu.xanderson.ritimoTask.model.entity.UserEntity;
 import edu.xanderson.ritimoTask.service.WorkGroupService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 @RestController
+@SecurityRequirement(name = "bearerAuth")
 public class WorkGroupController {
 
     @Autowired
@@ -77,7 +79,7 @@ public class WorkGroupController {
         return ResponseEntity.badRequest().body(null);
     }
 
-    @PutMapping("/edite/workgroup")
+    @PutMapping("/edit/workgroup")
     public ResponseEntity editeWorkGroup(@AuthenticationPrincipal UserEntity currentUser, 
                                 @Validated @RequestBody WorkGroupDTO workGroupDTO) {
         if (currentUser != null) {
@@ -105,7 +107,7 @@ public class WorkGroupController {
         return ResponseEntity.badRequest().body("Usuário não autenticado.");
     }
 
-    @PutMapping("/workgoup/adduser")
+    @PutMapping("/workgroup/adduser")
     public ResponseEntity addUserToWorkGroup(@AuthenticationPrincipal UserEntity currentUser, 
                                 @Validated @RequestBody EditUserResourcePermitionDTO data ) {
         if (currentUser != null) {

@@ -13,8 +13,10 @@ import org.springframework.web.bind.annotation.RestController;
 import edu.xanderson.ritimoTask.model.DTOs.CommentDTO;
 import edu.xanderson.ritimoTask.model.entity.UserEntity;
 import edu.xanderson.ritimoTask.service.CommentService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 @RestController
+@SecurityRequirement(name = "bearerAuth")
 public class CommentController {
     @Autowired
     private CommentService commentService;

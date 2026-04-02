@@ -66,8 +66,8 @@ public class ColumnService {
 
     @Transactional
     @PreAuthorize("@boardSecurityService.verifyIfUserIsAdministratorOrLeaderOrMember(#userId, #columnDTO.getBoardId())")
-    public void deletecolumn(ColumnDTO columnDTO, long userId){
-        ColumnEntity column = columnRepository.getReferenceById(columnDTO.getId());
+    public void deletecolumn(long columnId, long userId){
+        ColumnEntity column = columnRepository.getReferenceById(columnId);
 
         columnRepository.delete(column);
     }

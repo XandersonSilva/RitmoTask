@@ -71,7 +71,7 @@ public class NotificationDTO {
         this.recipientEmail = recipientEmail;
     }
 
-    public long getrecipientUserId() {
+    public long recipientUserId() {
         return recipientUserId;
     }
 
